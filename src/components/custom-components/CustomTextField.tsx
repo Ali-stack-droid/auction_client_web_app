@@ -7,6 +7,7 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
         position: 'relative',
     },
     "& .MuiOutlinedInput-root": {
+        backgroundColor: 'white',
         height: '65px',
         borderRadius: '15px',
         "& fieldset": {

@@ -11,7 +11,7 @@ const Header = () => {
     const classes = useHeaderStyles();
 
     const navLinks = [
-        { label: 'Home', path: '/dashboard' },
+        { label: 'Home', path: '/home' },
         { label: 'Current Auctions', path: '/current-auctions' },
         { label: 'Listings', path: '/listings' },
         { label: 'My Bids', path: '/my-bids' },

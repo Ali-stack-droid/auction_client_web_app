@@ -16,7 +16,7 @@ import Authentication from '../components/authentication/Authentication';
 // import AuctionRoutes from '../components/auction/routes/AuctionRoutes';
 
 // Page Components
-const Dashboard = React.lazy(() => import('../components/dashboard/Dashboard'));
+const LandingPage = React.lazy(() => import('../components/landing-page/LandingPage'));
 // const Auction = React.lazy(() => import('../components/auction/Auction'));
 const LiveStreaming = React.lazy(() => import('../components/live-streaming/LiveStreaming'));
 const PaymentTracking = React.lazy(() => import('../components/payment-tracking/PaymentTracking'));
@@ -40,7 +40,7 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                         {/* Login Route */}
                         <Route
                             path="/signup"
-                            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Authentication setIsAuthenticated={setIsAuthenticated} />}
+                            element={isAuthenticated ? <Navigate to="/home" /> : <Authentication setIsAuthenticated={setIsAuthenticated} />}
                         />
 
                         <Route path="/card-details" element={<Authentication setIsAuthenticated={setIsAuthenticated} />} />
@@ -52,13 +52,13 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                         {/* Protected Routes */}
                         <Route
                             path="/"
-                            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/signup" />}
+                            element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/signup" />}
                         />
                         <Route
-                            path="/dashboard"
+                            path="/home"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <Dashboard />
+                                    <LandingPage />
                                 </ProtectedRoute>
                             }
                         />

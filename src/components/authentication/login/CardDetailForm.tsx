@@ -68,7 +68,7 @@ const CardDetailForm = ({ registerData, setIsAuthenticated }: any) => {
                 setTimeout(() => {
                     setOpenModal(false)
                     setIsAuthenticated(true)
-                    navigate('/dashboard')
+                    navigate('/home')
                 }, 2000);
             }
         } catch (error: any) {
