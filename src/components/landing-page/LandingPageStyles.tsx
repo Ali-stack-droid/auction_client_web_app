@@ -32,7 +32,6 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         textTransform: 'none'
     },
     card: {
-        border: '1px solid red',
         borderRadius: '20px',
         // height: '50%'
     }
