@@ -51,7 +51,8 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
-    "@types/react-dom": "^19.0.2"
+    "@types/react-dom": "^19.0.2",
+    "typescript": "^5.7.3"
   },
   "proxy": "https://parkerauction.aaliservices.com"
 }

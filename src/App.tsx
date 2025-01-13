@@ -4,12 +4,12 @@ import { Box } from '@mui/material';
 import Cookies from 'js-cookie';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [loading, setLoading] = useState(true); // New loading state
 
   useEffect(() => {
     // Check authentication status from cookies
-    setIsAuthenticated(!!Cookies.get('user')); // Set isAuthenticated based on token
+    // setIsAuthenticated(!!Cookies.get('user')); // Set isAuthenticated based on token
     setLoading(false); // Authentication check complete
   }, []);
 
