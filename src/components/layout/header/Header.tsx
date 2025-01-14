@@ -1,10 +1,11 @@
 import React from 'react';
-import { AppBar, Toolbar, Button, IconButton, Box, Link, Typography } from '@mui/material';
+import { AppBar, Toolbar, Button, IconButton, Box, Typography } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import useHeaderStyles from './HeaderStyles';
 import theme from '../../../theme';
+import CustomNavLink from '../../custom-components/CustomNavLink';
 
 const Header = () => {
     const location = useLocation(); // Get the current pathname
@@ -18,6 +19,14 @@ const Header = () => {
         { label: 'Open Invoices', path: '/invoices' },
         { label: 'Live Stream', path: '/live' },
     ];
+
+    const isSelected = (path: string) => {
+
+        if (path === "/auction" || path === "/live") {
+            return location.pathname.replace(/\/+$/, '').includes(path);
+        }
+        return path === location.pathname;
+    }
 
     return (
         <AppBar
@@ -43,19 +52,13 @@ const Header = () => {
                     {/* Navigation Links */}
                     <Box className={classes.navLinks}>
                         {navLinks.map((link) => (
-                            <Link
+                            <CustomNavLink
+                                isSelected={isSelected(link.path)}
                                 key={link.path}
-                                href={link.path}
-                                underline="none"
-                                sx={{
-                                    color:
-                                        location.pathname === link.path
-                                            ? theme.palette.primary.main
-                                            : theme.palette.primary.main1,
-                                }}
+                                to={link.path}
                             >
                                 {link.label}
-                            </Link>
+                            </CustomNavLink>
                         ))}
                     </Box>
                 </Box>

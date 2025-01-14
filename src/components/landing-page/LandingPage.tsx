@@ -346,24 +346,28 @@ const LandingPage = () => {
                             velit viverra amet faucibus.
                         </Typography>
                         {/* Avatars */}
-                        <Stack direction="row" spacing={-1} sx={{ alignItems: "center" }}>
-                            {["/assets/pngs/user1.png", "/assets/pngs/user2.png", "/assets/pngs/user3.png", "/assets/pngs/user4.png", "/assets/pngs/user5.png", "/assets/pngs/user6.png"].map((src, index) => (
-                                <Avatar
-                                    key={index}
-                                    alt={`User ${index + 1}`}
-                                    src={src}
-                                    sx={{
-                                        border: "2px solid white",
-                                        width: 48,
-                                        height: 48,
-                                        boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-                                    }}
-                                />
-                            ))}
+                        <Box sx={{ display: 'flex', justifyContent: 'start', alignItems: "center" }}>
+
+                            <Stack direction="row" spacing={-2} sx={{ alignItems: "center" }}>
+                                {["/assets/pngs/user1.png", "/assets/pngs/user2.png", "/assets/pngs/user3.png", "/assets/pngs/user4.png", "/assets/pngs/user5.png", "/assets/pngs/user6.png"].map((src, index) => (
+                                    <Avatar
+                                        key={index}
+                                        alt={`User ${index + 1}`}
+                                        src={src}
+                                        sx={{
+                                            border: "2px solid white",
+                                            width: 48,
+                                            height: 48,
+                                            boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                                        }}
+                                    />
+                                ))}
+                            </Stack>
                             <Typography sx={{ ml: 2, fontWeight: "bold" }}>
                                 100+ Reviews
                             </Typography>
-                        </Stack>
+                        </Box>
+
                     </Grid>
 
                     {/* Right Section */}

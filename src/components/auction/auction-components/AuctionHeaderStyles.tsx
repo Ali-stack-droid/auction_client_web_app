@@ -52,8 +52,9 @@ const useAuctionHeaderStyles = makeStyles((theme: any) => ({
         border: '1px solid #E2E8F0',
         height: '40px',
         borderRadius: '5px',
-        minWidth: '260px',
-        maxWidth: '260px',
+        minWidth: '250px',
+        maxWidth: '250px',
+        backgroundColor: 'white',
     },
     filterDropDown: {
         display: 'flex',
