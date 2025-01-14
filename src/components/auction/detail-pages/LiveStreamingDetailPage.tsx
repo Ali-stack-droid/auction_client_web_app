@@ -206,9 +206,6 @@ const LiveStreamingDetailPage = () => {
                                 width={"100%"}
                                 headerType={"live"}
                                 cardData={auctionDetails || {}}
-                                handleEdit={() => { }}
-                                handleDelete={() => { }}
-                                handleMoveModal={() => { }}
                             />
                         </Box>
                         <Box className={classes.rightSection}>

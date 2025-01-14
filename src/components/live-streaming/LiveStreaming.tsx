@@ -150,9 +150,6 @@ const LiveStreaming = () => {
                                             <AuctionCard
                                                 headerType={"live"}
                                                 cardData={auction}
-                                                handleEdit={handleEdit}
-                                                handleDelete={() => handleDeleteAuction(auction.id)}
-                                                handleMoveModal={() => { }}
                                             />
                                         </Grid>
                                     ))}

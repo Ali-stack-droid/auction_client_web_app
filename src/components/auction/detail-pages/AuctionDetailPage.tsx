@@ -410,9 +410,6 @@ const AuctionDetailPage = () => {
                                                 key={lot.id}
                                                 headerType={'lots'}
                                                 cardData={lot}
-                                                handleEdit={handleEditLots}
-                                                handleDelete={handleDeleteAuction}
-                                                handleMoveModal={handleMoveModal}
                                             />
                                         </Grid>
                                     ))}

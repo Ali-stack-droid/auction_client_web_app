@@ -119,9 +119,6 @@ const LandingPage = () => {
                             <AuctionCard
                                 headerType={"home"}
                                 cardData={auction}
-                                handleEdit={() => { }}
-                                handleDelete={() => { }}
-                                handleMoveModal={() => { }}
                             />
                         </Box>
                     ))}
