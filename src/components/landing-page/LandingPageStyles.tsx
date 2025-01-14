@@ -36,23 +36,24 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         padding: '10px'
         // height: '50%'
     },
-    mediaCards:{
+    mediaCards: {
         paddingTop: '95px',
-        paddingBottom:'36px'
+        paddingBottom: '36px'
     },
-    headingStyles:{
+    headingStyles: {
         fontSize: '40px',
         fontWeight: 600
     },
-    locationSection:{
+    locationSection: {
         // background: 'rgba(244, 244, 244, 0.5)'
     },
-    locationCards:{
+    locationCards: {
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        gap: '16px'
     },
-    cardStyles:{
+    cardStyles: {
         borderRadius: "12px",
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
         textAlign: "left",
@@ -60,10 +61,11 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: 2,
+        border: '1px solid #E2E8F0'
     },
     titleStyles: {
-        fontWeight: "bold",
+        fontSize: '22px',
+        fontWeight: 600,
         color: "#001F54",
         marginBottom: "8px",
     }
