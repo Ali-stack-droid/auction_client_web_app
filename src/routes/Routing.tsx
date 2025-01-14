@@ -1,19 +1,14 @@
 import React, { Suspense, useState } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import TempComponent from './TempComponent';
 import AppProvider from '../components/layout/AppProvider';
-import Auction from '../components/auction/Auction';
-import Lots from '../components/auction/Lots';
-import LotDetailPage from '../components/auction/detail-pages/LotDetailPage';
 import AuctionDetailPage from '../components/auction/detail-pages/AuctionDetailPage';
-import CreatePage from '../components/auction/create-edit-pages/CreatePage';
 import LiveStreamingDetailPage from '../components/auction/detail-pages/LiveStreamingDetailPage';
 import { ToastContainer } from 'react-toastify';
-import AddLot from '../components/auction/create-edit-pages/AddLot';
 import Inventory from '../components/inventory/Inventory';
 import Authentication from '../components/authentication/Authentication';
-// import AuctionRoutes from '../components/auction/routes/AuctionRoutes';
+import CurrentAuctions from '../components/auction/CurrentAuctions';
 
 // Page Components
 const LandingPage = React.lazy(() => import('../components/landing-page/LandingPage'));
@@ -63,14 +58,59 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             }
                         />
                         <Route
-                            path="/auction"
+                            path="/current-auctions"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <Auction />
+                                    <CurrentAuctions />
                                 </ProtectedRoute>
                             }
                         />
                         <Route
+                            path="/auction/details"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <AuctionDetailPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/live-streaming/details"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <LiveStreamingDetailPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/live"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <LiveStreaming />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/payment"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <PaymentTracking />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/inventory"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <Inventory />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        <Route path="/logout" element={<TempComponent setIsAuthenticated={setIsAuthenticated} />} />
+
+
+                        {/* Routes not needed yet: */}
+                        {/* <Route
                             path="/auction/create"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
@@ -117,48 +157,7 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                                     <LotDetailPage />
                                 </ProtectedRoute>
                             }
-                        />
-                        <Route
-                            path="/auction/details"
-                            element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <AuctionDetailPage />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/live-streaming/details"
-                            element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <LiveStreamingDetailPage />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/live"
-                            element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <LiveStreaming />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/payment"
-                            element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <PaymentTracking />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/inventory"
-                            element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <Inventory />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route path="/logout" element={<TempComponent setIsAuthenticated={setIsAuthenticated} />} />
+                        /> */}
                     </Routes>
                 </Suspense>
                 <ToastContainer />

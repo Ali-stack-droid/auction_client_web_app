@@ -8,7 +8,7 @@ import KeyboardReturnRoundedIcon from '@mui/icons-material/KeyboardReturnRounded
 import CustomTextField from '../../custom-components/CustomTextField';
 
 const AuctionHeader = ({
-    headerType = 'auction', // Default to 'auction'
+    headerType = 'current-auctions', // Default to 'auction'
     isCurrent,
     onToggle,
     selectedLocation,
@@ -31,7 +31,7 @@ const AuctionHeader = ({
     };
 
     const handleAddClick = () => {
-        if (headerType === "auction" || headerType === "live") {
+        if (headerType === "current-auctions" || headerType === "live") {
             navigate('/auction/create')
         } else {
             const selectedAuction = getQueryParam('aucId');
@@ -40,99 +40,101 @@ const AuctionHeader = ({
     }
 
     return (
-        <Box className={classes.root}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                {locationURL.pathname === '/auction/lots' &&
-                    <IconButton onClick={() => headerType === "inventory" ? navigate('/inventory') : navigate('/auction')}>
-                        <KeyboardReturnRoundedIcon />
-                    </IconButton>
-                }
-                <Typography className={classes.title}>
-                    {headerType === 'live' ? "Live Streaming Auctions"
-                        : headerType === 'inventory' ? "Inventory"
-                            : isCurrent
-                                ? `Current ${headerType === 'lots' ? 'Lots' : 'Auctions'}`
-                                : `Past ${headerType === 'lots' ? 'Lots' : 'Auctions'}`}
-                </Typography>
-            </Box>
-            <Box className={classes.buttonContainer}>
+        <Box>
+            <Typography className={classes.title}>
+                {headerType === 'current-auctions' ? "Current Auction"
+                    : headerType === 'inventory' ? "Inventory"
+                        : isCurrent
+                            ? `Current ${headerType === 'lots' ? 'Lots' : 'Auctions'}`
+                            : `Past ${headerType === 'lots' ? 'Lots' : 'Auctions'}`}
+            </Typography>
+            <Box className={classes.root}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: "60%", padding: "20px 0" }}>
+                    <CustomTextField
+                        // value={searchTerm}
+                        // onChange={handleSearchChange}
+                        placeholder="Search for auction listings here..."
+                        className={classes.searchField}
+                        InputProps={{
+                            endAdornment: (
+                                <Button variant={'contained'} className={classes.searchButton}>
+                                    Search
+                                </Button>
+                            ),
+                        }}
+                    />
+                </Box>
 
-                {isCurrent && headerType !== "inventory" && (
-                    <Button variant={headerType === "live" ? "contained" : "outlined"}
-                        className={headerType === "live" ? classes.addAuctionButtonLive : classes.addAuctionButton} onClick={handleAddClick}
-                    >
-                        Add {headerType === 'lots' ? 'Lot' : 'Auction'}
-                    </Button>
-                )}
-
-                {headerType !== "live" &&
-                    <React.Fragment>
-                        {headerType !== "inventory" ?
-                            <Box className={classes.toggleContainer}>
-                                <ToggleButtonGroup
-                                    value={isCurrent ? 'current' : 'past'}
-                                    exclusive
-                                    onChange={onToggle}
-                                    sx={{ maxHeight: '30px' }}
-                                >
-                                    <ToggleButton
-                                        value="current"
-                                        className={`${classes.toggleButton} ${isCurrent ? 'current' : 'past'}`}
+                <Box className={classes.buttonContainer}>
+                    {headerType !== "live" &&
+                        <React.Fragment>
+                            {headerType !== "inventory" ?
+                                <Box className={classes.toggleContainer}>
+                                    <ToggleButtonGroup
+                                        value={isCurrent ? 'current' : 'past'}
+                                        exclusive
+                                        onChange={onToggle}
+                                        sx={{ maxHeight: '30px' }}
                                     >
-                                        Current {headerType === 'lots' ? 'Lots' : 'Auctions'}
-                                    </ToggleButton>
-                                    <ToggleButton
-                                        value="past"
-                                        className={`${classes.toggleButton} ${!isCurrent ? 'current' : 'past'}`}
+                                        <ToggleButton
+                                            value="current"
+                                            className={`${classes.toggleButton} ${isCurrent ? 'current' : 'past'}`}
+                                        >
+                                            Current {headerType === 'lots' ? 'Lots' : 'Auctions'}
+                                        </ToggleButton>
+                                        <ToggleButton
+                                            value="past"
+                                            className={`${classes.toggleButton} ${!isCurrent ? 'current' : 'past'}`}
+                                        >
+                                            Past {headerType === 'lots' ? 'Lots' : 'Auctions'}
+                                        </ToggleButton>
+                                    </ToggleButtonGroup>
+                                </Box>
+                                :
+                                <Box flex={1}>
+                                    <CustomTextField
+                                        select
+                                        className={classes.filterDropDown}
+                                        fullWidth
+                                        value={filterLots}
+                                        onChange={onToggle}
+                                        sx={{
+                                            '& .MuiSelect-icon': {
+                                                color: '#A0AEC0', // Set the color of the arrow icon
+                                            },
+                                        }}
                                     >
-                                        Past {headerType === 'lots' ? 'Lots' : 'Auctions'}
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Box>
-                            :
-                            <Box flex={1}>
-                                <CustomTextField
-                                    select
-                                    className={classes.filterDropDown}
-                                    fullWidth
-                                    value={filterLots}
-                                    onChange={onToggle}
-                                    sx={{
-                                        '& .MuiSelect-icon': {
-                                            color: '#A0AEC0', // Set the color of the arrow icon
-                                        },
-                                    }}
-                                >
-                                    <MenuItem value="all">All Lots</MenuItem>
-                                    <MenuItem value="current">Current Lots</MenuItem>
-                                    <MenuItem value="past">Past Lots</MenuItem>
-                                </CustomTextField>
-                            </Box>
-                        }
+                                        <MenuItem value="all">All Lots</MenuItem>
+                                        <MenuItem value="current">Current Lots</MenuItem>
+                                        <MenuItem value="past">Past Lots</MenuItem>
+                                    </CustomTextField>
+                                </Box>
+                            }
 
-                        <Button
-                            variant="contained"
-                            className={classes.filterButton}
-                            onClick={handleMenuOpen}
-                            startIcon={<FilterAltIcon />}
-                        >
-                            Filter
-                        </Button>
-                        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                            {locations.map((location: any) => (
-                                <MenuItem
-                                    key={location}
-                                    onClick={() => handleFilterChange(location)}
-                                    className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
-                                >
-                                    {location}
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </React.Fragment>
-                }
+                            <Button
+                                variant="contained"
+                                className={classes.filterButton}
+                                onClick={handleMenuOpen}
+                                startIcon={<FilterAltIcon />}
+                            >
+                                Filter
+                            </Button>
+                            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                                {locations.map((location: any) => (
+                                    <MenuItem
+                                        key={location}
+                                        onClick={() => handleFilterChange(location)}
+                                        className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
+                                    >
+                                        {location}
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </React.Fragment>
+                    }
+                </Box>
             </Box>
-        </Box>
+        </Box >
     );
 };
 

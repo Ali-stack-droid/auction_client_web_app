@@ -14,9 +14,9 @@ const Header = () => {
         { label: 'Home', path: '/home' },
         { label: 'Current Auctions', path: '/current-auctions' },
         { label: 'Listings', path: '/listings' },
-        { label: 'My Bids', path: '/my-bids' },
-        { label: 'Open Invoices', path: '/open-invoices' },
-        { label: 'Live Stream', path: '/live-stream' },
+        { label: 'My Bids', path: '/bids' },
+        { label: 'Open Invoices', path: '/invoices' },
+        { label: 'Live Stream', path: '/live' },
     ];
 
     return (
@@ -38,7 +38,7 @@ const Header = () => {
                     <img
                         src={`${process.env.PUBLIC_URL}/assets/svgs/logo.svg`}
                         alt="Parker's Auction"
-                        style={{ width: '15%', padding: '0 10px' }}
+                        style={{ width: '12%', padding: '0 10px' }}
                     />
                     {/* Navigation Links */}
                     <Box className={classes.navLinks}>

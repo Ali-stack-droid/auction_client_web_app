@@ -15,7 +15,7 @@ import { deleteAuction, getCurrentAuctions, getCurrentAuctionsByLocation, getCur
 import NoRecordFound from '../../utils/NoRecordFound';
 import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
 
-const Auction = ({ searchTerm }: any) => {
+const CurrentAuctions = ({ searchTerm }: any) => {
     const [fadeIn, setFadeIn] = useState(false); // Fade control state
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [deleteAuctionId, setDeleteAuctionId] = useState<string | null>(null);
@@ -149,7 +149,7 @@ const Auction = ({ searchTerm }: any) => {
     return (
         <Box sx={{ padding: 2 }}>
             <AuctionHeader
-                headerType={"auction"}
+                headerType={"current-auctions"}
                 isCurrent={isCurrentAuction}
                 onToggle={() => {
                     if (!isFetchingData) {
@@ -223,4 +223,4 @@ const Auction = ({ searchTerm }: any) => {
     );
 };
 
-export default Auction;
+export default CurrentAuctions;
