@@ -2,15 +2,28 @@
 import { makeStyles } from '@mui/styles';
 
 const useAuctionHeaderStyles = makeStyles((theme: any) => ({
+    searchField: {
+        height: '40px',
+        width: '70%',
+        // marginBottom: "40px"
+    },
+    searchButton: {
+        borderRadius: '15px',
+        margin: "10px 0",
+        height: '40px',
+        width: '140px',
+        textTransform: 'none'
+    },
     root: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     title: {
-        fontSize: '30px',
+        fontSize: '40.85px',
         fontWeight: 600,
         color: theme.palette.primary.main,
+        padding: "10px 0"
     },
     buttonContainer: {
         display: 'flex',
