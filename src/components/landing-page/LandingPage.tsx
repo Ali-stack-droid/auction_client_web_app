@@ -9,14 +9,8 @@ import {
     Avatar
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import theme from "../../theme";
 import useLandingPageStyles from "./LandingPageStyles";
 import CustomTextField from "../custom-components/CustomTextField";
-import {
-    Search as SearchIcon,
-} from '@mui/icons-material';
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import Stack from '@mui/material/Stack';
 import Rating from '@mui/material/Rating';
@@ -127,6 +121,7 @@ const LandingPage = () => {
                 </Box>
             </Box>
 
+            {/* All Tools Section*/}
             <Box>
                 <Typography
                     variant="h4"
@@ -143,8 +138,6 @@ const LandingPage = () => {
                     in one place
                 </Typography>
 
-                {/* Cards and Image Section */}
-                {/* Left Column */}
                 <Box className={classes.toolsWrapper}>
                     <Box className={classes.toolsInfo}>
 
@@ -295,7 +288,7 @@ const LandingPage = () => {
                 <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
                     {auctionData.slice(0, 3).map((auction, index) => (
 
-                        <Box sx={{ maxWidth: '386px' }} key={index}>
+                        <Box sx={{ width: "100%" }} key={index}>
                             <AuctionCard
                                 headerType={"auction"}
                                 cardData={auction}
@@ -324,7 +317,7 @@ const LandingPage = () => {
                 <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
                     {auctionData.slice(0, 3).map((auction, index) => (
 
-                        <Box sx={{ maxWidth: '386px' }} key={index}>
+                        <Box sx={{ width: "100%" }} key={index}>
                             <AuctionCard
                                 headerType={"lots"}
                                 cardData={auction}
