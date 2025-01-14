@@ -303,12 +303,12 @@ const LandingPage = () => {
                         Our Current Auctions
                     </Typography>
                 </Box>
-                <Box className={classes.locationCards} sx={{ marginBottom: 4 }}>
+                <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
                     {auctionData.slice(0, 3).map((auction, index) => (
 
                         <Box sx={{ maxWidth: '386px' }} key={index}>
                             <AuctionCard
-                                headerType={"home"}
+                                headerType={"auction"}
                                 cardData={auction}
                                 handleEdit={() => { }}
                                 handleDelete={() => { }}
@@ -317,30 +317,60 @@ const LandingPage = () => {
                         </Box>
                     ))}
                 </Box>
+
+                <Button className={classes.allAuctions} variant={"contained"} >
+                    View  All Auctions
+                </Button>
             </Box>
 
 
+            {/* Featured items Section */}
 
+            <Box className={classes.locationSection} py={10}>
+                <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
+                    <Typography className={classes.headingStyles} color="primary">
+                        Our Featured Items or Some Current Listing
+                    </Typography>
+                </Box>
+                <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
+                    {auctionData.slice(0, 3).map((auction, index) => (
 
+                        <Box sx={{ maxWidth: '386px' }} key={index}>
+                            <AuctionCard
+                                headerType={"lots"}
+                                cardData={auction}
+                                handleEdit={() => { }}
+                                handleDelete={() => { }}
+                                handleMoveModal={() => { }}
+                            />
+                        </Box>
+                    ))}
+                </Box>
 
+                <Button className={classes.allAuctions} variant={"contained"} >
+                    View  All Listings
+                </Button>
 
+            </Box>
 
+            {/* About us Section */}
 
-            <Box sx={{ py: 6, px: 4 }}>
+            <Box sx={{ py: 18, px: 4 }}>
                 <Grid container spacing={4} alignItems="center">
                     {/* Left Section */}
                     <Grid item xs={12} md={6}>
                         <Typography
-                            variant="h4"
-                            sx={{ fontWeight: "bold", color: "#001F54", mb: 2 }}
+                            sx={{ fontWeight: "700", fontSize: '40px', color: "#021526", mb: '14px' }}
                         >
-                            What Our Member's
+                            What <Typography className={classes.member}
+                                color={'primary'} component={'span'}>Our Member's</Typography>
                             <br />
                             Saying About Us
                         </Typography>
+
                         <Typography
                             variant="body1"
-                            sx={{ color: "text.secondary", mb: 4 }}
+                            sx={{ color: "text.secondary", mb: 4, maxWidth: '423px' }}
                         >
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem
                             velit viverra amet faucibus.
@@ -363,7 +393,7 @@ const LandingPage = () => {
                                     />
                                 ))}
                             </Stack>
-                            <Typography sx={{ ml: 2, fontWeight: "bold" }}>
+                            <Typography sx={{ ml: 2, fontWeight: 600, fontSize: '16px' }}>
                                 100+ Reviews
                             </Typography>
                         </Box>
@@ -372,12 +402,7 @@ const LandingPage = () => {
 
                     {/* Right Section */}
                     <Grid item xs={12} md={6}>
-                        <Card
-                            sx={{
-                                borderRadius: "12px",
-                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                            }}
-                        >
+                        <Card className={classes.ratingCard}>
                             <CardContent>
                                 <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
 
@@ -385,12 +410,12 @@ const LandingPage = () => {
                                         {/* Avatar */}
                                         <Avatar
                                             alt="Jane Cooper"
-                                            src="/images/jane-cooper.png"
+                                            src="/assets/pngs/user4.png"
                                             sx={{ width: 56, height: 56 }}
                                         />
                                         {/* Name and Date */}
                                         <Box>
-                                            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                                            <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '16px' }}>
                                                 Jane Cooper
                                             </Typography>
                                             <Typography
@@ -405,6 +430,7 @@ const LandingPage = () => {
                                     {/* Rating */}
                                     <Rating
                                         value={5}
+                                        size="large"
                                         readOnly
                                         sx={{ color: "#FFD700" }}
                                     />
@@ -413,7 +439,7 @@ const LandingPage = () => {
                                 {/* Review Text */}
                                 <Typography
                                     variant="body2"
-                                    sx={{ color: "text.secondary", mt: 2 }}
+                                    sx={{ color: "text.secondary", mt: '45px', fontSize: '16px', fontWeight: 400 }}
                                 >
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                     Sem velit viverra amet faucibus. Lorem ipsum dolor sit
@@ -427,11 +453,7 @@ const LandingPage = () => {
                         </Card>
                     </Grid>
                 </Grid>
-            </Box>
-
-
-
-
+            </Box>s
         </Box>
     );
 };

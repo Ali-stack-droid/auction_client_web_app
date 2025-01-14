@@ -45,7 +45,9 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         fontWeight: 600
     },
     locationSection: {
-        // background: 'rgba(244, 244, 244, 0.5)'
+        // background: 'rgba(244, 244, 244, 0.5)',
+        display: 'flex',
+        flexDirection: 'column'
     },
     locationCards: {
         display: 'flex',
@@ -68,6 +70,28 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         fontWeight: 600,
         color: "#001F54",
         marginBottom: "40px",
+    },
+    allAuctions: {
+        borderRadius: '6px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        height: '64px',
+        width: '400px',
+        textTransform: 'none',
+        fontWeight: 600,
+        fontSize: '18px'
+    },
+    member: {
+        fontSize: '40px',
+        fontWeight: 700
+    },
+    ratingCard: {
+        borderRadius: "20px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        border: '1px solid #A8A8A8',
+        maxWidth: '590px',
+        padding: '54px 44px 75px 52px'
     }
 }));
 

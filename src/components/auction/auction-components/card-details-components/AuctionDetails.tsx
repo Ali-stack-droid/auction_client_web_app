@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import WatchLaterRoundedIcon from '@mui/icons-material/WatchLaterRounded';
 import ViewInArRoundedIcon from '@mui/icons-material/ViewInArRounded';
@@ -9,8 +9,12 @@ const AuctionDetails = ({ auctionDetails }: any) => {
 
     return (
         <Box className={classes.container}>
-            {/* Row 1 */}
-            <Box className={classes.row}>
+
+            <Typography color='primary' fontSize={'16px'} fontWeight={700}>
+                ID : #30
+            </Typography>
+
+            <Box mt={'8px'} mb={'20px'} className={classes.row}>
                 {/* Location */}
                 <Box className={classes.iconText}>
                     <PlaceIcon fontSize="small" color="primary" />
@@ -20,14 +24,18 @@ const AuctionDetails = ({ auctionDetails }: any) => {
                 <Box className={`${classes.iconText} ${classes.flexItem}`}>
                     <WatchLaterRoundedIcon fontSize="small" color="primary" />
                     <Typography className={classes.text} sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-                        {auctionDetails.dateRange}
+                        12 : 30 : 44 :01
                     </Typography>
                 </Box>
             </Box>
 
+            <Button className={classes.viewButton} variant={"contained"} >
+                View Auction
+            </Button>
+
             {/* Row 2 */}
-            <Box className={classes.row}>
-                {/* Lots Available */}
+            {/* Lots Available */}
+            {/* <Box className={classes.row}>
                 <Box className={classes.iconText}>
                     <ViewInArRoundedIcon fontSize="small" color="primary" />
                     <Typography className={classes.text}>
@@ -35,7 +43,7 @@ const AuctionDetails = ({ auctionDetails }: any) => {
                         {auctionDetails.lotsAvailable > 1 ? "Lots" : "Lot"}&nbsp;Available
                     </Typography>
                 </Box>
-            </Box>
+            </Box> */}
         </Box>
     );
 };

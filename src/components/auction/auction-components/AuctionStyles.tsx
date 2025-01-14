@@ -184,7 +184,7 @@ export const useAuctionDetailStyles = makeStyles({
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
-        gap: 10,
+        gap: 16,
     },
     iconText: {
         display: 'flex',
