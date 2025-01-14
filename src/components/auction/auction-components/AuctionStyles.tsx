@@ -3,17 +3,9 @@ import theme from '../../../theme';
 
 export const useAuctionCardStyles = makeStyles({
     card: {
-        maxWidth: "345px",
-        // minHeight: "370px",
         padding: "15px",
         borderRadius: "15px",
-        // border: '1px solid red'
-    },
-    liveCard: {
-        maxWidth: "100%",
-        minHeight: "370px",
-        padding: "15px",
-        borderRadius: "15px",
+        minHeight: '440px'
     },
     description: {
         color: theme.palette.primary.main2,
@@ -37,16 +29,15 @@ export const useAuctionCardStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        minHeight: '250px'
     },
     content: {
-        marginTop: "15px",
+        marginTop: "30px",
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'start',
     },
     title: {
-        fontSize: "18px",
+        fontSize: "22px",
         fontWeight: 600,
         color: theme.palette.primary.main1,
         flex: 1,
@@ -188,7 +179,6 @@ export const useAuctionDetailStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: "space-between",
-        gap: 20,
     },
     row: {
         display: 'flex',
@@ -205,11 +195,17 @@ export const useAuctionDetailStyles = makeStyles({
         // flex: '1',
     },
     text: {
-        fontSize: "14px",
+        fontSize: "15px",
         color: theme.palette.primary.main2,
     },
     textLive: {
         fontSize: "16px",
         color: theme.palette.primary.main10,
-    }
+    },
+    viewButton: {
+        textTransform: "none",
+        fontSize: "13px",
+        width: "175px",
+        height: "37.47px",
+    },
 });

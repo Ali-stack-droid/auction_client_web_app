@@ -161,7 +161,7 @@ const CurrentAuctions = ({ searchTerm }: any) => {
                 locations={locations}
             />
 
-            <Box sx={{ minHeight: "500px" }}>
+            <Box>
                 {!isFetchingData && paginationedData?.length ?
                     <Fade in={fadeIn} timeout={300}>
                         <Container disableGutters maxWidth={false} sx={{ mt: 3 }}>

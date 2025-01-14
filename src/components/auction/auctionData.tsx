@@ -1,8 +1,8 @@
 const auctionData = [
     {
         id: 1,
-        name: "Luxury Car Auction Mercedes Special Event",
-        image: `${process.env.PUBLIC_URL}/assets/pngs/mercedes.png`,
+        name: "New York Jersey, USA",
+        image: `${process.env.PUBLIC_URL}/assets/pngs/land6.png`,
         type: "current",
         details: {
             location: "New York, USA",
@@ -12,8 +12,8 @@ const auctionData = [
     },
     {
         id: 2,
-        name: "Classic Art Collection Exclusive Auction",
-        image: `${process.env.PUBLIC_URL}/assets/pngs/watch.png`,
+        name: "New York Jersey, USA",
+        image: `${process.env.PUBLIC_URL}/assets/pngs/land6.png`,
         type: "past",
         details: {
             location: "New York, USA",
@@ -23,8 +23,8 @@ const auctionData = [
     },
     {
         id: 3,
-        name: "Real Estate Auction Prime Properties",
-        image: `${process.env.PUBLIC_URL}/assets/pngs/jacket.png`,
+        name: "New York Jersey, USA",
+        image: `${process.env.PUBLIC_URL}/assets/pngs/land6.png`,
         type: "current",
         details: {
             location: "New York, USA",

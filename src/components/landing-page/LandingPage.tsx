@@ -20,6 +20,8 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Stack from '@mui/material/Stack';
 import Rating from '@mui/material/Rating';
+import AuctionCard from "../auction/auction-components/AuctionCard";
+import auctionData from "../auction/auctionData";
 
 
 const AnimatedText = styled(Typography)({
@@ -34,7 +36,7 @@ const AnimatedText = styled(Typography)({
 const LandingPage = () => {
     const classes = useLandingPageStyles()
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box>
             {/* Animated Text Section */}
             <Box sx={{ textAlign: "center", marginBottom: 4, padding: "0 150px" }}>
                 <AnimatedText className={classes.heading}>
@@ -107,260 +109,193 @@ const LandingPage = () => {
             <Box className={classes.locationSection} py={10}>
                 <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
                     <Typography className={classes.headingStyles} color="primary">
-                        Current Auctions By Locations                     
+                        Current Auctions By Locations
                     </Typography>
                 </Box>
-                <Grid className={classes.locationCards} container spacing={3} sx={{ marginBottom: 4 }}>
-                    {[1, 2, 3].map((_, index) => (
-                        // <Grid item xs={12} sm={4} key={index}>
-                        //     <Card elevation={3}>
-                        //         <CardContent>
-                        //             <Typography variant="h6">Card Title {index + 1}</Typography>
-                        //             <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                        //                 Description of the card goes here.
-                        //             </Typography>
-                        //             <Button variant="contained" color="primary">
-                        //                 View More
-                        //             </Button>
-                        //         </CardContent>
-                        //     </Card>
-                        // </Grid>
-                             
-                        <Card
-                        sx={{
-                            maxWidth: 345,
-                            borderRadius: "16px",
-                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                            backgroundColor: "#ffffff",
-                            overflow: "hidden",
-                        }}
-                    >
-                        {/* Image Section */}
-                        <CardMedia
-                            component="img"
-                            height="180"
-                            image="/assets/pngs/land6.png" // Replace with your image path
-                            alt="New York Jersey, USA"
-                            sx={{
-                                borderTopLeftRadius: "16px",
-                                borderTopRightRadius: "16px",
-                                objectFit: "cover",
-                            }}
-                        />
-            
-                        {/* Content Section */}
-                        <CardContent sx={{ textAlign: "center" }}>
-                            {/* Location */}
-                            <Typography
-                                variant="h6"
-                                component="div"
-                                sx={{ fontWeight: 600, marginBottom: 1 }}
-                            >
-                                New York Jersey, USA
-                            </Typography>
-            
-                            {/* Date Section */}
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: 1,
-                                    marginBottom: 2,
-                                    color: "#757575",
-                                }}
-                            >
-                                <CalendarTodayIcon fontSize="small" />
-                                <Typography variant="body2">12/20/2024</Typography>
-                            </Box>
-            
-                            {/* Button */}
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: "#001F54",
-                                    color: "#ffffff",
-                                    textTransform: "none",
-                                    padding: "6px 16px",
-                                    fontWeight: 500,
-                                    "&:hover": {
-                                        backgroundColor: "#00337F",
-                                    },
-                                }}
-                            >
-                                View Auction
-                            </Button>
-                        </CardContent>
-                    </Card>
+                <Box className={classes.locationCards} sx={{ marginBottom: 4 }}>
+                    {auctionData.slice(0, 3).map((auction, index) => (
+
+                        <Box sx={{ maxWidth: '386px' }} key={index}>
+                            <AuctionCard
+                                headerType={"home"}
+                                cardData={auction}
+                                handleEdit={() => { }}
+                                handleDelete={() => { }}
+                                handleMoveModal={() => { }}
+                            />
+                        </Box>
                     ))}
-                </Grid>
+                </Box>
             </Box>
 
 
 
             {/*Tools Section */}
-            <Box sx={{ backgroundColor: "#f9f9f9", py: 10 }}>
-            
-            <Typography
-                variant="h4"
-                sx={{
-                    textAlign: "center",
-                    marginBottom: '54px',
-                }}
-                className={classes.headingStyles}
-            >
-                All the tools you need in one place
-            </Typography>
+            <Box sx={{ py: 10 }}>
 
-            {/* Cards and Image Section */}
-            <Grid container spacing={3} alignItems="center" justifyContent="center">
-                {/* Left Column */}
-                <Grid item xs={12} sm={6} md={3}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Card className={classes.cardStyles}>
-                                <CardContent>
-                                    <Typography variant="h6" className={classes.titleStyles}>
-                                        Current and Upcoming Auctions:
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                        Upload the blood test reports in PDF, JPG format and get
-                                        the AI-generated blood report. Get health recommendations
-                                        and chat about it.
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        endIcon={<ArrowForwardIcon />}
-                                        sx={{
-                                            textTransform: "none",
-                                            fontWeight: "bold",
-                                            backgroundColor: "#001F54",
-                                            "&:hover": {
-                                                backgroundColor: "#002D7E",
-                                            },
-                                        }}
-                                    >
-                                        Learn More
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Card className={classes.cardStyles}>
-                                <CardContent>
-                                    <Typography variant="h6" className={classes.titleStyles}>
-                                        Past Auctions:
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                        User enters the health data and our platform will use GPT-4
-                                        to give you the right suggestions about your health.
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        endIcon={<ArrowForwardIcon />}
-                                        sx={{
-                                            textTransform: "none",
-                                            fontWeight: "bold",
-                                            backgroundColor: "#001F54",
-                                            "&:hover": {
-                                                backgroundColor: "#002D7E",
-                                            },
-                                        }}
-                                    >
-                                        Learn More
-                                    </Button>
-                                </CardContent>
-                            </Card>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        textAlign: "center",
+                        marginBottom: '54px',
+                    }}
+                    className={classes.headingStyles}
+                >
+                    All the tools you <Typography className={classes.headingStyles}
+                        color={'primary'} component={'span'}>need</Typography> in one place
+                </Typography>
+
+                {/* Cards and Image Section */}
+                <Grid container spacing={1} alignItems="center" justifyContent="center">
+                    {/* Left Column */}
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Card className={classes.cardStyles}>
+                                    <CardContent>
+                                        <Typography className={classes.titleStyles}>
+                                            Current and Upcoming Auctions:
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                            Upload the blood test reports in PDF, JPG format and get
+                                            the AI-generated blood report. Get health recommendations
+                                            and chat about it.
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            endIcon={<ArrowForwardIcon />}
+                                            sx={{
+                                                textTransform: "none",
+                                                fontWeight: "bold",
+                                                backgroundColor: "#001F54",
+                                                "&:hover": {
+                                                    backgroundColor: "#002D7E",
+                                                },
+                                            }}
+                                        >
+                                            Learn More
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Card className={classes.cardStyles}>
+                                    <CardContent>
+                                        <Typography variant="h6" className={classes.titleStyles}>
+                                            Past Auctions:
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                            User enters the health data and our platform will use GPT-4
+                                            to give you the right suggestions about your health.
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            endIcon={<ArrowForwardIcon />}
+                                            sx={{
+                                                textTransform: "none",
+                                                fontWeight: "bold",
+                                                backgroundColor: "#001F54",
+                                                "&:hover": {
+                                                    backgroundColor: "#002D7E",
+                                                },
+                                            }}
+                                        >
+                                            Learn More
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
 
-                {/* Center Image */}
-                <Grid item xs={12} sm={6} md={6}>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <img
-                            src="/assets/pngs/post-bidding.png" 
-                            alt="Auction Illustration"
-                            style={{
-                                maxWidth: "100%",
-                                borderRadius: "12px",
+                    {/* Center Image */}
+                    <Grid item xs={12} sm={6} md={6}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                             }}
-                        />
-                    </Box>
-                </Grid>
+                        >
+                            <img
+                                src="/assets/pngs/post-bidding.png"
+                                alt="Auction Illustration"
+                                style={{
+                                    maxWidth: "100%",
+                                    borderRadius: "12px",
+                                    padding: '10px',
+                                    border: '1px solid #E2E8F0'
+                                }}
+                            />
+                        </Box>
+                    </Grid>
 
-                {/* Right Column */}
-                <Grid item xs={12} sm={6} md={3}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Card className={classes.cardStyles}>
-                                <CardContent>
-                                    <Typography variant="h6" className={classes.titleStyles}>
-                                        Shipping Services:
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                        Our platform gets the DNA data of the user, then
-                                        integrates and provides personalized insights based on
-                                        predisposition.
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        endIcon={<ArrowForwardIcon />}
-                                        sx={{
-                                            textTransform: "none",
-                                            fontWeight: "bold",
-                                            backgroundColor: "#001F54",
-                                            "&:hover": {
-                                                backgroundColor: "#002D7E",
-                                            },
-                                        }}
-                                    >
-                                        Learn More
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Card className={classes.cardStyles}>
-                                <CardContent>
-                                    <Typography variant="h6" className={classes.titleStyles}>
-                                        Featured Products:
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                        Get into with our professional nutritionist and trainers to
-                                        get maximum health benefits.
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        endIcon={<ArrowForwardIcon />}
-                                        sx={{
-                                            textTransform: "none",
-                                            fontWeight: "bold",
-                                            backgroundColor: "#001F54",
-                                            "&:hover": {
-                                                backgroundColor: "#002D7E",
-                                            },
-                                        }}
-                                    >
-                                        Learn More
-                                    </Button>
-                                </CardContent>
-                            </Card>
+                    {/* Right Column */}
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Card className={classes.cardStyles}>
+                                    <CardContent>
+                                        <Typography variant="h6" className={classes.titleStyles}>
+                                            Shipping Services:
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                            Our platform gets the DNA data of the user, then
+                                            integrates and provides personalized insights based on
+                                            predisposition.
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            endIcon={<ArrowForwardIcon />}
+                                            sx={{
+                                                textTransform: "none",
+                                                fontWeight: "bold",
+                                                backgroundColor: "#001F54",
+                                                "&:hover": {
+                                                    backgroundColor: "#002D7E",
+                                                },
+                                            }}
+                                        >
+                                            Learn More
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Card className={classes.cardStyles}>
+                                    <CardContent>
+                                        <Typography variant="h6" className={classes.titleStyles}>
+                                            Featured Products:
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                            Get into with our professional nutritionist and trainers to
+                                            get maximum health benefits.
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            endIcon={<ArrowForwardIcon />}
+                                            sx={{
+                                                textTransform: "none",
+                                                fontWeight: "bold",
+                                                backgroundColor: "#001F54",
+                                                "&:hover": {
+                                                    backgroundColor: "#002D7E",
+                                                },
+                                            }}
+                                        >
+                                            Learn More
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-        </Box>
+            </Box>
 
 
             {/* Five Cards Section */}
@@ -406,104 +341,104 @@ const LandingPage = () => {
 
 
 
-        <Box sx={{ backgroundColor: "#f9f9f9", py: 6, px: 4 }}>
-            <Grid container spacing={4} alignItems="center">
-                {/* Left Section */}
-                <Grid item xs={12} md={6}>
-                    <Typography
-                        variant="h4"
-                        sx={{ fontWeight: "bold", color: "#001F54", mb: 2 }}
-                    >
-                        What Our Member's
-                        <br/>
-                        Saying About Us
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                        sx={{ color: "text.secondary", mb: 4 }}
-                    >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem
-                        velit viverra amet faucibus.
-                    </Typography>
-                    {/* Avatars */}
-                    <Stack direction="row" spacing={-1} sx={{ alignItems: "center" }}>
-                        {["/assets/pngs/user1.png", "/assets/pngs/user2.png", "/assets/pngs/user3.png", "/assets/pngs/user4.png", "/assets/pngs/user5.png", "/assets/pngs/user6.png"].map((src, index) => (
-                            <Avatar
-                                key={index}
-                                alt={`User ${index + 1}`}
-                                src={src}
-                                sx={{
-                                    border: "2px solid white",
-                                    width: 48,
-                                    height: 48,
-                                    boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-                                }}
-                            />
-                        ))}
-                        <Typography sx={{ ml: 2, fontWeight: "bold" }}>
-                            100+ Reviews
+            <Box sx={{ py: 6, px: 4 }}>
+                <Grid container spacing={4} alignItems="center">
+                    {/* Left Section */}
+                    <Grid item xs={12} md={6}>
+                        <Typography
+                            variant="h4"
+                            sx={{ fontWeight: "bold", color: "#001F54", mb: 2 }}
+                        >
+                            What Our Member's
+                            <br />
+                            Saying About Us
                         </Typography>
-                    </Stack>
-                </Grid>
-
-                {/* Right Section */}
-                <Grid item xs={12} md={6}>
-                    <Card
-                        sx={{
-                            borderRadius: "12px",
-                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                        }}
-                    >
-                        <CardContent>
-                            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-
-                            <Stack direction="row" spacing={2} alignItems="center">
-                                {/* Avatar */}
+                        <Typography
+                            variant="body1"
+                            sx={{ color: "text.secondary", mb: 4 }}
+                        >
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem
+                            velit viverra amet faucibus.
+                        </Typography>
+                        {/* Avatars */}
+                        <Stack direction="row" spacing={-1} sx={{ alignItems: "center" }}>
+                            {["/assets/pngs/user1.png", "/assets/pngs/user2.png", "/assets/pngs/user3.png", "/assets/pngs/user4.png", "/assets/pngs/user5.png", "/assets/pngs/user6.png"].map((src, index) => (
                                 <Avatar
-                                    alt="Jane Cooper"
-                                    src="/images/jane-cooper.png"
-                                    sx={{ width: 56, height: 56 }}
+                                    key={index}
+                                    alt={`User ${index + 1}`}
+                                    src={src}
+                                    sx={{
+                                        border: "2px solid white",
+                                        width: 48,
+                                        height: 48,
+                                        boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                                    }}
                                 />
-                                {/* Name and Date */}
-                                <Box>
-                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                                        Jane Cooper
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{ color: "text.secondary" }}
-                                    >
-                                        12/4/17
-                                    </Typography>
-                                </Box>
-                            </Stack>
-
-                            {/* Rating */}
-                            <Rating
-                                value={5}
-                                readOnly
-                                sx={{ color: "#FFD700" }}
-                            />
-                            </Box>
-
-                            {/* Review Text */}
-                            <Typography
-                                variant="body2"
-                                sx={{ color: "text.secondary", mt: 2 }}
-                            >
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Sem velit viverra amet faucibus. Lorem ipsum dolor sit
-                                amet, consectetur adipiscing elit. Sem velit viverra amet
-                                faucibus. Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. Sem velit viverra amet faucibus.
+                            ))}
+                            <Typography sx={{ ml: 2, fontWeight: "bold" }}>
+                                100+ Reviews
                             </Typography>
+                        </Stack>
+                    </Grid>
 
-                            
-                        </CardContent>
-                    </Card>
+                    {/* Right Section */}
+                    <Grid item xs={12} md={6}>
+                        <Card
+                            sx={{
+                                borderRadius: "12px",
+                                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                            }}
+                        >
+                            <CardContent>
+                                <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+
+                                    <Stack direction="row" spacing={2} alignItems="center">
+                                        {/* Avatar */}
+                                        <Avatar
+                                            alt="Jane Cooper"
+                                            src="/images/jane-cooper.png"
+                                            sx={{ width: 56, height: 56 }}
+                                        />
+                                        {/* Name and Date */}
+                                        <Box>
+                                            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                                                Jane Cooper
+                                            </Typography>
+                                            <Typography
+                                                variant="body2"
+                                                sx={{ color: "text.secondary" }}
+                                            >
+                                                12/4/17
+                                            </Typography>
+                                        </Box>
+                                    </Stack>
+
+                                    {/* Rating */}
+                                    <Rating
+                                        value={5}
+                                        readOnly
+                                        sx={{ color: "#FFD700" }}
+                                    />
+                                </Box>
+
+                                {/* Review Text */}
+                                <Typography
+                                    variant="body2"
+                                    sx={{ color: "text.secondary", mt: 2 }}
+                                >
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Sem velit viverra amet faucibus. Lorem ipsum dolor sit
+                                    amet, consectetur adipiscing elit. Sem velit viverra amet
+                                    faucibus. Lorem ipsum dolor sit amet, consectetur
+                                    adipiscing elit. Sem velit viverra amet faucibus.
+                                </Typography>
+
+
+                            </CardContent>
+                        </Card>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Box>
+            </Box>
 
 
 
