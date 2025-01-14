@@ -12,7 +12,7 @@ const useHeaderStyles = makeStyles({
     navLinks: {
         display: 'flex',
         alignItems: 'center',
-        gap: "20px",
+        gap: "10px",
         marginLeft: "20px",
         fontWeight: "600"
     }

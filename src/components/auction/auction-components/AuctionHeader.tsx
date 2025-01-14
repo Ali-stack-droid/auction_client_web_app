@@ -117,7 +117,7 @@ const AuctionHeader = ({
                                 onClick={handleMenuOpen}
                                 startIcon={<FilterAltIcon />}
                             >
-                                Filter
+                                Location
                             </Button>
                             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                                 {locations.map((location: any) => (

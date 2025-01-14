@@ -147,7 +147,7 @@ const CurrentAuctions = ({ searchTerm }: any) => {
 
 
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box sx={{ padding: "10px 0" }}>
             <AuctionHeader
                 headerType={"current-auctions"}
                 isCurrent={isCurrentAuction}
