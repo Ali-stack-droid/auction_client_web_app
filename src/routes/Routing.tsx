@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import Inventory from '../components/inventory/Inventory';
 import Authentication from '../components/authentication/Authentication';
 import CurrentAuctions from '../components/auction/CurrentAuctions';
+import AuctionListings from '../components/auction/AuctionListings';
 
 // Page Components
 const LandingPage = React.lazy(() => import('../components/landing-page/LandingPage'));
@@ -62,6 +63,14 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                                     <CurrentAuctions />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/listings"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <AuctionListings />
                                 </ProtectedRoute>
                             }
                         />
