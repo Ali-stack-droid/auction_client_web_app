@@ -67,7 +67,7 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         fontSize: '22px',
         fontWeight: 600,
         color: "#001F54",
-        marginBottom: "8px",
+        marginBottom: "40px",
     }
 }));
 

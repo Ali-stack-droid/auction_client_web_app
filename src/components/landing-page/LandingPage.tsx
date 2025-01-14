@@ -17,7 +17,7 @@ import {
 } from '@mui/icons-material';
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import Stack from '@mui/material/Stack';
 import Rating from '@mui/material/Rating';
 import AuctionCard from "../auction/auction-components/AuctionCard";
@@ -128,8 +128,6 @@ const LandingPage = () => {
                 </Box>
             </Box>
 
-
-
             {/*Tools Section */}
             <Box sx={{ py: 10 }}>
 
@@ -164,10 +162,10 @@ const LandingPage = () => {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            endIcon={<ArrowForwardIcon />}
+                                            endIcon={<ArrowOutwardIcon />}
                                             sx={{
                                                 textTransform: "none",
-                                                fontWeight: "bold",
+                                                fontWeight: 500,
                                                 backgroundColor: "#001F54",
                                                 "&:hover": {
                                                     backgroundColor: "#002D7E",
@@ -192,10 +190,10 @@ const LandingPage = () => {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            endIcon={<ArrowForwardIcon />}
+                                            endIcon={<ArrowOutwardIcon />}
                                             sx={{
                                                 textTransform: "none",
-                                                fontWeight: "bold",
+                                                fontWeight: 500,
                                                 backgroundColor: "#001F54",
                                                 "&:hover": {
                                                     backgroundColor: "#002D7E",
@@ -249,10 +247,10 @@ const LandingPage = () => {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            endIcon={<ArrowForwardIcon />}
+                                            endIcon={<ArrowOutwardIcon />}
                                             sx={{
                                                 textTransform: "none",
-                                                fontWeight: "bold",
+                                                fontWeight: 500,
                                                 backgroundColor: "#001F54",
                                                 "&:hover": {
                                                     backgroundColor: "#002D7E",
@@ -277,10 +275,10 @@ const LandingPage = () => {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            endIcon={<ArrowForwardIcon />}
+                                            endIcon={<ArrowOutwardIcon />}
                                             sx={{
                                                 textTransform: "none",
-                                                fontWeight: "bold",
+                                                fontWeight: 500,
                                                 backgroundColor: "#001F54",
                                                 "&:hover": {
                                                     backgroundColor: "#002D7E",
@@ -297,47 +295,34 @@ const LandingPage = () => {
                 </Grid>
             </Box>
 
+            {/* Current Auctions Section */}
 
-            {/* Five Cards Section */}
-            {/* <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} md={3}>
-                    <Card>
-                        <CardMedia
-                            component="img"
-                            height="150"
-                            image="/assets/images/card3.jpg"
-                            alt="Card 3"
-                        />
-                    </Card>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <Card>
-                        <CardMedia
-                            component="img"
-                            height="150"
-                            image="/assets/images/card4.jpg"
-                            alt="Card 4"
-                        />
-                    </Card>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                    <Card>
-                        <CardMedia
-                            component="img"
-                            height="300"
-                            image="/assets/images/card5.jpg"
-                            alt="Big Card"
-                        />
-                    </Card>
-                </Grid>
-            </Grid>
+            <Box className={classes.locationSection} py={10}>
+                <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
+                    <Typography className={classes.headingStyles} color="primary">
+                        Our Current Auctions
+                    </Typography>
+                </Box>
+                <Box className={classes.locationCards} sx={{ marginBottom: 4 }}>
+                    {auctionData.slice(0, 3).map((auction, index) => (
 
-            {/* Show More Section */}
-            {/* <Box sx={{ textAlign: "center", marginTop: 4 }}>
-                <Button variant="contained" color="primary">
-                    Show More
-                </Button>
-            </Box>  */}
+                        <Box sx={{ maxWidth: '386px' }} key={index}>
+                            <AuctionCard
+                                headerType={"home"}
+                                cardData={auction}
+                                handleEdit={() => { }}
+                                handleDelete={() => { }}
+                                handleMoveModal={() => { }}
+                            />
+                        </Box>
+                    ))}
+                </Box>
+            </Box>
+
+
+
+
+
 
 
 
