@@ -208,9 +208,6 @@ const Lots = ({ searchTerm }: any) => {
                                                 <AuctionCard
                                                     headerType={"lots"}
                                                     cardData={lot}
-                                                    handleEdit={handleEdit}
-                                                    handleDelete={() => handleDeleteLot(lot.id)}
-                                                    handleMoveModal={handleMoveModal}
                                                 />
                                             </Grid>
                                         ))}
