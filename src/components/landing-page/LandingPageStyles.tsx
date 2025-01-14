@@ -33,8 +33,8 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
     },
     card: {
         borderRadius: '20px',
-        padding: '10px'
-        // height: '50%'
+        padding: '10px',
+        width: '80%'
     },
     mediaCards: {
         paddingTop: '95px',
@@ -51,15 +51,15 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
     },
     locationCards: {
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         gap: '16px'
     },
     cardStyles: {
+        height: "267px",
         borderRadius: "12px",
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
         textAlign: "left",
-        height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -92,6 +92,28 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         border: '1px solid #A8A8A8',
         maxWidth: '590px',
         padding: '54px 44px 75px 52px'
+    },
+    toolsWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: "10px"
+    },
+    toolsInfo: {
+        flex: 0.3,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: "10px",
+        justifyContent: 'start',
+        alignItems: 'center'
+    },
+    toolBox: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItmes: 'start',
+        padding: "16px"
     }
 }));
 

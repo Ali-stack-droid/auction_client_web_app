@@ -70,8 +70,8 @@ const LandingPage = () => {
             </Box>
 
             {/* Card Media Section */}
-            <Grid container spacing={2} className={classes.mediaCards}>
-                <Grid item xs={12} sm={6}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: "95px 0" }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: "16px", width: "100%", }}>
                     <Card className={classes.card}>
                         <CardMedia
                             component="img"
@@ -85,8 +85,6 @@ const LandingPage = () => {
                             alt="Card 1"
                         />
                     </Card>
-                </Grid>
-                <Grid item xs={12} sm={6}>
                     <Card className={classes.card}>
                         <CardMedia
                             component="img"
@@ -101,21 +99,25 @@ const LandingPage = () => {
                             alt="Card 2"
                         />
                     </Card>
-                </Grid>
-            </Grid>
+                </Box>
+            </Box>
 
             {/* Center Title + Three Cards Section */}
 
-            <Box className={classes.locationSection} py={10}>
+            <Box className={classes.locationSection} pb={8}>
                 <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
-                    <Typography className={classes.headingStyles} color="primary">
-                        Current Auctions By Locations
+                    <Typography className={classes.heading} color="primary">
+                        Current
+                        <Typography component={'span'} className={classes.headingSpan}>
+                            &nbsp;Auctions&nbsp;
+                        </Typography>
+                        By Locations
                     </Typography>
                 </Box>
                 <Box className={classes.locationCards} sx={{ marginBottom: 4 }}>
                     {auctionData.slice(0, 3).map((auction, index) => (
 
-                        <Box sx={{ maxWidth: '386px' }} key={index}>
+                        <Box sx={{ width: "100%" }} key={index}>
                             <AuctionCard
                                 headerType={"home"}
                                 cardData={auction}
@@ -125,171 +127,161 @@ const LandingPage = () => {
                 </Box>
             </Box>
 
-            {/*Tools Section */}
-            <Box sx={{ py: 10 }}>
-
+            <Box>
                 <Typography
                     variant="h4"
                     sx={{
                         textAlign: "center",
                         marginBottom: '54px',
                     }}
-                    className={classes.headingStyles}
+                    className={classes.heading}
                 >
-                    All the tools you <Typography className={classes.headingStyles}
-                        color={'primary'} component={'span'}>need</Typography> in one place
+                    All the tools you
+                    <Typography className={classes.headingSpan} component={'span'}>
+                        &nbsp;need&nbsp;
+                    </Typography>
+                    in one place
                 </Typography>
 
                 {/* Cards and Image Section */}
-                <Grid container spacing={1} alignItems="center" justifyContent="center">
-                    {/* Left Column */}
-                    <Grid item xs={12} sm={6} md={3}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <Card className={classes.cardStyles}>
-                                    <CardContent>
-                                        <Typography className={classes.titleStyles}>
-                                            Current and Upcoming Auctions:
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                            Upload the blood test reports in PDF, JPG format and get
-                                            the AI-generated blood report. Get health recommendations
-                                            and chat about it.
-                                        </Typography>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            endIcon={<ArrowOutwardIcon />}
-                                            sx={{
-                                                textTransform: "none",
-                                                fontWeight: 500,
-                                                backgroundColor: "#001F54",
-                                                "&:hover": {
-                                                    backgroundColor: "#002D7E",
-                                                },
-                                            }}
-                                        >
-                                            Learn More
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Card className={classes.cardStyles}>
-                                    <CardContent>
-                                        <Typography variant="h6" className={classes.titleStyles}>
-                                            Past Auctions:
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                            User enters the health data and our platform will use GPT-4
-                                            to give you the right suggestions about your health.
-                                        </Typography>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            endIcon={<ArrowOutwardIcon />}
-                                            sx={{
-                                                textTransform: "none",
-                                                fontWeight: 500,
-                                                backgroundColor: "#001F54",
-                                                "&:hover": {
-                                                    backgroundColor: "#002D7E",
-                                                },
-                                            }}
-                                        >
-                                            Learn More
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                {/* Left Column */}
+                <Box className={classes.toolsWrapper}>
+                    <Box className={classes.toolsInfo}>
+
+                        <Card className={classes.cardStyles}>
+                            <Box className={classes.toolBox}>
+                                <Typography className={classes.titleStyles}>
+                                    Current and Upcoming Auctions:
+                                </Typography>
+                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                    Upload the blood test reports in PDF, JPG format and get
+                                    the AI-generated blood report. Get health recommendations
+                                    and chat about it.
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    endIcon={<ArrowOutwardIcon />}
+                                    sx={{
+                                        textTransform: "none",
+                                        fontWeight: 500,
+                                        backgroundColor: "#001F54",
+                                        "&:hover": {
+                                            backgroundColor: "#002D7E",
+                                        },
+                                    }}
+                                >
+                                    Learn More
+                                </Button>
+                            </Box>
+                        </Card>
+                        <Card className={classes.cardStyles}>
+                            <Box className={classes.toolBox}>
+                                <Typography variant="h6" className={classes.titleStyles}>
+                                    Past Auctions:
+                                </Typography>
+                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                    User enters the health data and our platform will use GPT-4
+                                    to give you the right suggestions about your health.
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    endIcon={<ArrowOutwardIcon />}
+                                    sx={{
+                                        textTransform: "none",
+                                        fontWeight: 500,
+                                        backgroundColor: "#001F54",
+                                        "&:hover": {
+                                            backgroundColor: "#002D7E",
+                                        },
+                                    }}
+                                >
+                                    Learn More
+                                </Button>
+                            </Box>
+                        </Card>
+                    </Box>
 
                     {/* Center Image */}
-                    <Grid item xs={12} sm={6} md={6}>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
+                    <Box
+                        sx={{
+                            flex: 0.6,
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <img
+                            src="/assets/pngs/post-bidding.png"
+                            alt="Auction Illustration"
+                            style={{
+                                maxWidth: "100%",
+                                borderRadius: "12px",
+                                padding: '10px',
+                                border: '1px solid #E2E8F0'
                             }}
-                        >
-                            <img
-                                src="/assets/pngs/post-bidding.png"
-                                alt="Auction Illustration"
-                                style={{
-                                    maxWidth: "100%",
-                                    borderRadius: "12px",
-                                    padding: '10px',
-                                    border: '1px solid #E2E8F0'
-                                }}
-                            />
-                        </Box>
-                    </Grid>
+                        />
+                    </Box>
 
                     {/* Right Column */}
-                    <Grid item xs={12} sm={6} md={3}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <Card className={classes.cardStyles}>
-                                    <CardContent>
-                                        <Typography variant="h6" className={classes.titleStyles}>
-                                            Shipping Services:
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                            Our platform gets the DNA data of the user, then
-                                            integrates and provides personalized insights based on
-                                            predisposition.
-                                        </Typography>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            endIcon={<ArrowOutwardIcon />}
-                                            sx={{
-                                                textTransform: "none",
-                                                fontWeight: 500,
-                                                backgroundColor: "#001F54",
-                                                "&:hover": {
-                                                    backgroundColor: "#002D7E",
-                                                },
-                                            }}
-                                        >
-                                            Learn More
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Card className={classes.cardStyles}>
-                                    <CardContent>
-                                        <Typography variant="h6" className={classes.titleStyles}>
-                                            Featured Products:
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                            Get into with our professional nutritionist and trainers to
-                                            get maximum health benefits.
-                                        </Typography>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            endIcon={<ArrowOutwardIcon />}
-                                            sx={{
-                                                textTransform: "none",
-                                                fontWeight: 500,
-                                                backgroundColor: "#001F54",
-                                                "&:hover": {
-                                                    backgroundColor: "#002D7E",
-                                                },
-                                            }}
-                                        >
-                                            Learn More
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                    <Box className={classes.toolsInfo}>
+                        <Card className={classes.cardStyles}>
+                            <Box className={classes.toolBox}>
+                                <Typography variant="h6" className={classes.titleStyles}>
+                                    Shipping Services:
+                                </Typography>
+                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                    Our platform gets the DNA data of the user, then
+                                    integrates and provides personalized insights based on
+                                    predisposition.
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    endIcon={<ArrowOutwardIcon />}
+                                    sx={{
+                                        textTransform: "none",
+                                        fontWeight: 500,
+                                        backgroundColor: "#001F54",
+                                        "&:hover": {
+                                            backgroundColor: "#002D7E",
+                                        },
+                                    }}
+                                >
+                                    Learn More
+                                </Button>
+                            </Box>
+                        </Card>
+                        <Card className={classes.cardStyles}>
+                            <Box className={classes.toolBox}>
+                                <Typography variant="h6" className={classes.titleStyles}>
+                                    Featured Products:
+                                </Typography>
+                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
+                                    Get into with our professional nutritionist and trainers to
+                                    get maximum health benefits.
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    endIcon={<ArrowOutwardIcon />}
+                                    sx={{
+                                        textTransform: "none",
+                                        fontWeight: 500,
+                                        backgroundColor: "#001F54",
+                                        "&:hover": {
+                                            backgroundColor: "#002D7E",
+                                        },
+                                    }}
+                                >
+                                    Learn More
+                                </Button>
+                            </Box>
+                        </Card>
+                    </Box>
+                </Box>
             </Box>
 
             {/* Current Auctions Section */}
