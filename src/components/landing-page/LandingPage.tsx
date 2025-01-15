@@ -147,9 +147,8 @@ const LandingPage = () => {
                                     Current and Upcoming Auctions:
                                 </Typography>
                                 <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                    Upload the blood test reports in PDF, JPG format and get
-                                    the AI-generated blood report. Get health recommendations
-                                    and chat about it.
+                                    Upload blood test reports in PDF, JPG format and get
+                                    the AI-generated blood report.
                                 </Typography>
                                 <Button
                                     variant="contained"
