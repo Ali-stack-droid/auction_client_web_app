@@ -435,7 +435,7 @@ const LandingPage = () => {
                         </Card>
                     </Grid>
                 </Grid>
-            </Box>s
+            </Box>
         </Box>
     );
 };
