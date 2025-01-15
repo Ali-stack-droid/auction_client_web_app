@@ -3,14 +3,38 @@ import { makeStyles } from "@mui/styles";
 const usePaymentTrackingStyles = makeStyles((theme: any) => ({
     header: {
         display: 'flex',
-        alignItems: 'start',
+        alignItems: 'center',
         justifyContent: 'space-between',
+        marginBottom: "20px",
+    },
+    searchField: {
+        height: '35px',
+        width: '70%',
+        // marginBottom: "40px"
+    },
+    searchButton: {
+        borderRadius: '10px',
+        margin: "10px 0",
+        height: '35px',
+        width: '140px',
+        textTransform: 'none'
+    },
+    buttonContainer: {
+        display: 'flex',
+        gap: '16px',
+        maxHeight: '40px',
+    },
+    filterButton: {
+        textTransform: 'none',
+        backgroundColor: theme.palette.primary.main,
+        width: '160px',
+        height: '50px',
     },
     title: {
-        fontSize: '30px',
+        fontSize: '40.85px',
         fontWeight: 600,
         color: theme.palette.primary.main,
-        paddingBottom: "20px"
+        padding: "10px 0"
     },
     toggleContainer: {
         display: 'flex',
@@ -19,8 +43,9 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         border: '1px solid #E2E8F0',
         height: '40px',
         borderRadius: '5px',
-        minWidth: '260px',
-        maxWidth: '260px',
+        minWidth: '250px',
+        maxWidth: '250px',
+        backgroundColor: 'white',
     },
     toggleButton: {
         textTransform: 'none',
@@ -28,12 +53,12 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         border: 'none',
         borderRadius: '5px !important',
         width: "120px",
-        '&.pending': {
+        '&.paid': {
             fontSize: '11px',
             backgroundColor: `${theme.palette.primary.main} !important`,
             color: 'white !important',
         },
-        '&.paid': {
+        '&.unpaid': {
             fontSize: '10px',
             backgroundColor: 'inherit',
             color: `${theme.palette.primary.main5} !important`,
@@ -47,7 +72,8 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
             color: '#2A2A2A'
         },
         '& th': {
-            fontSize: '18px'
+            fontSize: '18px',
+            backgroundColor: theme.palette.primary.main,
         },
         '& td th': {
             textAlign: 'left',
@@ -70,22 +96,16 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         padding: "30px 0"
     },
     viewButton: {
-        width: "100px",
-        backgroundColor: "#377DFF",
+        width: "120px",
+        backgroundColor: theme.palette.primary.main,
         textTransform: "none",
         fontSize: '15px',
     },
-    status: {
-        width: "100px",
+    downloadButton: {
+        width: "120px",
+        backgroundColor: "#36AB32",
         textTransform: "none",
         fontSize: '15px',
-        color: 'white',
-        '&.active': {
-            backgroundColor: "#009045",
-        },
-        '&.inactive': {
-            backgroundColor: '#FF0000',
-        },
     },
 }));
 

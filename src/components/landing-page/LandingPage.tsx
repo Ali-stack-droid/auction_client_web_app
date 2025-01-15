@@ -1,21 +1,27 @@
 import {
     Box,
     Card,
-    CardContent,
     CardMedia,
     Typography,
     Button,
+    Avatar,
+    CardContent,
     Grid,
-    Avatar
+    Rating,
+    Stack,
+
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import useLandingPageStyles from "./LandingPageStyles";
 import CustomTextField from "../custom-components/CustomTextField";
-import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
-import Stack from '@mui/material/Stack';
-import Rating from '@mui/material/Rating';
 import AuctionCard from "../auction/auction-components/AuctionCard";
 import auctionData from "../auction/auctionData";
+import AllTools from "./components/AllTools";
+import Feedback from "./components/Feedback";
+import FeaturedAuctions from "./components/FeaturedAuctions";
+import CurrentAuctionSection from "./components/CurrentAuctionSection";
+import CurrentAuctionsByLocation from "./components/CurrentAuctionsByLocation";
+import CardMediaSection from "./components/CardMediaSection";
 
 
 const AnimatedText = styled(Typography)({
@@ -64,282 +70,26 @@ const LandingPage = () => {
             </Box>
 
             {/* Card Media Section */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: "95px 0" }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: "16px", width: "100%", }}>
-                    <Card className={classes.card}>
-                        <CardMedia
-                            component="img"
-                            sx={{
-                                maxHeight: "423px",
-                                objectFit: "cover",
-                                objectPosition: "center",
-                                borderRadius: '20px'
-                            }}
-                            image="/assets/pngs/land1.png"
-                            alt="Card 1"
-                        />
-                    </Card>
-                    <Card className={classes.card}>
-                        <CardMedia
-                            component="img"
-                            sx={{
-                                maxHeight: "423px",
-                                objectFit: "cover",
-                                objectPosition: "center",
-                                borderRadius: '20px'
+            <CardMediaSection />
 
-                            }}
-                            image="/assets/pngs/land2.png"
-                            alt="Card 2"
-                        />
-                    </Card>
-                </Box>
-            </Box>
-
-            {/* Center Title + Three Cards Section */}
-
-            <Box className={classes.locationSection} pb={8}>
-                <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
-                    <Typography className={classes.heading} color="primary">
-                        Current
-                        <Typography component={'span'} className={classes.headingSpan}>
-                            &nbsp;Auctions&nbsp;
-                        </Typography>
-                        By Locations
-                    </Typography>
-                </Box>
-                <Box className={classes.locationCards} sx={{ marginBottom: 4 }}>
-                    {auctionData.slice(0, 3).map((auction, index) => (
-
-                        <Box sx={{ width: "100%" }} key={index}>
-                            <AuctionCard
-                                headerType={"home"}
-                                cardData={auction}
-                            />
-                        </Box>
-                    ))}
-                </Box>
-            </Box>
+            {/* Current Auctions By LocationSection */}
+            <CurrentAuctionsByLocation />
 
             {/* All Tools Section*/}
-            <Box>
-                <Typography
-                    variant="h4"
-                    sx={{
-                        textAlign: "center",
-                        marginBottom: '54px',
-                    }}
-                    className={classes.heading}
-                >
-                    All the tools you
-                    <Typography className={classes.headingSpan} component={'span'}>
-                        &nbsp;need&nbsp;
-                    </Typography>
-                    in one place
-                </Typography>
-
-                <Box className={classes.toolsWrapper}>
-                    <Box className={classes.toolsInfo}>
-
-                        <Card className={classes.cardStyles}>
-                            <Box className={classes.toolBox}>
-                                <Typography className={classes.titleStyles}>
-                                    Current and Upcoming Auctions:
-                                </Typography>
-                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                    Upload the blood test reports in PDF, JPG format and get
-                                    the AI-generated blood report. Get health recommendations
-                                    and chat about it.
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    endIcon={<ArrowOutwardIcon />}
-                                    sx={{
-                                        textTransform: "none",
-                                        fontWeight: 500,
-                                        backgroundColor: "#001F54",
-                                        "&:hover": {
-                                            backgroundColor: "#002D7E",
-                                        },
-                                    }}
-                                >
-                                    Learn More
-                                </Button>
-                            </Box>
-                        </Card>
-                        <Card className={classes.cardStyles}>
-                            <Box className={classes.toolBox}>
-                                <Typography variant="h6" className={classes.titleStyles}>
-                                    Past Auctions:
-                                </Typography>
-                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                    User enters the health data and our platform will use GPT-4
-                                    to give you the right suggestions about your health.
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    endIcon={<ArrowOutwardIcon />}
-                                    sx={{
-                                        textTransform: "none",
-                                        fontWeight: 500,
-                                        backgroundColor: "#001F54",
-                                        "&:hover": {
-                                            backgroundColor: "#002D7E",
-                                        },
-                                    }}
-                                >
-                                    Learn More
-                                </Button>
-                            </Box>
-                        </Card>
-                    </Box>
-
-                    {/* Center Image */}
-                    <Box
-                        sx={{
-                            flex: 0.6,
-                            height: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <img
-                            src="/assets/pngs/post-bidding.png"
-                            alt="Auction Illustration"
-                            style={{
-                                maxWidth: "100%",
-                                borderRadius: "12px",
-                                padding: '10px',
-                                border: '1px solid #E2E8F0'
-                            }}
-                        />
-                    </Box>
-
-                    {/* Right Column */}
-                    <Box className={classes.toolsInfo}>
-                        <Card className={classes.cardStyles}>
-                            <Box className={classes.toolBox}>
-                                <Typography variant="h6" className={classes.titleStyles}>
-                                    Shipping Services:
-                                </Typography>
-                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                    Our platform gets the DNA data of the user, then
-                                    integrates and provides personalized insights based on
-                                    predisposition.
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    endIcon={<ArrowOutwardIcon />}
-                                    sx={{
-                                        textTransform: "none",
-                                        fontWeight: 500,
-                                        backgroundColor: "#001F54",
-                                        "&:hover": {
-                                            backgroundColor: "#002D7E",
-                                        },
-                                    }}
-                                >
-                                    Learn More
-                                </Button>
-                            </Box>
-                        </Card>
-                        <Card className={classes.cardStyles}>
-                            <Box className={classes.toolBox}>
-                                <Typography variant="h6" className={classes.titleStyles}>
-                                    Featured Products:
-                                </Typography>
-                                <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                                    Get into with our professional nutritionist and trainers to
-                                    get maximum health benefits.
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    endIcon={<ArrowOutwardIcon />}
-                                    sx={{
-                                        textTransform: "none",
-                                        fontWeight: 500,
-                                        backgroundColor: "#001F54",
-                                        "&:hover": {
-                                            backgroundColor: "#002D7E",
-                                        },
-                                    }}
-                                >
-                                    Learn More
-                                </Button>
-                            </Box>
-                        </Card>
-                    </Box>
-                </Box>
-            </Box>
+            <AllTools />
 
             {/* Current Auctions Section */}
-
-            <Box className={classes.locationSection} py={10}>
-                <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
-                    <Typography className={classes.headingStyles} color="primary">
-                        Our Current Auctions
-                    </Typography>
-                </Box>
-                <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
-                    {auctionData.slice(0, 3).map((auction, index) => (
-
-                        <Box sx={{ width: "100%" }} key={index}>
-                            <AuctionCard
-                                headerType={"auction"}
-                                cardData={auction}
-                                handleEdit={() => { }}
-                                handleDelete={() => { }}
-                                handleMoveModal={() => { }}
-                            />
-                        </Box>
-                    ))}
-                </Box>
-
-                <Button className={classes.allAuctions} variant={"contained"} >
-                    View  All Auctions
-                </Button>
-            </Box>
-
+            <CurrentAuctionSection />
 
             {/* Featured items Section */}
-
-            <Box className={classes.locationSection} py={10}>
-                <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
-                    <Typography className={classes.headingStyles} color="primary">
-                        Our Featured Items or Some Current Listing
-                    </Typography>
-                </Box>
-                <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
-                    {auctionData.slice(0, 3).map((auction, index) => (
-
-                        <Box sx={{ width: "100%" }} key={index}>
-                            <AuctionCard
-                                headerType={"lots"}
-                                cardData={auction}
-                                handleEdit={() => { }}
-                                handleDelete={() => { }}
-                                handleMoveModal={() => { }}
-                            />
-                        </Box>
-                    ))}
-                </Box>
-
-                <Button className={classes.allAuctions} variant={"contained"} >
-                    View  All Listings
-                </Button>
-
-            </Box>
+            <FeaturedAuctions />
 
             {/* About us Section */}
+            <Feedback />
 
-            <Box sx={{ py: 18, px: 4 }}>
+            {/* <Box sx={{ py: 18, px: 4 }}>
                 <Grid container spacing={4} alignItems="center">
-                    {/* Left Section */}
+                   
                     <Grid item xs={12} md={6}>
                         <Typography
                             sx={{ fontWeight: "700", fontSize: '40px', color: "#021526", mb: '14px' }}
@@ -357,7 +107,7 @@ const LandingPage = () => {
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem
                             velit viverra amet faucibus.
                         </Typography>
-                        {/* Avatars */}
+                      
                         <Box sx={{ display: 'flex', justifyContent: 'start', alignItems: "center" }}>
 
                             <Stack direction="row" spacing={-2} sx={{ alignItems: "center" }}>
@@ -382,20 +132,17 @@ const LandingPage = () => {
 
                     </Grid>
 
-                    {/* Right Section */}
                     <Grid item xs={12} md={6}>
                         <Card className={classes.ratingCard}>
                             <CardContent>
                                 <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
 
                                     <Stack direction="row" spacing={2} alignItems="center">
-                                        {/* Avatar */}
                                         <Avatar
                                             alt="Jane Cooper"
                                             src="/assets/pngs/user4.png"
                                             sx={{ width: 56, height: 56 }}
                                         />
-                                        {/* Name and Date */}
                                         <Box>
                                             <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '16px' }}>
                                                 Jane Cooper
@@ -409,7 +156,6 @@ const LandingPage = () => {
                                         </Box>
                                     </Stack>
 
-                                    {/* Rating */}
                                     <Rating
                                         value={5}
                                         size="large"
@@ -418,7 +164,6 @@ const LandingPage = () => {
                                     />
                                 </Box>
 
-                                {/* Review Text */}
                                 <Typography
                                     variant="body2"
                                     sx={{ color: "text.secondary", mt: '45px', fontSize: '16px', fontWeight: 400 }}
@@ -435,7 +180,7 @@ const LandingPage = () => {
                         </Card>
                     </Grid>
                 </Grid>
-            </Box>
+            </Box> */}
         </Box>
     );
 };
