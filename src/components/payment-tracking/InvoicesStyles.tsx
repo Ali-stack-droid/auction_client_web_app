@@ -5,8 +5,7 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: "10px",
-        border: '1px solid red'
+        marginBottom: "20px",
     },
     searchField: {
         height: '35px',
@@ -29,7 +28,7 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         textTransform: 'none',
         backgroundColor: theme.palette.primary.main,
         width: '160px',
-        height: '40px',
+        height: '50px',
     },
     title: {
         fontSize: '40.85px',

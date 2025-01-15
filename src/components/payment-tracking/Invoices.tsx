@@ -1,12 +1,12 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Pagination, Stack, Button, ToggleButton, ToggleButtonGroup, Fade, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
-import usePaymentTrackingStyles from "./PaymentTrackingStyles";
+import usePaymentTrackingStyles from "./InvoicesStyles";
 import { getPaidInvoices, getPendingInvoices } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
 import PaymentViewModal from "./PaymentViewModal";
 import { tableData } from "./paymentData";
 
-const PaymentTracking = () => {
+const Invoices = () => {
     const classes = usePaymentTrackingStyles();
 
     const [invoices, setInvoices]: any = useState(tableData);
@@ -172,4 +172,4 @@ const PaymentTracking = () => {
     );
 };
 
-export default PaymentTracking;
+export default Invoices;
