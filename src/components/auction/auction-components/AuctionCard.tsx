@@ -1,12 +1,12 @@
-import { Card, CardMedia, Typography, Button, Tooltip, Box } from '@mui/material';
+import { Card, CardMedia, Typography, Button, Tooltip, Box, TextField } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuctionCardStyles } from './AuctionStyles';
-import LotDetails from './card-details-components/HomeDetails';
 import AuctionDetails from './card-details-components/AuctionDetails';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import MoveLotModal from '../detail-pages/detail-pages-components/MoveLotModal';
 import HomeDetails from './card-details-components/HomeDetails';
+import LotDetails from './card-details-components/LotDetails';
 
 const AuctionCard = ({
     headerType,
@@ -99,21 +99,45 @@ const AuctionCard = ({
                 </Box>
 
                 {/* Location, Date, and Lots */}
-                {headerType === "auction" || headerType === "live" ?
+                {headerType === "auction" || headerType === "live" ? (
                     <AuctionDetails auctionDetails={cardData.details} />
-                    : <HomeDetails homeData={cardData} />
-                }
+                ) : headerType === "lots" ? (
+                    <LotDetails lotDetails={cardData} />
+                ) : (
+                    <HomeDetails homeData={cardData} />
+                )}
 
                 {/* Action Buttons */}
                 <Box className={classes.actionButtons}>
-                    {headerType === "live" ?
-                        <Button className={classes.joinButton} variant="outlined" size="small" color="primary" onClick={() => handleJoin(cardData.id)}>
-                            Join
+                    {headerType === "auction" || headerType === "home" ?
+                        <Button className={classes.viewButton} variant={"contained"} >
+                            View Auction
                         </Button>
-                        : headerType === "lots" && cardData?.isPast ?
-                            <Button className={classes.joinButton} variant="outlined" size="small" color="primary" onClick={() => handleMoveLot(cardData.id)}>
-                                Move
-                            </Button>
+                        : headerType === "lots" ?
+                            <Box display={'flex'} flexDirection={'column'}>
+                                <Button className={classes.bidButton} variant="contained" color="primary">
+                                    Bid Now $1600
+                                </Button>
+                                <Typography mt={'10px'} sx={{ fontSize: '9px', color: '#212121', fontWeight: 500 }}>
+                                    You can enter your custom Amount
+                                </Typography>
+                                <Box mb={'4px'}>
+                                    <TextField
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ width: '175px', height: '31px' }}
+                                    />
+                                </Box>
+
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submitBtn}
+                                >
+                                    Submit
+                                </Button>
+
+                            </Box>
                             : null
                     }
                 </Box>

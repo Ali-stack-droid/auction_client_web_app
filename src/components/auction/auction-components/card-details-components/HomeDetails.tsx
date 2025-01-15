@@ -15,12 +15,6 @@ const HomeDetails = ({ homeData }: any) => {
             <Box mb={'20px'} display={'flex'} justifyContent={'flex-start'} alignItems={'center'}>
                 <CalendarTodayIcon sx={{ color: theme.palette.primary.main, fontSize: '15px' }} /> <Typography className={classes.text} ml={1}>12/20/2024</Typography>
             </Box>
-
-            <Button className={classes.viewButton} variant={"contained"} >
-                View Auction
-            </Button>
-
-
         </Box>
     );
 };

@@ -29,10 +29,6 @@ const AuctionDetails = ({ auctionDetails }: any) => {
                 </Box>
             </Box>
 
-            <Button className={classes.viewButton} variant={"contained"} >
-                View Auction
-            </Button>
-
             {/* Row 2 */}
             {/* Lots Available */}
             {/* <Box className={classes.row}>

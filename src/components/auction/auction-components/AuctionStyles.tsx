@@ -155,6 +155,26 @@ export const useAuctionCardStyles = makeStyles({
         fontSize: "13px",
         width: "95px",
         height: "37.47px",
+    },
+    viewButton: {
+        textTransform: "none",
+        fontSize: "13px",
+        width: "175px",
+        height: "37.47px",
+    },
+    bidButton: {
+        fontSize: "13px",
+        fontWeight: 600,
+        width: "356px",
+        height: "37.47px",
+    },
+    submitBtn: {
+        fontSize: "10px",
+        fontWeight: 600,
+        width: "100px",
+        height: "27.47px",
+        textTransform: 'capitalize',
+        marginTop: '12px'
     }
 });
 
