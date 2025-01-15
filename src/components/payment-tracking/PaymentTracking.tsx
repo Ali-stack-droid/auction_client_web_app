@@ -4,53 +4,54 @@ import usePaymentTrackingStyles from "./PaymentTrackingStyles";
 import { getPaidInvoices, getPendingInvoices } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
 import PaymentViewModal from "./PaymentViewModal";
+import { tableData } from "./paymentData";
 
 const PaymentTracking = () => {
     const classes = usePaymentTrackingStyles();
 
-    const [invoices, setInvoices]: any = useState([]);
+    const [invoices, setInvoices]: any = useState(tableData);
     const [isFetchingData, setIsFetchingData] = useState(false);
 
     const [page, setPage] = useState<number>(0);
     const [selectedInvoice, setSelectedInvoice] = useState({});
-    const [paidInvoice, setPaidInvoice] = useState<boolean>(false);
+    const [paidInvoice, setPaidInvoice] = useState<boolean>(true);
     const [viewDetails, setViewDetails] = useState(false);
     const rowsPerPage = 10;
 
-    useEffect(() => {
-        fetchInvoices();
-    }, [paidInvoice])
+    // useEffect(() => {
+    //     fetchInvoices();
+    // }, [paidInvoice])
 
-    const fetchInvoices = async () => {
-        setIsFetchingData(true)
-        try {
-            const response = paidInvoice
-                ? await getPaidInvoices()
-                : await getPendingInvoices();
+    // const fetchInvoices = async () => {
+    //     setIsFetchingData(true)
+    //     try {
+    //         const response = paidInvoice
+    //             ? await getPaidInvoices()
+    //             : await getPendingInvoices();
 
-            if (response.data && response.data.length > 0) {
-                const formattedInvoices = response.data.map((invoice: any) => ({
-                    invoiceId: invoice.Id,
-                    name: invoice.Name,
-                    email: invoice.Email,
-                    amount: invoice.TotalAmount,
-                    deadline: invoice.Date,
-                    status: invoice.Status,
-                    totalLots: invoice.TotalLots,
-                    paidAmount: invoice.PaidAmount,
-                    pendingAmount: invoice.Pending,
-                    paymentMethod: invoice.PaymenMethod,
-                }));
-                setInvoices(formattedInvoices);
-            } else {
-                setInvoices([]);
-            }
-        } catch (error) {
-            console.error('Error fetching auction data:', error);
-        } finally {
-            setIsFetchingData(false)
-        }
-    };
+    //         if (response.data && response.data.length > 0) {
+    //             const formattedInvoices = response.data.map((invoice: any) => ({
+    //                 invoiceId: invoice.Id,
+    //                 name: invoice.Name,
+    //                 email: invoice.Email,
+    //                 amount: invoice.TotalAmount,
+    //                 deadline: invoice.Date,
+    //                 status: invoice.Status,
+    //                 totalLots: invoice.TotalLots,
+    //                 paidAmount: invoice.PaidAmount,
+    //                 pendingAmount: invoice.Pending,
+    //                 paymentMethod: invoice.PaymenMethod,
+    //             }));
+    //             setInvoices(formattedInvoices);
+    //         } else {
+    //             setInvoices([]);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching auction data:', error);
+    //     } finally {
+    //         setIsFetchingData(false)
+    //     }
+    // };
 
     const handleChangePage = (_event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage - 1); // Adjust for 0-based index
@@ -74,27 +75,27 @@ const PaymentTracking = () => {
     const totalPages = Math.ceil(invoices.length / rowsPerPage);
 
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box >
             <Box className={classes.header}>
-                <Typography className={classes.title}>{paidInvoice ? "Paid Invoices" : "Pending Invoices"}</Typography>
+                <Typography className={classes.title}>{paidInvoice ? "Paid Invoices" : "Unpaid Invoices"}</Typography>
                 <Box className={classes.toggleContainer}>
                     <ToggleButtonGroup
-                        value={paidInvoice ? 'paid' : 'pending'}
+                        value={paidInvoice ? 'paid' : 'unpaid'}
                         exclusive
                         onChange={handleToggleInvoice}
                         sx={{ maxHeight: '30px' }}
                     >
                         <ToggleButton
-                            value="pending"
-                            className={`${classes.toggleButton} ${paidInvoice ? 'paid' : 'pending'}`}
-                        >
-                            Pending Invoices
-                        </ToggleButton>
-                        <ToggleButton
                             value="paid"
-                            className={`${classes.toggleButton} ${!paidInvoice ? 'paid' : 'pending'}`}
+                            className={`${classes.toggleButton} ${paidInvoice ? 'paid' : 'unpaid'}`}
                         >
                             Paid Invoices
+                        </ToggleButton>
+                        <ToggleButton
+                            value="unpaid"
+                            className={`${classes.toggleButton} ${!paidInvoice ? 'paid' : 'unpaid'}`}
+                        >
+                            Unpaid Invoices
                         </ToggleButton>
                     </ToggleButtonGroup>
                 </Box>
@@ -105,35 +106,31 @@ const PaymentTracking = () => {
                     <Table className={classes.paymentTable} aria-label="simple table">
                         <TableHead sx={{ backgroundColor: '#19549F' }}>
                             <TableRow>
-                                <TableCell sx={{ color: "white" }}>Invoice ID</TableCell>
-                                <TableCell sx={{ color: "white" }}>Name</TableCell>
-                                <TableCell sx={{ color: "white" }}>Email</TableCell>
-                                <TableCell sx={{ color: "white" }}>Amount</TableCell>
-                                <TableCell sx={{ color: "white" }}>Deadline</TableCell>
-                                <TableCell sx={{ color: "white" }}>Details</TableCell>
-                                <TableCell sx={{ color: "white" }}>Status</TableCell>
+                                <TableCell sx={{ color: "white" }}>Item Description</TableCell>
+                                <TableCell sx={{ color: "white" }}>Date Purchase</TableCell>
+                                <TableCell sx={{ color: "white" }}>Payment Due Date</TableCell>
+                                <TableCell sx={{ color: "white" }}>Pickup Status</TableCell>
+                                <TableCell sx={{ color: "white" }}>{paidInvoice ? "Details" : "Status"}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {invoices.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any, index: number) => (
-                                <TableRow key={row.invoiceId}>
-                                    <TableCell>{row.invoiceId}</TableCell>
-                                    <TableCell>{row.name}</TableCell>
-                                    <TableCell>{row.email}</TableCell>
-                                    <TableCell>{row.amount}</TableCell>
-                                    <TableCell>{row.deadline}</TableCell>
+                                <TableRow key={row.name + index}>
+                                    <TableCell>{row.description}</TableCell>
+                                    <TableCell>{row.datePurchase}</TableCell>
+                                    <TableCell>{row.paymentDueDate}</TableCell>
                                     <TableCell>
-                                        <Button variant={'contained'} className={classes.viewButton} onClick={() => handleViewButton(index)}>View</Button>
+                                        {paidInvoice ?
+                                            <Button variant={'contained'} className={classes.viewButton} onClick={() => handleViewButton(index)}>{row.pickupStatus ? "Picked" : "Not Picked"}</Button>
+                                            :
+                                            <Button variant={'contained'} className={classes.viewButton} onClick={() => handleViewButton(index)}>View</Button>
+                                        }
                                     </TableCell>
                                     <TableCell>
                                         {paidInvoice ?
-                                            <Button variant={'contained'} className={`${classes.status} ${'active'}`}>
-                                                Paid
-                                            </Button>
+                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleViewButton(index)}>Download</Button>
                                             :
-                                            <Button variant={'contained'} className={`${classes.status} ${row.status ? 'active' : 'inactive'}`}>
-                                                {row.status ? "Active" : "Inactive"}
-                                            </Button>
+                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleViewButton(index)}>Pay Now</Button>
                                         }
                                     </TableCell>
                                 </TableRow>

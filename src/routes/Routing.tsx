@@ -99,7 +99,7 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             }
                         />
                         <Route
-                            path="/payment"
+                            path="/invoices"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                                     <PaymentTracking />

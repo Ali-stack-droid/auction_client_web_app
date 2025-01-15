@@ -130,7 +130,7 @@ const LiveStreaming = () => {
 
 
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box>
             <AuctionHeader
                 headerType={"live"}
                 isCurrent={isCurrentAuction}
