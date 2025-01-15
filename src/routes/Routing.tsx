@@ -10,6 +10,7 @@ import Inventory from '../components/inventory/Inventory';
 import Authentication from '../components/authentication/Authentication';
 import CurrentAuctions from '../components/auction/CurrentAuctions';
 import AuctionListings from '../components/auction/AuctionListings';
+import MyBids from '../components/bids/MyBids';
 
 // Page Components
 const LandingPage = React.lazy(() => import('../components/landing-page/LandingPage'));
@@ -103,6 +104,14 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                                     <PaymentTracking />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/bids"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <MyBids />
                                 </ProtectedRoute>
                             }
                         />

@@ -6,6 +6,30 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: "10px",
+        border: '1px solid red'
+    },
+    searchField: {
+        height: '35px',
+        width: '70%',
+        // marginBottom: "40px"
+    },
+    searchButton: {
+        borderRadius: '10px',
+        margin: "10px 0",
+        height: '35px',
+        width: '140px',
+        textTransform: 'none'
+    },
+    buttonContainer: {
+        display: 'flex',
+        gap: '16px',
+        maxHeight: '40px',
+    },
+    filterButton: {
+        textTransform: 'none',
+        backgroundColor: theme.palette.primary.main,
+        width: '160px',
+        height: '40px',
     },
     title: {
         fontSize: '40.85px',
