@@ -207,6 +207,53 @@ const useDetailStyles = makeStyles(() => ({
             backgroundColor: theme.palette.primary.main4,
             borderRadius: '10px',
         },
+    },
+    cardGrid: {
+        padding: '20px !important',
+        border: '1px solid #E2E8F0',
+        borderRadius: '20px',
+
+    },
+    bidAmount: {
+        maxWidth: 'fit-content',
+        '& .MuiInputBase-root': {
+            width: "340px",
+            height: "65px",
+            borderRadius: "15px",
+            backgroundColor: "#F7F9FC",
+            border: '1px solid #E2E8F0',
+            fontSize: '14px',
+            padding: '20px 10px',
+        }
+    },
+    submitBtn: {
+        backgroundColor: "#012868",
+        color: "#FFFFFF",
+        textTransform: "none",
+        width: '200px',
+        height: '64px',
+        fontSize: '16px',
+        fontWeight: 600,
+        borderRadius: '14px'
+    },
+    lotDetail: {
+        paddingTop: '0 !important'
+    },
+    accordianGrid: {
+        padding: '0 !important',
+        marginTop: '0 !important',
+        '& .MuiAccordion-root::before': { // Corrected the selector
+            content: 'none',
+        },
+    },
+    accordianSummary: {
+        borderRadius: "4px",
+        fontWeight: 500,
+        fontSize: '18px',
+        padding: '16px 20px',
+        '& .MuiAccordionSummary-content': {
+            margin: '0 !important'
+        }
     }
 }
 ));
