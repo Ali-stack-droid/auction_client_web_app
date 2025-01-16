@@ -33,7 +33,7 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
     title: {
         fontSize: '40.85px',
         fontWeight: 600,
-        color: theme.palette.primary.main,
+        color: theme.palette.primary.main11,
         padding: "10px 0"
     },
     toggleContainer: {
