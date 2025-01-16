@@ -44,70 +44,73 @@ const AuctionHeader = ({
             <Typography className={classes.title}>
                 {headerType === 'listings' ? "All Auction Listings"
                     : headerType === 'live' ? "Live Stream"
-                        : "Current Auction"
+                        : headerType === 'watchlist' ? "Watchlist:"
+                            : "Current Auction"
                 }
             </Typography>
-            <Box className={classes.root}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: "60%", padding: "20px 0" }}>
-                    <CustomTextField
-                        // value={searchTerm}
-                        // onChange={handleSearchChange}
-                        placeholder="Search for auction listings here..."
-                        className={classes.searchField}
-                        InputProps={{
-                            endAdornment: (
-                                <Button variant={'contained'} className={classes.searchButton}>
-                                    Search
-                                </Button>
-                            ),
-                        }}
-                    />
-                </Box>
-
-                <Box className={classes.buttonContainer}>
-                    <Box className={classes.toggleContainer}>
-                        <ToggleButtonGroup
-                            value={isCurrent ? 'current' : 'past'}
-                            exclusive
-                            onChange={onToggle}
-                            sx={{ maxHeight: '30px' }}
-                        >
-                            <ToggleButton
-                                value="current"
-                                className={`${classes.toggleButton} ${isCurrent ? 'current' : 'past'}`}
-                            >
-                                Current {headerType === 'lots' ? 'Lots' : 'Auctions'}
-                            </ToggleButton>
-                            <ToggleButton
-                                value="past"
-                                className={`${classes.toggleButton} ${!isCurrent ? 'current' : 'past'}`}
-                            >
-                                Past {headerType === 'lots' ? 'Lots' : 'Auctions'}
-                            </ToggleButton>
-                        </ToggleButtonGroup>
+            {headerType !== "watchlist" &&
+                <Box className={classes.root}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: "60%", padding: "20px 0" }}>
+                        <CustomTextField
+                            // value={searchTerm}
+                            // onChange={handleSearchChange}
+                            placeholder="Search for auction listings here..."
+                            className={classes.searchField}
+                            InputProps={{
+                                endAdornment: (
+                                    <Button variant={'contained'} className={classes.searchButton}>
+                                        Search
+                                    </Button>
+                                ),
+                            }}
+                        />
                     </Box>
 
-                    <Button
-                        variant="contained"
-                        className={classes.filterButton}
-                        onClick={handleMenuOpen}
-                        startIcon={<FilterAltIcon />}
-                    >
-                        Location
-                    </Button>
-                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                        {locations.map((location: any) => (
-                            <MenuItem
-                                key={location}
-                                onClick={() => handleFilterChange(location)}
-                                className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
+                    <Box className={classes.buttonContainer}>
+                        <Box className={classes.toggleContainer}>
+                            <ToggleButtonGroup
+                                value={isCurrent ? 'current' : 'past'}
+                                exclusive
+                                onChange={onToggle}
+                                sx={{ maxHeight: '30px' }}
                             >
-                                {location}
-                            </MenuItem>
-                        ))}
-                    </Menu>
+                                <ToggleButton
+                                    value="current"
+                                    className={`${classes.toggleButton} ${isCurrent ? 'current' : 'past'}`}
+                                >
+                                    Current {headerType === 'lots' ? 'Lots' : 'Auctions'}
+                                </ToggleButton>
+                                <ToggleButton
+                                    value="past"
+                                    className={`${classes.toggleButton} ${!isCurrent ? 'current' : 'past'}`}
+                                >
+                                    Past {headerType === 'lots' ? 'Lots' : 'Auctions'}
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                        </Box>
+
+                        <Button
+                            variant="contained"
+                            className={classes.filterButton}
+                            onClick={handleMenuOpen}
+                            startIcon={<FilterAltIcon />}
+                        >
+                            Location
+                        </Button>
+                        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                            {locations.map((location: any) => (
+                                <MenuItem
+                                    key={location}
+                                    onClick={() => handleFilterChange(location)}
+                                    className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
+                                >
+                                    {location}
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
                 </Box>
-            </Box>
+            }
         </Box >
     );
 };

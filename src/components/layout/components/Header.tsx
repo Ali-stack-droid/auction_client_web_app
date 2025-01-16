@@ -1,8 +1,8 @@
 import React from 'react';
-import { AppBar, Toolbar, Button, IconButton, Box, Typography } from '@mui/material';
+import { AppBar, Toolbar, Button, IconButton, Box, Typography, Tooltip } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useHeaderStyles from './HeaderStyles';
 import theme from '../../../theme';
 import CustomNavLink from '../../custom-components/CustomNavLink';
@@ -10,6 +10,7 @@ import CustomNavLink from '../../custom-components/CustomNavLink';
 const Header = () => {
     const location = useLocation(); // Get the current pathname
     const classes = useHeaderStyles();
+    const navigate = useNavigate();
 
     const navLinks = [
         { label: 'Home', path: '/home' },
@@ -71,13 +72,17 @@ const Header = () => {
                     <Button variant="contained" color="primary" sx={{ width: "120px", textTransform: 'none' }}>
                         Sign up
                     </Button>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }} >
-                        <IconButton sx={{ color: "black" }}>
-                            <FavoriteBorderIcon />
-                        </IconButton>
-                        <IconButton sx={{ color: "black" }}>
-                            <ShoppingCartIcon />
-                        </IconButton>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Tooltip title="Watchlist">
+                            <IconButton sx={{ color: "black" }} onClick={() => navigate('/watchlist')}>
+                                <FavoriteBorderIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Cart">
+                            <IconButton sx={{ color: "black" }}>
+                                <ShoppingCartIcon />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 </Box>
             </Toolbar>
