@@ -8,6 +8,7 @@ import MoveLotModal from '../detail-pages/detail-pages-components/MoveLotModal';
 import HomeDetails from './card-details-components/HomeDetails';
 import LotDetails from './card-details-components/LotDetails';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import CurrentAuctionDetails from './card-details-components/CurrentAuctionDetails';
 
 
 const AuctionCard = ({
@@ -36,7 +37,7 @@ const AuctionCard = ({
             if (location.pathname === "/inventory") {
                 localStorage.setItem('inventory', 'true');
             }
-            navigate(`/auction/lots/details?lotId=${cardData.id}`);
+            navigate(`/listings/details?lotId=${cardData.id}`);
         } else {
             navigate(`/auction/details?aucId=${cardData.id}`);
         }
@@ -117,13 +118,15 @@ const AuctionCard = ({
                 </Box>
 
                 {/* Location, Date, and Lots */}
-                {headerType === "auction" || headerType === "live" ? (
+                {headerType === "auction" ? (
                     <AuctionDetails auctionDetails={cardData.details} />
                 ) : headerType === "lots" ? (
                     <LotDetails lotDetails={cardData} />
-                ) : (
+                ) : headerType === "current-auction" || headerType === "live" ? (
+                    <CurrentAuctionDetails lotDetails={cardData} />
+                ) :
                     <HomeDetails homeData={cardData} />
-                )}
+                }
 
                 {/* Action Buttons */}
                 <Box className={classes.actionButtons}>
@@ -164,7 +167,13 @@ const AuctionCard = ({
                                 </Button>
 
                             </Box>
-                            : null
+                            : headerType === "live" ?
+                                <Button className={classes.bidButton} variant="contained" color="primary">
+                                    Join Auction
+                                </Button>
+                                : <Button className={classes.bidButton} variant="contained" color="primary">
+                                    View Auction
+                                </Button>
                     }
                 </Box>
             </Box>

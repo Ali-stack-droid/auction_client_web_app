@@ -13,6 +13,7 @@ import AuctionListings from '../components/auction/AuctionListings';
 import MyBids from '../components/bids/MyBids';
 import Invoices from '../components/invoices/Invoices';
 import WatchList from '../components/auction/auction-components/Watchlist';
+import LotDetailPage from '../components/auction/detail-pages/LotDetailPage';
 
 // Page Components
 const LandingPage = React.lazy(() => import('../components/landing-page/LandingPage'));
@@ -73,6 +74,14 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                                     <AuctionListings />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/listings/details"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <LotDetailPage />
                                 </ProtectedRoute>
                             }
                         />

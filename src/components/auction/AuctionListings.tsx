@@ -177,9 +177,9 @@ const AuctionListings = ({ searchTerm }: any) => {
                                         );
                                     })
                                     .map((auction: any) => (
-                                        <Grid item xs={12} sm={6} md={4} xl={3} key={auction.id}>
+                                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={auction.id}>
                                             <AuctionCard
-                                                headerType={"auction"}
+                                                headerType={"lots"}
                                                 cardData={auction}
                                             />
                                         </Grid>
