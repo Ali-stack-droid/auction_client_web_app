@@ -165,8 +165,9 @@ export const useAuctionCardStyles = makeStyles({
     bidButton: {
         fontSize: "13px",
         fontWeight: 600,
-        width: "356px",
+        width: "100%",
         height: "37.47px",
+        textTransform: 'none'
     },
     submitBtn: {
         fontSize: "10px",
