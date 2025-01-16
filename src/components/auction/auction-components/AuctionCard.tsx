@@ -139,16 +139,24 @@ const AuctionCard = ({
                                 <Button className={classes.bidButton} variant="contained" color="primary">
                                     Bid Now $1600
                                 </Button>
-                                <Typography mt={'10px'} sx={{ fontSize: '9px', color: '#212121', fontWeight: 500 }}>
+                                <Typography m={'10px 0'} sx={{ fontSize: '12px', color: '#212121', fontWeight: 500 }}>
                                     You can enter your custom Amount
                                 </Typography>
                                 <Box mb={'4px'}>
                                     <TextField
                                         variant="outlined"
                                         size="small"
-                                        sx={{ width: '175px', height: '31px' }}
+                                        sx={{
+                                            width: '175px',
+                                            height: '31px',
+                                            '& .MuiInputBase-input::placeholder': {
+                                                fontSize: '13px',
+                                            },
+                                        }}
+                                        placeholder="Enter Bid Amount"
                                     />
                                 </Box>
+
 
                                 <Button
                                     variant="contained"

@@ -12,6 +12,7 @@ import CurrentAuctions from '../components/auction/CurrentAuctions';
 import AuctionListings from '../components/auction/AuctionListings';
 import MyBids from '../components/bids/MyBids';
 import Invoices from '../components/invoices/Invoices';
+import WatchList from '../components/auction/auction-components/Watchlist';
 import LotDetailPage from '../components/auction/detail-pages/LotDetailPage';
 
 // Page Components
@@ -124,6 +125,15 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                                 </ProtectedRoute>
                             }
                         />
+                        <Route
+                            path="/watchlist"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <WatchList />
+                                </ProtectedRoute>
+                            }
+                        />
+
 
                         <Route path="/logout" element={<TempComponent setIsAuthenticated={setIsAuthenticated} />} />
 
