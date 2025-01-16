@@ -102,7 +102,7 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             }
                         />
                         <Route
-                            path="/live/details"
+                            path="/live-streaming/details"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                                     <LiveStreamingDetailPage />

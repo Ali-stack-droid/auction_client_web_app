@@ -122,6 +122,67 @@ const useLiveStreamDetailStyles = makeStyles(() => ({
         padding: "2px",
         marginLeft: "10px"
     },
+    bidAmount: {
+        '& .MuiInputBase-root': {
+            width: "592px",
+            height: "80px",
+            borderRadius: "22px",
+            backgroundColor: "#F7F9FC",
+            border: '1px solid #E2E8F0',
+            fontSize: '20px',
+            padding: '20px 10px'
+        }
+    },
+    liveBtn: {
+        position: "absolute",
+        top: "30px",
+        left: "30px",
+        backgroundColor: "#D32F2F",
+        color: "#FFFFFF",
+        fontWeight: 500,
+        fontSize: '18px',
+        textTransform: "none",
+        width: '178px',
+        height: '60px'
+    },
+    nameBtn: {
+        position: "absolute",
+        top: "30px",
+        right: "295px",
+        backgroundColor: "#012868",
+        color: "#FFFFFF",
+        textTransform: "none",
+        fontWeight: 500,
+        fontSize: '18px',
+        padding: '18px 30px'
+    },
+    rateBtn: {
+        position: "absolute",
+        top: "30px",
+        right: "30px",
+        backgroundColor: "#012868",
+        color: "#FFFFFF",
+        textTransform: "none",
+        fontWeight: 500,
+        fontSize: '18px',
+        padding: '18px 30px'
+    },
+    iconBtn: {
+        border: "1px solid #E2E8F0",
+        width: "40px",
+        height: "40px",
+        borderRadius: "50%"
+    },
+    submitBtn: {
+        backgroundColor: "#012868",
+        color: "#FFFFFF",
+        textTransform: "none",
+        width: '225px',
+        height: '54px',
+        fontSize: '20px',
+        fontWeight: 500,
+        borderRadius: '6px'
+    },
     bidderName: { fontSize: "16px", color: theme.palette.primary.main10 },
     bidderMessage: { fontSize: "12px", color: theme.palette.primary.main10 },
 }));
