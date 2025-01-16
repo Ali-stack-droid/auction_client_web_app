@@ -4,9 +4,10 @@ import theme from '../../../../theme';
 
 const useDetailStyles = makeStyles(() => ({
     title: {
-        fontSize: '30px',
+        fontSize: '40.85px',
         fontWeight: 600,
-        color: theme.palette.primary.main,
+        color: theme.palette.primary.main1,
+        paddingBottom: "10px"
     },
     card: {
         position: 'relative',
@@ -45,13 +46,14 @@ const useDetailStyles = makeStyles(() => ({
     rightTitle: {
         fontSize: "22px",
         fontWeight: 600,
-        color: theme.palette.primary.main1,
+        color: theme.palette.primary.main11,
         flex: 1,
     },
     description: {
-        color: theme.palette.primary.main2,
+        color: theme.palette.primary.main5,
         fontSize: "12px",
-        paddingTop: "4px"
+        paddingTop: "4px",
+        textAlign: "justify"
     },
     dateTime: {
         fontSize: "13px",
@@ -73,6 +75,16 @@ const useDetailStyles = makeStyles(() => ({
     text: {
         fontSize: "12px",
         color: theme.palette.primary.main1,
+        fontWeight: "500"
+    },
+    bigText: {
+        fontSize: "18px",
+        color: theme.palette.primary.main11,
+        fontWeight: "600"
+    },
+    accordianHeading: {
+        fontSize: "15px",
+        color: theme.palette.primary.main11,
         fontWeight: "500"
     },
     soldButton: {
@@ -255,6 +267,24 @@ const useDetailStyles = makeStyles(() => ({
             margin: '0 !important'
         }
     }
+    searchField: {
+        height: '40px',
+        width: '60%',
+        // marginBottom: "40px"
+    },
+    searchButton: {
+        borderRadius: '15px',
+        margin: "10px 0",
+        height: '40px',
+        width: '140px',
+        textTransform: 'none'
+    },
+    filterButton: {
+        textTransform: 'none',
+        backgroundColor: theme.palette.primary.main,
+        width: '160px',
+        height: '40px',
+    },
 }
 ));
 

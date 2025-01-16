@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography, Card, CardMedia, Grid, CircularProgress, Container, IconButton } from "@mui/material";
+import { Box, Button, Typography, Card, CardMedia, Grid, CircularProgress, Container, IconButton, Divider, Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import useDetailStyles from "./detail-pages-components/DetailPageStyles";
 import { getQueryParam } from "../../../helper/GetQueryParam";
-import theme from "../../../theme";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import WatchLaterRoundedIcon from '@mui/icons-material/WatchLaterRounded';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomDialogue from "../../custom-components/CustomDialogue";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import AuctionCard from "../auction-components/AuctionCard";
-import BiddingTable from "./detail-pages-components/BiddingTable";
 import { deleteAuction, getAuctionDetailById } from "../../Services/Methods";
 import PaginationButton from "../auction-components/PaginationButton";
 import { ErrorMessage, SuccessMessage } from "../../../utils/ToastMessages";
-import KeyboardReturnRoundedIcon from '@mui/icons-material/KeyboardReturnRounded';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import CustomTextField from "../../custom-components/CustomTextField";
 
 
 const AuctionDetailPage = () => {
@@ -214,12 +212,10 @@ const AuctionDetailPage = () => {
 
     return (
         <Box p={2}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, pb: 2 }}>
-                <IconButton onClick={() => navigate('/auction')}>
-                    <KeyboardReturnRoundedIcon />
-                </IconButton>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography className={classes.title}>
-                    Auction Details
+                    {/* {auctionDetails.name} */}
+                    Monthly Public Auction
                 </Typography>
             </Box>
 
@@ -240,168 +236,186 @@ const AuctionDetailPage = () => {
                             </Card>
 
                             <Box paddingTop={3}>
-                                <Typography className={classes.dateTime} color={theme.palette.primary.main2} gutterBottom>
-                                    Auction Date and Time for Live Streaming
-                                </Typography>
-
-                                <Box className={classes.row}>
-                                    <Box className={classes.iconText}>
-                                        <CalendarMonthIcon fontSize="small" color="primary" />
-                                        <Typography className={classes.text}>
-                                            {auctionDetails?.dateRange}
+                                <Accordion sx={{ backgroundColor: "white", border: "1px solid rgba(0, 0, 0, 0.2)", boxShadow: 'none' }}>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon sx={{ color: 'black' }} />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        <Typography className={classes.accordianHeading}>Terms and Conditions</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Typography>
+                                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis amet optio autem iure sapiente perferendis ducimus laborum accusantium beatae id!
                                         </Typography>
-                                    </Box>
-                                    <Box className={classes.iconText}>
-                                        <WatchLaterRoundedIcon fontSize="small" color="primary" />
-                                        <Typography className={classes.text} sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-                                            {auctionDetails?.timeRange}
+                                    </AccordionDetails>
+                                </Accordion>
+
+                                <Accordion sx={{ backgroundColor: "white", border: "1px solid rgba(0, 0, 0, 0.2)", boxShadow: 'none', my: 1 }}>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon sx={{ color: 'black' }} />}
+                                        aria-controls="panel2a-content"
+                                        id="panel2a-header"
+                                    >
+                                        <Typography className={classes.accordianHeading}>Payment Information</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Typography>
+                                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis amet optio autem iure sapiente perferendis ducimus laborum accusantium beatae id!
                                         </Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
+                                    </AccordionDetails>
+                                </Accordion>
 
-                            <Box paddingTop={3}>
-                                <Typography className={classes.dateTime} color={theme.palette.primary.main2} gutterBottom>
-                                    Auction Preview Date and Time
-                                </Typography>
-                                <Box className={classes.row}>
-                                    <Box className={classes.iconText}>
-                                        <CalendarMonthIcon fontSize="small" color="primary" />
-                                        <Typography className={classes.text}>{auctionDetails?.previewDateRange}</Typography>
-                                    </Box>
-                                    <Box className={classes.iconText}>
-                                        <WatchLaterRoundedIcon fontSize="small" color="primary" />
-                                        <Typography className={classes.text} sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-                                            {auctionDetails?.previewTimeRange}
+                                <Accordion sx={{ backgroundColor: "white", border: "1px solid rgba(0, 0, 0, 0.2)", boxShadow: 'none' }}>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon sx={{ color: 'black' }} />}
+                                        aria-controls="panel3a-content"
+                                        id="panel3a-header"
+                                    >
+                                        <Typography className={classes.accordianHeading}>Pickup and Shipping Details</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Typography>
+                                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis amet optio autem iure sapiente perferendis ducimus laborum accusantium beatae id!
                                         </Typography>
-                                    </Box>
-                                </Box>
+                                    </AccordionDetails>
+                                </Accordion>
                             </Box>
-
-                            <Box paddingTop={3}>
-                                <Typography className={classes.location} color={theme.palette.primary.main2} gutterBottom>
-                                    {/* Street Number 21, Hawks Street , UK London, 45560, London, United Kingdom */}
-                                    {auctionDetails.fullAddress}
-                                </Typography>
-                                <Box className={classes.details}>
-                                    <Typography className={classes.detailHeading} py={1}>Currency USD</Typography>
-                                    {/* <Typography className={classes.detailText} >&nbsp;: 5000</Typography> */}
-                                </Box>
-                            </Box>
-
-                            {auctionDetails.termsConditions?.length &&
-                                <Box paddingTop={1}>
-                                    <Typography className={classes.terms}>Terms and Condition:</Typography>
-                                    <Typography className={classes.termsText}>
-                                        {showMoreTerms || auctionDetails.termsConditions.length < 235
-                                            ? auctionDetails.termsConditions
-                                            : `${auctionDetails.termsConditions.slice(0, 235)}...`}
-                                        {auctionDetails.termsConditions.length > 235 &&
-                                            <Typography
-                                                component={'span'}
-                                                className={classes.seeMore}
-                                                onClick={() => handleSeeMoreClick('terms')}
-                                            >
-                                                {showMoreTerms ? "See Less" : "See More"}
-                                            </Typography>
-                                        }
-                                    </Typography>
-                                </Box>
-                            }
-                            {auctionDetails.paymentTerms?.length &&
-                                <Box paddingTop={3}>
-                                    <Typography className={classes.terms}>Payment Terms:</Typography>
-                                    <Typography className={classes.termsText}>
-                                        {showMorePaymentTerms || auctionDetails.paymentTerms.length < 235
-                                            ? auctionDetails.paymentTerms
-                                            : `${auctionDetails.paymentTerms.slice(0, 235)}...`}
-                                        {auctionDetails.paymentTerms.length > 235 && (
-                                            <Typography
-                                                component={'span'}
-                                                className={classes.seeMore}
-                                                onClick={() => handleSeeMoreClick('payment')}
-                                            >
-                                                {showMorePaymentTerms ? " See Less" : " See More"}
-                                            </Typography>
-                                        )}
-                                    </Typography>
-                                </Box>
-                            }
                         </Grid>
 
                         {/* Right Section */}
                         <Grid item xs={12} md={6}>
                             <Box>
                                 <Typography className={classes.rightTitle}>
-                                    {auctionDetails.name}
+                                    Auction Details:
                                 </Typography>
-                                <Typography className={classes.description} mb={2}>
-                                    {auctionDetails.description}
+                                <Typography className={classes.description} >
+                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Adipisci laudantium consectetur obcaecati voluptate facilis dolores? Ut reprehenderit eum voluptatem aliquam et? Sed consequatur harum ex provident perferendis vitae accusantium, fugit eligendi, deleniti voluptas molestias dolore nihil inventore ratione. At, quod?
                                 </Typography>
 
-                                <Box display={'flex'} gap={3}>
-                                    <Box className={classes.iconText}>
-                                        <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
-                                        <Typography className={classes.text}>ID# {auctionDetails.id}</Typography>
-                                    </Box>
-                                    <Box className={classes.iconText}>
-                                        <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
-                                        <Typography className={classes.text}>Online Auction</Typography>
-                                    </Box>
-                                    {auctionDetails.lLiveStreaming &&
-                                        <Box className={classes.iconText}>
+                                <Divider sx={{ my: 2 }} />
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "70%" }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
-                                            <Typography className={classes.text}>Live Streaming</Typography>
+                                            <Typography className={classes.bigText}>Start & End Date</Typography>
                                         </Box>
-                                    }
-                                    <Box className={classes.iconText}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
+                                            <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
+                                        </Box>
+                                    </Box>
+
+                                    <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
+                                            <Typography className={classes.bigText}>Location</Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
+                                            <Typography className={classes.text}>United States of America</Typography>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                <Divider sx={{ my: 2 }} />
+
+                                <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                         <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
-                                        <Typography className={classes.text}>Buyer Premium : 10%</Typography>
+                                        <Typography className={classes.bigText}>Preview Date and Time</Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                        <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
+                                        <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
                                     </Box>
                                 </Box>
 
-                                {/* Details */}
-                                <Box className={classes.iconText} py={1}>
-                                    <CalendarMonthIcon fontSize="small" color="primary" />
-                                    <Typography className={classes.text}>{auctionDetails.dateRange}</Typography>
-                                </Box>
-                                <Box className={classes.iconText}>
-                                    <WatchLaterRoundedIcon fontSize="small" color="primary" />
-                                    <Typography className={classes.text} sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-                                        {auctionDetails.timeRange}
-                                    </Typography>
+                                <Divider sx={{ my: 2 }} />
+
+                                <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                        <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
+                                        <Typography className={classes.bigText}>Checkout Date and Time</Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                        <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
+                                        <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
+                                    </Box>
                                 </Box>
 
-                                {/* Buttons */}
-                                <Box className={classes.actionButtons} py={1}>
-                                    <Button className={classes.actionButton}
-                                        variant="contained" size="small" color="primary"
-                                        onClick={() => handleEdit(auctionDetails.id)}
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button className={classes.actionButton}
-                                        variant="contained" size="small" color="error"
-                                        onClick={() => {
-                                            setIsDeletedFromDetail(true);
-                                            handleDeleteAuction(auctionDetails.id)
-                                        }}
-                                    >
-                                        Delete
-                                    </Button>
+                                <Divider sx={{ my: 2 }} />
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "70%" }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
+                                            <Typography className={classes.bigText}>Type</Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
+                                            <Typography className={classes.text}>Lorem ipsum dolor sit amet.</Typography>
+                                        </Box>
+                                    </Box>
+
+                                    <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
+                                            <Typography className={classes.bigText}>Buyer Premium</Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
+                                            <Typography className={classes.text}>10%</Typography>
+                                        </Box>
+                                    </Box>
                                 </Box>
                             </Box>
                         </Grid>
                     </Grid>
 
                     {auctionLots.length > 0 &&
-                        <Box width={'80vw'} overflow={'auto'} pt={3}>
+                        <Box overflow={'auto'} pt={3}>
                             <Box className={classes.titleWrapper}>
                                 <Typography className={classes.title}>
-                                    Auction Lots :
+                                    All Auction Listing
                                 </Typography>
-                                <Box className={classes.countBadge}>{auctionDetails.totalLots}</Box>
                             </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%", padding: "20px 0" }}>
+                                <CustomTextField
+                                    // value={searchTerm}
+                                    // onChange={handleSearchChange}
+                                    placeholder="Search for auction listings here..."
+                                    className={classes.searchField}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <Button variant={'contained'} className={classes.searchButton}>
+                                                Search
+                                            </Button>
+                                        ),
+                                    }}
+                                />
+
+                                <Box className={classes.buttonContainer}>
+                                    <Button
+                                        variant="contained"
+                                        className={classes.filterButton}
+                                        // onClick={handleMenuOpen}
+                                        startIcon={<FilterAltIcon />}
+                                    >
+                                        Filter
+                                    </Button>
+                                    {/* <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                                        {locations.map((location: any) => (
+                                            <MenuItem
+                                                key={location}
+                                                onClick={() => handleFilterChange(location)}
+                                                className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
+                                            >
+                                                {location}
+                                            </MenuItem>
+                                        ))}
+                                    </Menu> */}
+                                </Box>
+                            </Box>
+
                             <Container disableGutters maxWidth={false} sx={{ mt: 3, pl: 1 }}>
                                 <Grid container spacing={3}>
                                     {paginationedData && paginationedData.map((lot: any) => (
