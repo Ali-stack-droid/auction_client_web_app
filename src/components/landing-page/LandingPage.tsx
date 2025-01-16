@@ -23,7 +23,6 @@ import CurrentAuctionSection from "./components/CurrentAuctionSection";
 import CurrentAuctionsByLocation from "./components/CurrentAuctionsByLocation";
 import CardMediaSection from "./components/CardMediaSection";
 
-
 const AnimatedText = styled(Typography)({
     animation: "fadeIn 2s ease-in-out",
     "@keyframes fadeIn": {
@@ -31,7 +30,6 @@ const AnimatedText = styled(Typography)({
         "100%": { opacity: 1 },
     },
 });
-
 
 const LandingPage = () => {
     const classes = useLandingPageStyles()
@@ -87,100 +85,6 @@ const LandingPage = () => {
             {/* About us Section */}
             <Feedback />
 
-            {/* <Box sx={{ py: 18, px: 4 }}>
-                <Grid container spacing={4} alignItems="center">
-                   
-                    <Grid item xs={12} md={6}>
-                        <Typography
-                            sx={{ fontWeight: "700", fontSize: '40px', color: "#021526", mb: '14px' }}
-                        >
-                            What <Typography className={classes.member}
-                                color={'primary'} component={'span'}>Our Member's</Typography>
-                            <br />
-                            Saying About Us
-                        </Typography>
-
-                        <Typography
-                            variant="body1"
-                            sx={{ color: "text.secondary", mb: 4, maxWidth: '423px' }}
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sem
-                            velit viverra amet faucibus.
-                        </Typography>
-                      
-                        <Box sx={{ display: 'flex', justifyContent: 'start', alignItems: "center" }}>
-
-                            <Stack direction="row" spacing={-2} sx={{ alignItems: "center" }}>
-                                {["/assets/pngs/user1.png", "/assets/pngs/user2.png", "/assets/pngs/user3.png", "/assets/pngs/user4.png", "/assets/pngs/user5.png", "/assets/pngs/user6.png"].map((src, index) => (
-                                    <Avatar
-                                        key={index}
-                                        alt={`User ${index + 1}`}
-                                        src={src}
-                                        sx={{
-                                            border: "2px solid white",
-                                            width: 48,
-                                            height: 48,
-                                            boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-                                        }}
-                                    />
-                                ))}
-                            </Stack>
-                            <Typography sx={{ ml: 2, fontWeight: 600, fontSize: '16px' }}>
-                                100+ Reviews
-                            </Typography>
-                        </Box>
-
-                    </Grid>
-
-                    <Grid item xs={12} md={6}>
-                        <Card className={classes.ratingCard}>
-                            <CardContent>
-                                <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-
-                                    <Stack direction="row" spacing={2} alignItems="center">
-                                        <Avatar
-                                            alt="Jane Cooper"
-                                            src="/assets/pngs/user4.png"
-                                            sx={{ width: 56, height: 56 }}
-                                        />
-                                        <Box>
-                                            <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '16px' }}>
-                                                Jane Cooper
-                                            </Typography>
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ color: "text.secondary" }}
-                                            >
-                                                12/4/17
-                                            </Typography>
-                                        </Box>
-                                    </Stack>
-
-                                    <Rating
-                                        value={5}
-                                        size="large"
-                                        readOnly
-                                        sx={{ color: "#FFD700" }}
-                                    />
-                                </Box>
-
-                                <Typography
-                                    variant="body2"
-                                    sx={{ color: "text.secondary", mt: '45px', fontSize: '16px', fontWeight: 400 }}
-                                >
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    Sem velit viverra amet faucibus. Lorem ipsum dolor sit
-                                    amet, consectetur adipiscing elit. Sem velit viverra amet
-                                    faucibus. Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Sem velit viverra amet faucibus.
-                                </Typography>
-
-
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
-            </Box> */}
         </Box>
     );
 };
