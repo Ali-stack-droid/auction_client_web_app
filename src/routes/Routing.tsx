@@ -11,7 +11,7 @@ import Authentication from '../components/authentication/Authentication';
 import CurrentAuctions from '../components/auction/CurrentAuctions';
 import AuctionListings from '../components/auction/AuctionListings';
 import MyBids from '../components/bids/MyBids';
-import Invoices from '../components/payment-tracking/Invoices';
+import Invoices from '../components/invoices/Invoices';
 
 // Page Components
 const LandingPage = React.lazy(() => import('../components/landing-page/LandingPage'));
