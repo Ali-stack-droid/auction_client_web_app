@@ -266,7 +266,7 @@ const useDetailStyles = makeStyles(() => ({
         '& .MuiAccordionSummary-content': {
             margin: '0 !important'
         }
-    }
+    },
     searchField: {
         height: '40px',
         width: '60%',
