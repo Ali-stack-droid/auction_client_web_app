@@ -7,7 +7,7 @@ const useDetailStyles = makeStyles(() => ({
         fontSize: '40.85px',
         fontWeight: 600,
         color: theme.palette.primary.main1,
-        paddingBottom: "10px"
+        padding: "10px 0"
     },
     card: {
         position: 'relative',

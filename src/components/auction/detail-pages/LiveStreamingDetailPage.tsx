@@ -190,7 +190,7 @@ const LiveStreamingDetailPage = () => {
 
 
     return (
-        <Box p={2}>
+        <Box py={2}>
             {/* Page Title */}
             <Typography
                 sx={{ marginTop: "20px", marginBottom: "40px", fontWeight: 600, fontSize: '40px' }}

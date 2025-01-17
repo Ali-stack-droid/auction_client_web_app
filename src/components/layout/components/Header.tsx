@@ -23,7 +23,7 @@ const Header = () => {
 
     const isSelected = (path: string) => {
 
-        if (path === "/auction" || path === "/live") {
+        if (path === "/current-auctions" || path === "/live" || path === "/listings") {
             return location.pathname.replace(/\/+$/, '').includes(path);
         }
         return path === location.pathname;

@@ -70,6 +70,14 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             }
                         />
                         <Route
+                            path="/current-auctions/details"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <AuctionDetailPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
                             path="/listings"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
@@ -86,14 +94,6 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             }
                         />
                         <Route
-                            path="/auction/details"
-                            element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <AuctionDetailPage />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
                             path="/live"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
@@ -102,7 +102,7 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             }
                         />
                         <Route
-                            path="/live-streaming/details"
+                            path="/live/details"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                                     <LiveStreamingDetailPage />
