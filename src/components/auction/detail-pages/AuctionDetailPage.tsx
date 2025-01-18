@@ -211,7 +211,7 @@ const AuctionDetailPage = () => {
     }
 
     return (
-        <Box p={2}>
+        <Box sx={{ padding: "10px 0" }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography className={classes.title}>
                     {/* {auctionDetails.name} */}
@@ -236,51 +236,34 @@ const AuctionDetailPage = () => {
                             </Card>
 
                             <Box paddingTop={3}>
-                                <Accordion sx={{ backgroundColor: "white", border: "1px solid rgba(0, 0, 0, 0.2)", boxShadow: 'none' }}>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon sx={{ color: 'black' }} />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
+                                {[
+                                    { title: "Terms and Conditions", content: "Terms and conditions content goes here." },
+                                    { title: "Payment Information", content: "Payment information content goes here." },
+                                    { title: "Pickup and Shipping Details", content: "Pickup and shipping details content goes here." },
+                                ].map((item, index) => (
+                                    <Accordion
+                                        sx={{
+                                            marginBottom: index !== 2 ? '6px' : 0, // Adds 6px margin except for the last item
+                                            borderRadius: "8px", // Optional, for better UI
+                                            boxShadow: 'none',
+                                            border: '1px solid #E2E8F0'
+                                        }}
+                                        key={index}
                                     >
-                                        <Typography className={classes.accordianHeading}>Terms and Conditions</Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Typography>
-                                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis amet optio autem iure sapiente perferendis ducimus laborum accusantium beatae id!
-                                        </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
-
-                                <Accordion sx={{ backgroundColor: "white", border: "1px solid rgba(0, 0, 0, 0.2)", boxShadow: 'none', my: 1 }}>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon sx={{ color: 'black' }} />}
-                                        aria-controls="panel2a-content"
-                                        id="panel2a-header"
-                                    >
-                                        <Typography className={classes.accordianHeading}>Payment Information</Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Typography>
-                                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis amet optio autem iure sapiente perferendis ducimus laborum accusantium beatae id!
-                                        </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
-
-                                <Accordion sx={{ backgroundColor: "white", border: "1px solid rgba(0, 0, 0, 0.2)", boxShadow: 'none' }}>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon sx={{ color: 'black' }} />}
-                                        aria-controls="panel3a-content"
-                                        id="panel3a-header"
-                                    >
-                                        <Typography className={classes.accordianHeading}>Pickup and Shipping Details</Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        <Typography>
-                                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Blanditiis amet optio autem iure sapiente perferendis ducimus laborum accusantium beatae id!
-                                        </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            className={classes.accordianSummary}
+                                        >
+                                            {item.title}
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            <Typography>{item.content}</Typography>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                ))}
                             </Box>
+
+
                         </Grid>
 
                         {/* Right Section */}

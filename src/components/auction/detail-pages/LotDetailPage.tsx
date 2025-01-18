@@ -295,14 +295,15 @@ const LotDetailPage = () => {
 
     return (
 
-        <Box pt={'40px'} pb={'180px'}>
+        <Box pt={'10px'} pb={'180px'}>
             {/* Header */}
-            <Typography
-                sx={{ fontWeight: 600, fontSize: '40px' }}>
-                Listing Details:
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography className={classes.title}>
+                    Listing Details:
+                </Typography>
+            </Box>
 
-            <Grid width={'100%'} ml={0} mt={'40px'} container spacing={4} justifyContent={'space-between'}>
+            <Grid width={'100%'} ml={0} mt={'10px'} container spacing={4} justifyContent={'space-between'}>
                 {/* Left Section */}
                 <Grid item xs={12} md={6} className={classes.cardGrid}>
                     {/* Main Image */}
@@ -348,7 +349,7 @@ const LotDetailPage = () => {
                         ID: #365
                     </Typography>
 
-                    <Divider sx={{ marginBottom: '30px', marginTop: '20px' }} />
+                    <Divider sx={{ my: 2 }} />
 
                     <Typography mb={'10px'} sx={{ fontSize: "18px", fontWeight: 600, color: "#2D3748" }}>
                         Date and Time
@@ -368,12 +369,18 @@ const LotDetailPage = () => {
                             2 days : 22 hours : 12 minutes : 54 seconds
                         </Typography>
                     </Box>
+
+                    <Divider sx={{ my: 2 }} />
+
                     {/* Current Bid */}
                     <Typography
-                        sx={{ fontSize: "25px", fontWeight: 600, color: '#012868', mt: 3, mb: '50px' }}
+                        sx={{ fontSize: "25px", fontWeight: 600, color: '#012868', mt: 3, mb: '10px' }}
                     >
                         Current Bid: <span style={{ color: "#212121" }}>$25000.90</span>
                     </Typography>
+
+                    <Divider sx={{ my: 2 }} />
+
                     {/* Bid Now Button */}
                     <Button
                         variant="outlined"
@@ -391,8 +398,10 @@ const LotDetailPage = () => {
                         Bid Now: $1600
                     </Button>
 
+                    <Divider sx={{ my: 2 }} />
+
                     {/* Bid Price Section */}
-                    <Typography sx={{ fontWeight: 600, mt: '50px', fontSize: '18px' }}>Bid Price</Typography>
+                    <Typography sx={{ fontWeight: 600, mt: '30px', fontSize: '18px' }}>Bid Price</Typography>
                     <Box className={classes.bidAmount} sx={{ display: "flex", alignItems: "center", mt: '10px' }}>
                         <TextField
                             placeholder="Enter Your Bid Amount"

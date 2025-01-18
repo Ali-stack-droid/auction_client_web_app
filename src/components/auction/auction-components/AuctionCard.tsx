@@ -32,34 +32,16 @@ const AuctionCard = ({
 
     const handleCardMediaClick = () => {
         if (headerType === "live") {
-            navigate(`/live-streaming/details?aucId=${cardData.id}`);
+            navigate(`/live/details?aucId=${cardData.id}`);
         } else if (headerType === "lots") {
             if (location.pathname === "/inventory") {
                 localStorage.setItem('inventory', 'true');
             }
             navigate(`/listings/details?lotId=${cardData.id}`);
         } else {
-            navigate(`/auction/details?aucId=${cardData.id}`);
+            navigate(`/current-auctions/details?aucId=${cardData.id}`);
         }
     };
-
-    const handleJoin = (id: number) => {
-        navigate(`/live-streaming/details?aucId=${id}`);
-    }
-
-    const handleNextLot = (id: number) => {
-        console.log("Join live stream: ", id)
-    }
-
-    const handleViewCatalog = (id: number) => {
-        // dispatch(setSelectedAuction(id));
-        navigate(`/auction/lots?aucId=${id}`)
-    }
-
-    const handleMoveLot = (id: number) => {
-        setMoveLotId(id)
-        setMoveModalOpen(true);
-    }
 
     return (
         <Card className={classes.card} elevation={2}>
