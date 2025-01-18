@@ -79,7 +79,7 @@ const Header = () => {
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Cart">
-                            <IconButton sx={{ color: "black" }}>
+                            <IconButton sx={{ color: "black" }} onClick={() => navigate('/cart')}>
                                 <ShoppingCartIcon />
                             </IconButton>
                         </Tooltip>

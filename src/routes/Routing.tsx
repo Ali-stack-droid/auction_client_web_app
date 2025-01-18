@@ -14,6 +14,8 @@ import MyBids from '../components/bids/MyBids';
 import Invoices from '../components/invoices/Invoices';
 import WatchList from '../components/auction/auction-components/Watchlist';
 import LotDetailPage from '../components/auction/detail-pages/LotDetailPage';
+import Cart from '../components/auction/auction-components/Cart';
+
 
 // Page Components
 const LandingPage = React.lazy(() => import('../components/landing-page/LandingPage'));
@@ -130,6 +132,14 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                                     <WatchList />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/cart"
+                            element={
+                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                    <Cart />
                                 </ProtectedRoute>
                             }
                         />
