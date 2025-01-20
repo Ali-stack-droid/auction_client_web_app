@@ -221,7 +221,7 @@ const AuctionDetailPage = () => {
 
             {!isFetchingData ?
                 <Box>
-                    <Grid container spacing={4}>
+                    <Grid container spacing={4} pb={4}>
                         {/* Left Section */}
                         <Grid item xs={12} md={6}>
                             <Card className={classes.card} elevation={2}>

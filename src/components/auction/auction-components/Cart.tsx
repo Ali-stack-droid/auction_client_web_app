@@ -36,7 +36,7 @@ const Cart = ({ searchTerm }: any) => {
                 Shipping Address and Payment Address:
             </Typography>
 
-            <Box sx={{ padding: 5, maxWidth: 640, border: '1px solid #E2E8F0', borderRadius: '20px', backgroundColor: '#ffffff' }}>
+            <Box className={classes.container}>
 
                 <Formik
                     initialValues={{
@@ -272,8 +272,7 @@ const Cart = ({ searchTerm }: any) => {
                                         variant="contained"
                                         color="primary"
                                         fullWidth
-                                        sx={{ height: '64px', borderRadius: '14px', textTransform: 'none', fontSize: '16px', fontWeight: 600 }}
-                                    >
+                                        className={classes.submitButton}                                    >
                                         Complete Auction Process
                                     </Button>
                                 </Grid>
@@ -284,18 +283,7 @@ const Cart = ({ searchTerm }: any) => {
                 {/* Modal */}
                 <Modal open={open} onClose={handleClose}>
                     <Box
-                        sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: 400,
-                            bgcolor: "background.paper",
-                            borderRadius: 2,
-                            boxShadow: 24,
-                            p: 4,
-                            textAlign: "center",
-                        }}
+                        className={classes.modalStyles}
                     >
                         <Typography variant="h6" gutterBottom>
                             Congratulations!

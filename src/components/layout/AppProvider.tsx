@@ -3,37 +3,25 @@ import { Box, Divider, IconButton, Typography } from '@mui/material';
 import Header from './components/Header'; // Import your Header component
 import { useLocation } from 'react-router-dom';
 import Footer from './components/Footer';
+import { useAppProviderStyles } from './AppProviderStyles';
 
 const AppProvider = ({ children }: any) => {
     const [searchTerm, setSearchTerm] = useState("");
     const location = useLocation();
+    const isHomePage = location.pathname === '/home';
+    const classes: any = useAppProviderStyles({ isHomePage });
 
     return (
         <Box sx={{ display: 'flex' }}>
-            {/* Main content area */}
-            <Box
-                sx={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    backgroundImage: 'linear-gradient(to bottom, rgba(47, 131, 233, 0.2), rgba(47, 131, 233, 0))',
-                    backgroundSize: '100% 45%', // Restricts the gradient to 50% height
-                    backgroundRepeat: 'no-repeat', // Ensures it doesn’t repeat
-                    backgroundPosition: 'top', // Keeps the gradient at the top
-                    position: 'relative', // To allow layering content over the background
-                }}
-            >
-                <Box sx={{ padding: "40px 80px", backgroundColor: location.pathname === '/home' ? 'transparent' : 'white' }}>
-                    {/* Header on top */}
+            <Box className={classes.container}>
+                <Box className={classes.header}>
                     <Header />
-
                 </Box>
-                {/* Content area below the header */}
-                <Box id="childContainer" sx={{ flex: 1, overflowY: 'auto', padding: "0 80px", }}>
+
+                <Box id="childContainer" className={classes.childContainer}>
                     {React.cloneElement(children, { searchTerm })}
                 </Box>
 
-                {/* Footer on bottom */}
                 <Footer />
             </Box>
         </Box>
