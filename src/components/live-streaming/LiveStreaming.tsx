@@ -103,6 +103,7 @@ const LiveStreaming = () => {
         }
     };
 
+
     // Filtered Data based on `type` and `location`
     useEffect(() => {
 
@@ -160,17 +161,6 @@ const LiveStreaming = () => {
             </Box>
 
             <PaginationButton filteredData={filteredData} setPaginationedData={setPaginationedData} />
-
-            {/* Confirmation Modal */}
-            <CustomDialogue
-                type={"delete"}
-                title={"Confirm Deletion"}
-                message={"Are you sure you want to delete this auction? This action cannot be undone."}
-                openDialogue={confirmDelete}
-                handleCloseModal={handleCloseModal}
-                handleConfirmModal={handleConfirmDelete}
-                isDeleting={isDeleting}
-            />
 
         </Box>
     );
