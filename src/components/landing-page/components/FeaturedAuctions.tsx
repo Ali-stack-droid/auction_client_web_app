@@ -20,9 +20,6 @@ const FeaturedAuctions = () => {
                         <AuctionCard
                             headerType={"lots"}
                             cardData={auction}
-                            handleEdit={() => { }}
-                            handleDelete={() => { }}
-                            handleMoveModal={() => { }}
                         />
                     </Box>
                 ))}

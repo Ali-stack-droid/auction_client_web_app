@@ -103,21 +103,6 @@ const LiveStreaming = () => {
         }
     };
 
-    // Confirm deletion
-    const handleConfirmDelete = () => {
-        if (deleteAuctionId && !isDeleting) {
-            setIsDeleting(true)
-            handleDelete(deleteAuctionId); // Call the delete handler
-        }
-    };
-
-    const navigate = useNavigate()
-
-    // Handle Edit
-    const handleEdit = (id: string) => {
-        navigate(`/auction/edit?aucId=${id}`);
-    };
-
     // Filtered Data based on `type` and `location`
     useEffect(() => {
 

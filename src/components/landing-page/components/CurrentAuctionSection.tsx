@@ -21,9 +21,6 @@ const CurrentAuctions = () => {
                         <AuctionCard
                             headerType={"auction"}
                             cardData={auction}
-                            handleEdit={() => { }}
-                            handleDelete={() => { }}
-                            handleMoveModal={() => { }}
                         />
                     </Box>
                 ))}

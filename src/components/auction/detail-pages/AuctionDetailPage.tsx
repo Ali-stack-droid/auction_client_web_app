@@ -404,7 +404,6 @@ const AuctionDetailPage = () => {
                                     {paginationedData && paginationedData.map((lot: any) => (
                                         <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
                                             <AuctionCard
-                                                key={lot.id}
                                                 headerType={'lots'}
                                                 cardData={lot}
                                             />
