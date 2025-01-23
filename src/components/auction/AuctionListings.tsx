@@ -55,6 +55,8 @@ const AuctionListings = ({ searchTerm }: any) => {
                     id: item.Id,
                     name: item.Name,
                     image: item.Image,
+                    date: `${item.StartDate} to ${item.EndDate}`,
+                    time: `${item.StartTime} to ${item.EndTime}`,
                     details: {
                         location: `${item.City}, ${item.Country}`,
                         dateRange: `${item.StartDate} to ${item.EndDate}`,
