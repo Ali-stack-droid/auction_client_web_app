@@ -60,13 +60,24 @@ const CardDetailForm = ({ registerData, setIsAuthenticated }: any) => {
 
     const registerUser = async (payload: any) => {
         try {
-            const response = await RegisterUser(payload)
+            const response: any = await RegisterUser(payload)
             setIsSubmitting(false)
             if (response.data) {
                 setOpenModal(true)
 
+                const user = {
+                    id: response.data.Id,
+                    name: response.data.Name,
+                    email: response.data.Email,
+                    address: response.data.Address,
+                    company: response.data.Company,
+                }
+
+                console.log(response.data)
+
                 setTimeout(() => {
                     setOpenModal(false)
+                    sessionStorage.setItem('authToken', JSON.stringify(user));
                     setIsAuthenticated(true)
                     navigate('/home')
                 }, 2000);

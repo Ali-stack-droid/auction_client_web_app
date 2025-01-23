@@ -49,12 +49,21 @@ const LoginForm = ({ setIsAuthenticated }: any) => {
             setIsSubmitting(false)
             if (response?.status == 200) {
                 setOpenModal(true)
+                const user = {
+                    id: response.data.Id,
+                    name: response.data.Name,
+                    email: response.data.Email,
+                    address: response.data.Address,
+                    company: response.data.Company,
+                }
 
                 setTimeout(() => {
                     if (isRemember) {
-                        Cookies.set('user', JSON.stringify(response.data), { expires: 1 }); // expires in 1 day
+                        Cookies.set('user', JSON.stringify(user), { expires: 1 }); // expires in 1 day
+                    } else {
+                        sessionStorage.setItem('authToken', JSON.stringify(user));
                     }
-                    // localStorage.setItem('token', 'qwerty')
+
                     setOpenModal(false)
                     setIsAuthenticated(true)
                     navigate('/')

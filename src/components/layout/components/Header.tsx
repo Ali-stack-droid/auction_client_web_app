@@ -2,9 +2,9 @@ import React from 'react';
 import { AppBar, Toolbar, Button, IconButton, Box, Typography, Tooltip } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useHeaderStyles from './HeaderStyles';
-import theme from '../../../theme';
+import Cookies from 'js-cookie';
 import CustomNavLink from '../../custom-components/CustomNavLink';
 
 const Header = () => {
@@ -28,6 +28,8 @@ const Header = () => {
         }
         return path === location.pathname;
     }
+
+    const isAuthenticated = sessionStorage.getItem('authToken') || Cookies.get('user');
 
     return (
         <AppBar
@@ -66,24 +68,34 @@ const Header = () => {
 
                 {/* Action Buttons */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Button variant="outlined" color="primary" sx={{ width: "120px", textTransform: 'none' }}>
-                        Login
-                    </Button>
-                    <Button variant="contained" color="primary" sx={{ width: "120px", textTransform: 'none' }}>
-                        Sign up
-                    </Button>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Tooltip title="Watchlist">
-                            <IconButton sx={{ color: "black" }} onClick={() => navigate('/watchlist')}>
-                                <FavoriteBorderIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Cart">
-                            <IconButton sx={{ color: "black" }} onClick={() => navigate('/cart')}>
-                                <ShoppingCartIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
+                    {!isAuthenticated &&
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Button variant="outlined" color="primary" sx={{ width: "120px", textTransform: 'none' }}
+                                onClick={() => navigate('/login')}
+                            >
+                                Login
+                            </Button>
+                            <Button variant="contained" color="primary" sx={{ width: "120px", textTransform: 'none' }}
+                                onClick={() => navigate('/signup')}
+                            >
+                                Sign up
+                            </Button>
+                        </Box>
+                    }
+                    {isAuthenticated &&
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Tooltip title="Watchlist">
+                                <IconButton sx={{ color: "black" }} onClick={() => navigate('/watchlist')}>
+                                    <FavoriteBorderIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Cart">
+                                <IconButton sx={{ color: "black" }} onClick={() => navigate('/cart')}>
+                                    <ShoppingCartIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    }
                 </Box>
             </Toolbar>
         </AppBar>

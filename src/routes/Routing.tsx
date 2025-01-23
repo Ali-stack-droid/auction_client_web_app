@@ -22,6 +22,10 @@ const LandingPage = React.lazy(() => import('../components/landing-page/LandingP
 // const Auction = React.lazy(() => import('../components/auction/Auction'));
 const LiveStreaming = React.lazy(() => import('../components/live-streaming/LiveStreaming'));
 // ProtectedRoute Component
+const PublicRoute = ({ children }: any) => {
+    return <AppProvider>{children}</AppProvider>;
+};
+
 const ProtectedRoute = ({ isAuthenticated, children }: any) => {
     if (!isAuthenticated) {
         return <Navigate to="/signup" />;
@@ -53,22 +57,22 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                         {/* Protected Routes */}
                         <Route
                             path="/"
-                            element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/signup" />}
+                            element={<Navigate to="/home" />}
                         />
                         <Route
                             path="/home"
                             element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                <PublicRoute>
                                     <LandingPage />
-                                </ProtectedRoute>
+                                </PublicRoute>
                             }
                         />
                         <Route
                             path="/current-auctions"
                             element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                <PublicRoute>
                                     <CurrentAuctions />
-                                </ProtectedRoute>
+                                </PublicRoute>
                             }
                         />
                         <Route
@@ -82,9 +86,9 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                         <Route
                             path="/listings"
                             element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                <PublicRoute>
                                     <AuctionListings />
-                                </ProtectedRoute>
+                                </PublicRoute>
                             }
                         />
                         <Route
@@ -98,9 +102,9 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                         <Route
                             path="/live"
                             element={
-                                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                                <PublicRoute>
                                     <LiveStreaming />
-                                </ProtectedRoute>
+                                </PublicRoute>
                             }
                         />
                         <Route
