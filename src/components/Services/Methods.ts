@@ -4,7 +4,7 @@ export const RegisterUser = (payload: FormData) => postRequest('/clients/create'
 export const LoginUser = (payload: LogInPayload) => getRequest(`/clients/login?email=${payload.email}&password=${payload?.password}`)
 
 // Landing page APIs
-export const getFeaturedAuctionsByLocation = (location: any) => getRequest('/auctions/featuredauctionsbylocation')
+export const getFeaturedAuctionsByLocation = () => getRequest('/auctions/featuredauctionsbylocation')
 export const getFeaturedAuctions = () => getRequest('/auctions/featuredauctions')
 export const getFeaturedLots = () => getRequest('/lots/featuredlisting')
 
