@@ -27,7 +27,7 @@ const CurrentAuctionsByLocation = () => {
 
                 const currentCity = "z";
                 const currentLocationAuctions = response.data.filter((item: any) => item.City === currentCity)
-                console.log(currentLocationAuctions)
+
                 const updatedData = currentLocationAuctions[0].Auctions.map((item: any) => ({
                     id: item.Id,
                     name: item.Name || "Monthly Public Auction",

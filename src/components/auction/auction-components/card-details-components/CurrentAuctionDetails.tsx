@@ -13,7 +13,7 @@ const AuctionDetails = ({ auctionDetails }: any) => {
         <Box className={classes.container}>
 
             <Typography color='#2A2A2A' fontSize={'14px'} fontWeight={500}>
-                Sacramento, California
+                {auctionDetails.details.location}
             </Typography>
 
             <Box className={classes.row}>
@@ -21,7 +21,9 @@ const AuctionDetails = ({ auctionDetails }: any) => {
                 <Box mb={'20px'} className={`${classes.iconText} ${classes.flexItem}`}>
                     <Box display={'flex'} justifyContent={'flex-start'} alignItems={'center'}>
                         <CalendarTodayIcon sx={{ color: theme.palette.primary.main, fontSize: '15px' }} />
-                        <Typography className={classes.text} ml={1}>12/20/2024 to 12/20/2024</Typography>
+                        <Typography className={classes.text} ml={1}>
+                            {auctionDetails.details.dateRange.replaceAll('-', '/')}
+                        </Typography>
                     </Box>
                 </Box>
             </Box>
