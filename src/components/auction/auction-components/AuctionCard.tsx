@@ -9,6 +9,7 @@ import HomeDetails from './card-details-components/HomeDetails';
 import LotDetails from './card-details-components/LotDetails';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CurrentAuctionDetails from './card-details-components/CurrentAuctionDetails';
+import Cookies from 'js-cookie';
 
 
 const AuctionCard = ({
@@ -57,22 +58,24 @@ const AuctionCard = ({
                     alt={headerType === "Auction" ? "Auction" : "Lot" + " Image"}
                     className={classes.media}
                 />
-                {headerType === "lots" && (
-                    <IconButton
-                        sx={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            backgroundColor: '#012868',
-                            color: '#ffffff',
-                            '&:hover': { backgroundColor: '#001c48' },
-                            boxShadow: 2,
-                        }}
-                        onClick={() => console.log('Heart button clicked')} // Add your action here
-                    >
-                        <FavoriteBorderIcon />
-                    </IconButton>
-                )}
+                {headerType === "lots"
+                    && (sessionStorage.getItem('authToken') || Cookies.get('user'))
+                    && (
+                        <IconButton
+                            sx={{
+                                position: 'absolute',
+                                top: '10px',
+                                right: '10px',
+                                backgroundColor: '#012868',
+                                color: '#ffffff',
+                                '&:hover': { backgroundColor: '#001c48' },
+                                boxShadow: 2,
+                            }}
+                            onClick={() => console.log('Heart button clicked')} // Add your action here
+                        >
+                            <FavoriteBorderIcon />
+                        </IconButton>
+                    )}
                 {
                     ((headerType === "lots" && cardData.isPast) || headerType === "live" || headerType === "inventory") &&
 
