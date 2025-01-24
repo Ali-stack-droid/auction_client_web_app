@@ -1,21 +1,12 @@
 import {
     Box,
-    Card,
-    CardMedia,
     Typography,
     Button,
-    Avatar,
-    CardContent,
-    Grid,
-    Rating,
-    Stack,
 
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import useLandingPageStyles from "./LandingPageStyles";
 import CustomTextField from "../custom-components/CustomTextField";
-import AuctionCard from "../auction/auction-components/AuctionCard";
-import auctionData from "../auction/auctionData";
 import AllTools from "./components/AllTools";
 import Feedback from "./components/Feedback";
 import FeaturedAuctions from "./components/FeaturedAuctions";
