@@ -34,7 +34,13 @@ export const moveLotToAuction = (lotId: any, newAuctionId: any) => putRequest(`/
 export const getLotWinner = (id: any) => getRequest(`/lots/lotwinner?id=${id}`);
 export const getBiddersByLotId = (id: any) => getRequest(`/lots/biddersbylot?id=${id}`);
 
+
+// WatchList Methods
+export const addToWatchlist = (id: any, lotId: any) => getRequest(`/wishlist/addtowishlist?clientid=${id}&lotid=${lotId}`);
+export const getWatchlist = (id: any) => getRequest(`/wishlist/getwishlist?clientid=${id}`);
+
 // Bidding Methods
+export const getBidHistory = (id: any, isWinner: any) => getRequest(`lots/clientbids?id=${id}&iswinner=${isWinner}`);
 export const placeBid = (payload: any) => postWithFormRequest('/lots/newbid', payload);
 
 

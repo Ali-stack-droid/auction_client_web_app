@@ -1,59 +1,63 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Pagination, Stack, Button, ToggleButton, ToggleButtonGroup, Fade, CircularProgress, Menu, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getPaidInvoices, getPendingInvoices } from "../Services/Methods";
+import { getBidHistory, getPaidInvoices, getPendingInvoices } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
 import PaymentViewModal from "./BidsViewModal";
 import { bidsData } from "./bidsData";
 import usePaymentTrackingStyles from "../invoices/InvoicesStyles";
 import CustomTextField from "../custom-components/CustomTextField";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import Cookies from "js-cookie";
 
 const PaymentTracking = () => {
     const classes = usePaymentTrackingStyles();
 
-    const [invoices, setInvoices]: any = useState(bidsData);
+    const [invoices, setInvoices]: any = useState([]);
     const [isFetchingData, setIsFetchingData] = useState(false);
 
     const [page, setPage] = useState<number>(0);
     const [selectedInvoice, setSelectedInvoice] = useState({});
-    const [paidInvoice, setPaidInvoice] = useState<boolean>(true);
+    const [isWinning, setIsWinning] = useState<boolean>(true);
     const [viewDetails, setViewDetails] = useState(false);
     const rowsPerPage = 10;
 
-    // useEffect(() => {
-    //     fetchInvoices();
-    // }, [paidInvoice])
+    useEffect(() => {
+        fetchBidHistory();
+    }, [isWinning])
 
-    // const fetchInvoices = async () => {
-    //     setIsFetchingData(true)
-    //     try {
-    //         const response = paidInvoice
-    //             ? await getPaidInvoices()
-    //             : await getPendingInvoices();
+    const fetchBidHistory = async () => {
+        setIsFetchingData(true);
 
-    //         if (response.data && response.data.length > 0) {
-    //             const formattedInvoices = response.data.map((invoice: any) => ({
-    //                 invoiceId: invoice.Id,
-    //                 name: invoice.Name,
-    //                 email: invoice.Email,
-    //                 amount: invoice.TotalAmount,
-    //                 deadline: invoice.Date,
-    //                 status: invoice.Status,
-    //                 totalLots: invoice.TotalLots,
-    //                 paidAmount: invoice.PaidAmount,
-    //                 pendingAmount: invoice.Pending,
-    //                 paymentMethod: invoice.PaymenMethod,
-    //             }));
-    //             setInvoices(formattedInvoices);
-    //         } else {
-    //             setInvoices([]);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching auction data:', error);
-    //     } finally {
-    //         setIsFetchingData(false)
-    //     }
-    // };
+        const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+        const clientId = (sessionStorage.getItem('authToken') ?
+            JSON.parse(user).id : Cookies.get('user')
+                ? JSON.parse(user).id : '')
+
+        try {
+            const response = isWinning
+                ? await getBidHistory(5, true)
+                : await getBidHistory(5, false);
+
+            if (response.data && response.data.length > 0) {
+
+                const formattedResponse = response.data.map((bid: any) => ({
+                    id: bid.Id,
+                    productName: bid.Lots.ShortDescription,
+                    highestBidderName: bid.Clients.Name,
+                    totalBids: bid.TotalLots || 6,
+                    currentPrice: `$${bid.Amount}`,
+                }));
+
+                setInvoices(formattedResponse);
+            } else {
+                setInvoices([]);
+            }
+        } catch (error) {
+            console.error('Error fetching auction data:', error);
+        } finally {
+            setIsFetchingData(false)
+        }
+    };
 
     const handleChangePage = (_event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage - 1); // Adjust for 0-based index
@@ -63,12 +67,6 @@ const PaymentTracking = () => {
         setPage(0);
     };
 
-    const handleToggleInvoice = () => {
-        if (!isFetchingData) {
-            setPage(0);
-            setPaidInvoice(!paidInvoice);
-        }
-    }
     const handleViewButton = (ind: number) => {
         setSelectedInvoice(invoices[ind]);
         setViewDetails(true)

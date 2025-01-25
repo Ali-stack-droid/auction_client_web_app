@@ -10,10 +10,11 @@ import { useNavigate } from 'react-router-dom';
 import NoRecordFound from '../../../utils/NoRecordFound';
 import { SuccessMessage, ErrorMessage } from '../../../utils/ToastMessages';
 import CustomDialogue from '../../custom-components/CustomDialogue';
-import { getCurrentAuctionsByLocation, getCurrentAuctions, getPastAuctionsByLocation, getPastAuctions, getCurrentLocations, getPastLocations, deleteAuction } from '../../Services/Methods';
+import { deleteAuction, getWatchlist } from '../../Services/Methods';
 import AuctionCard from './AuctionCard';
 import AuctionHeader from './AuctionHeader';
 import PaginationButton from './PaginationButton';
+import Cookies from 'js-cookie';
 
 
 
@@ -30,30 +31,29 @@ const WatchList = ({ searchTerm }: any) => {
     const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
     const [locations, setLocations]: any = useState([]); // Filtered data state
 
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const clientId = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user).id : Cookies.get('user')
+            ? JSON.parse(user).id : '')
+
     useEffect(() => {
         if (!isFetchingData) {
             setIsFetchingData(true)
-            fetchAuctionData();
+            fetchWatchlist();
 
         }
     }, [isCurrentAuction, selectedLocation])
 
-    const fetchAuctionData = async () => {
+    const fetchWatchlist = async () => {
+
         try {
             // Critical request:
-            let response;
-            if (isCurrentAuction) {
-                response = selectedLocation
-                    ? await getCurrentAuctionsByLocation(selectedLocation)
-                    : await getCurrentAuctions()
-            } else {
-                response = selectedLocation
-                    ? await getPastAuctionsByLocation(selectedLocation)
-                    : await getPastAuctions();
-            }
-
+            const response = await getWatchlist(clientId)
             if (response.data && response.data.length > 0) {
-                const updatedData = response.data.map((item: any) => ({
+                const allLots = response.data.map((item: any) => item.Lots);
+
+                console.log("asd : ", allLots)
+                const updatedData = allLots.map((item: any) => ({
                     id: item.Id,
                     name: item.Name,
                     image: item.Image,
@@ -71,18 +71,6 @@ const WatchList = ({ searchTerm }: any) => {
                 setFilteredData([]);
                 setPaginationedData([])
             }
-
-            const locationResponse = isCurrentAuction
-                ? await getCurrentLocations()
-                : await getPastLocations();
-
-            if (locationResponse.data && locationResponse.data.length > 0) {
-                const updatedLocation = locationResponse.data;
-                setLocations(updatedLocation);
-            } else {
-                setLocations([]);
-            }
-
 
         } catch (error) {
             console.error('Error fetching auction data:', error);

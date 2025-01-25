@@ -10,6 +10,8 @@ import LotDetails from './card-details-components/LotDetails';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CurrentAuctionDetails from './card-details-components/CurrentAuctionDetails';
 import Cookies from 'js-cookie';
+import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages';
+import { addToWatchlist } from '../../Services/Methods';
 
 
 const AuctionCard = ({
@@ -35,15 +37,26 @@ const AuctionCard = ({
         if (headerType === "live") {
             navigate(`/live/details?aucId=${cardData.id}`);
         } else if (headerType === "lots") {
-            if (location.pathname === "/inventory") {
-                localStorage.setItem('inventory', 'true');
-            }
             navigate(`/listings/details?lotId=${cardData.id}`);
         } else {
             navigate(`/current-auctions/details?aucId=${cardData.id}`);
         }
     };
 
+    const handleAddWatchList = async (id: any) => {
+        const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+        const clientId = (sessionStorage.getItem('authToken') ?
+            JSON.parse(user).id : Cookies.get('user')
+                ? JSON.parse(user).id : '')
+        try {
+            const response = await addToWatchlist(clientId, id)
+            if (response.data) {
+                SuccessMessage('Added to watchlist!')
+            }
+        } catch {
+            ErrorMessage('Error adding to watchlist!')
+        }
+    }
     return (
         <Card className={classes.card} elevation={2}>
             {/* Auction Image */}
@@ -71,7 +84,7 @@ const AuctionCard = ({
                                 '&:hover': { backgroundColor: '#001c48' },
                                 boxShadow: 2,
                             }}
-                            onClick={() => console.log('Heart button clicked')} // Add your action here
+                            onClick={() => handleAddWatchList(cardData.id)} // Add your action here
                         >
                             <FavoriteBorderIcon />
                         </IconButton>
