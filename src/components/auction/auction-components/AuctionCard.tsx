@@ -57,6 +57,16 @@ const AuctionCard = ({
             ErrorMessage('Error adding to watchlist!')
         }
     }
+
+    const handleBidNow = () => {
+        const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+        if (user) {
+            SuccessMessage('Bid placed successfully!')
+        } else {
+            navigate('/login')
+        }
+    }
+
     return (
         <Card className={classes.card} elevation={2}>
             {/* Auction Image */}
@@ -134,7 +144,7 @@ const AuctionCard = ({
                         </Button>
                         : headerType === "lots" ?
                             <Box display={'flex'} flexDirection={'column'} width={'100%'}>
-                                <Button className={classes.bidButton} variant="contained" color="primary">
+                                <Button className={classes.bidButton} variant="contained" color="primary" onClick={() => handleBidNow()}>
                                     Bid Now $1600
                                 </Button>
                                 <Typography m={'10px 0'} sx={{ fontSize: '12px', color: '#212121', fontWeight: 500 }}>
