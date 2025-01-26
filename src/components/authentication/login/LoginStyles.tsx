@@ -71,11 +71,10 @@ export const useLoginStyles = makeStyles({
     },
     componentContainerSignup: {
         flex: 1,
-        height: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        overflow: 'hidden',
+        overflowY: 'auto',
     },
     fadeWrapper: {
         width: '100%',

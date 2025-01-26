@@ -57,18 +57,9 @@ const Authentication = ({ setIsAuthenticated }: any) => {
             {/* Animated Component */}
             <Box className={classes.componentContainerSignup}>
                 <Box sx={{
-                    maxHeight: "80%",
+                    // maxHeight: "80%",
                     width: '--webkit-fill-available',
                     overflowY: 'auto',
-                    '&::-webkit-scrollbar': {
-                        height: '10px',
-                        width: '15px',
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        height: '100px',
-                        backgroundColor: theme.palette.primary.main4,
-                        borderRadius: '10px',
-                    },
                 }}>
                     <Fade in={fadeIn} timeout={300}>
                         <div className={classes.fadeWrapper}>{currentComponent}</div>
