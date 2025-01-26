@@ -101,6 +101,13 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         textTransform: "none",
         fontSize: '15px',
     },
+    pickedButton: {
+        width: "120px",
+        backgroundColor: theme.palette.primary.main,
+        textTransform: "none",
+        fontSize: '15px',
+        pointerEvents: 'none'
+    },
     downloadButton: {
         width: "120px",
         backgroundColor: "#36AB32",

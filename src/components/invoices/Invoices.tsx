@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import usePaymentTrackingStyles from "./InvoicesStyles";
 import { getPaidInvoices, getPendingInvoices } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
-import PaymentViewModal from "./PaymentViewModal";
+import PaymentViewModal from "./InvoiceViewModal";
 import { tableData } from "./paymentData";
 import { useNavigate } from "react-router-dom";
+import InvoiceViewModal from "./InvoiceViewModal";
 
 const Invoices = () => {
     const classes = usePaymentTrackingStyles();
@@ -115,7 +116,7 @@ const Invoices = () => {
                                 <TableCell sx={{ color: "white" }}>Item Description</TableCell>
                                 <TableCell sx={{ color: "white" }}>Date Purchase</TableCell>
                                 <TableCell sx={{ color: "white" }}>Payment Due Date</TableCell>
-                                <TableCell sx={{ color: "white" }}>Pickup Status</TableCell>
+                                <TableCell sx={{ color: "white" }}>{paidInvoice ? "Pickup Status" : "Action"}</TableCell>
                                 <TableCell sx={{ color: "white" }}>{paidInvoice ? "Details" : "Status"}</TableCell>
                             </TableRow>
                         </TableHead>
@@ -127,7 +128,7 @@ const Invoices = () => {
                                     <TableCell>{row.paymentDueDate}</TableCell>
                                     <TableCell>
                                         {paidInvoice ?
-                                            <Button variant={'contained'} className={classes.viewButton} onClick={() => handleViewButton(index)}>{row.pickupStatus ? "Picked" : "Not Picked"}</Button>
+                                            <Button variant={'contained'} className={classes.pickedButton}>{row.pickupStatus ? "Picked" : "Not Picked"}</Button>
                                             :
                                             <Button variant={'contained'} className={classes.viewButton} onClick={() => handleViewButton(index)}>View</Button>
                                         }
@@ -173,7 +174,7 @@ const Invoices = () => {
                     </Box>
             }
 
-            <PaymentViewModal open={viewDetails} onClose={() => setViewDetails(false)} invoice={selectedInvoice} />
+            <InvoiceViewModal open={viewDetails} onClose={() => setViewDetails(false)} invoice={selectedInvoice} />
         </Box >
     );
 };
