@@ -24,6 +24,7 @@ const AuctionCard = ({
     const classes = useAuctionCardStyles();
     const navigate = useNavigate();
     const location = useLocation();
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
 
     const [select, setSelect] = useState(false)
     const [moveLotId, setMoveLotId] = useState(0)
@@ -32,6 +33,8 @@ const AuctionCard = ({
     // const [moveDialogue, setMoveDialogue] = useState(false)
 
     const dispatch = useDispatch();
+
+
 
     const handleCardMediaClick = () => {
         if (headerType === "live") {
@@ -59,7 +62,6 @@ const AuctionCard = ({
     }
 
     const handleBidNow = () => {
-        const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
         if (user) {
             SuccessMessage('Bid placed successfully!')
         } else {
@@ -147,33 +149,36 @@ const AuctionCard = ({
                                 <Button className={classes.bidButton} variant="contained" color="primary" onClick={() => handleBidNow()}>
                                     Bid Now $1600
                                 </Button>
-                                <Typography m={'10px 0'} sx={{ fontSize: '12px', color: '#212121', fontWeight: 500 }}>
-                                    You can enter your custom Amount
-                                </Typography>
-                                <Box mb={'4px'}>
-                                    <TextField
-                                        variant="outlined"
-                                        size="small"
-                                        sx={{
-                                            width: '175px',
-                                            height: '31px',
-                                            '& .MuiInputBase-input::placeholder': {
-                                                fontSize: '13px',
-                                            },
-                                        }}
-                                        placeholder="Enter Bid Amount"
-                                    />
-                                </Box>
+                                {user &&
+                                    <Box>
+                                        <Typography m={'10px 0'} sx={{ fontSize: '12px', color: '#212121', fontWeight: 500 }}>
+                                            You can enter your custom Amount
+                                        </Typography>
+                                        <Box mb={'4px'}>
+                                            <TextField
+                                                variant="outlined"
+                                                size="small"
+                                                sx={{
+                                                    width: '175px',
+                                                    height: '31px',
+                                                    '& .MuiInputBase-input::placeholder': {
+                                                        fontSize: '13px',
+                                                    },
+                                                }}
+                                                placeholder="Enter Bid Amount"
+                                            />
+                                        </Box>
 
 
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.submitBtn}
-                                >
-                                    Submit
-                                </Button>
-
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.submitBtn}
+                                        >
+                                            Submit
+                                        </Button>
+                                    </Box>
+                                }
                             </Box>
                             : headerType === "live" ?
                                 <Button className={classes.bidButton} variant="contained" color="primary">
