@@ -5,9 +5,11 @@ import { getPaidInvoices, getPendingInvoices } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
 import PaymentViewModal from "./PaymentViewModal";
 import { tableData } from "./paymentData";
+import { useNavigate } from "react-router-dom";
 
 const Invoices = () => {
     const classes = usePaymentTrackingStyles();
+    const navigate = useNavigate();
 
     const [invoices, setInvoices]: any = useState(tableData);
     const [isFetchingData, setIsFetchingData] = useState(false);
@@ -71,6 +73,10 @@ const Invoices = () => {
         setSelectedInvoice(invoices[ind]);
         setViewDetails(true)
     }
+
+    const handlePayNow = (paymentId: any) => {
+        navigate(`/cart?paymentId=${paymentId}`)
+    }
     // Calculate the number of pages based on the length of tableData
     const totalPages = Math.ceil(invoices.length / rowsPerPage);
 
@@ -130,7 +136,7 @@ const Invoices = () => {
                                         {paidInvoice ?
                                             <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleViewButton(index)}>Download</Button>
                                             :
-                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleViewButton(index)}>Pay Now</Button>
+                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handlePayNow(2)}>Pay Now</Button>
                                         }
                                     </TableCell>
                                 </TableRow>
