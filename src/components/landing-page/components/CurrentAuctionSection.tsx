@@ -1,12 +1,13 @@
 import { Box, Typography, Button } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AuctionCard from '../../auction/auction-components/AuctionCard'
-import auctionData from '../../auction/auctionData'
 import useLandingPageStyles from '../LandingPageStyles'
 import { getFeaturedAuctions, getFeaturedLots } from '../../Services/Methods'
+import { useNavigate } from 'react-router-dom'
 
 const CurrentAuctions = () => {
     const classes = useLandingPageStyles();
+    const navigate = useNavigate();
 
     const [isFetchingData, setIsFetchingData] = useState(false);
     const [filteredData, setFilteredData]: any = useState([]);
@@ -48,6 +49,10 @@ const CurrentAuctions = () => {
         }
     };
 
+    const handleViewAllAuctions = () => {
+        navigate('/current-auctions')
+    }
+
     return (
         <Box className={classes.locationSection} py={10}>
             <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
@@ -76,7 +81,7 @@ const CurrentAuctions = () => {
                 }
             </Box>
 
-            <Button className={classes.allAuctions} variant={"contained"} >
+            <Button className={classes.allAuctions} variant={"contained"} onClick={handleViewAllAuctions}>
                 View  All Auctions
             </Button>
         </Box >

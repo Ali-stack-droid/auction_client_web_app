@@ -4,10 +4,11 @@ import auctionData from '../../auction/auctionData'
 import useLandingPageStyles from '../LandingPageStyles'
 import { getFeaturedLots } from '../../Services/Methods'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const FeaturedAuctions = () => {
     const classes = useLandingPageStyles()
-
+    const navigate = useNavigate()
     const [isFetchingData, setIsFetchingData] = useState(false);
     const [filteredData, setFilteredData]: any = useState([]);
 
@@ -48,6 +49,9 @@ const FeaturedAuctions = () => {
         }
     };
 
+    const handleViewAllListings = () => {
+        navigate('/listings')
+    }
     return (
         <Box className={classes.locationSection} py={10}>
             <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
@@ -56,7 +60,7 @@ const FeaturedAuctions = () => {
                 </Typography>
             </Box>
             <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
-                {filteredData.length === 1
+                {filteredData.length === 1 || filteredData.length === 2
                     ? Array(3).fill(filteredData[0]).map((auction: any, index: number) => (
                         <Box sx={{ width: "100%" }} key={index}>
                             <AuctionCard
@@ -76,7 +80,7 @@ const FeaturedAuctions = () => {
                 }
             </Box>
 
-            <Button className={classes.allAuctions} variant={"contained"} >
+            <Button className={classes.allAuctions} variant={"contained"} onClick={handleViewAllListings}>
                 View  All Listings
             </Button>
 

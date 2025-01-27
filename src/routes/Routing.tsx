@@ -1,5 +1,5 @@
-import React, { Suspense, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { Suspense, useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
 import TempComponent from './TempComponent';
 import AppProvider from '../components/layout/AppProvider';
@@ -15,6 +15,7 @@ import Invoices from '../components/invoices/Invoices';
 import WatchList from '../components/auction/auction-components/Watchlist';
 import LotDetailPage from '../components/auction/detail-pages/LotDetailPage';
 import Cart from '../components/auction/auction-components/Cart';
+
 
 
 // Page Components
@@ -34,6 +35,25 @@ const ProtectedRoute = ({ isAuthenticated, children }: any) => {
 };
 
 const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
+
+    const location = useLocation()
+    useEffect(() => {
+        const handleRouteChange = (url: any) => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            });
+        };
+        window.addEventListener('popstate', () => handleRouteChange(window.location.pathname));
+        return () => window.removeEventListener('popstate', handleRouteChange);
+    }, []);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }, [location.pathname]);
 
     return (
         <Box style={{ display: 'flex' }}>
@@ -160,3 +180,4 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
 };
 
 export default Routing;
+
