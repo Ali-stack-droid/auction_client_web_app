@@ -51,12 +51,13 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
     },
     locationCards: {
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         gap: '16px'
     },
     cardStyles: {
         height: "267px",
+        maxWidth: '320px',
         borderRadius: "12px",
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
         textAlign: "left",
@@ -97,14 +98,15 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: "10px"
+        gap: "10px",
+        flexWrap: 'wrap', // Ensures wrapping on smaller screens
     },
     toolsInfo: {
         flex: 0.3,
         display: 'flex',
         flexDirection: 'column',
         gap: "10px",
-        justifyContent: 'start',
+        justifyContent: 'flex-start',
         alignItems: 'center'
     },
     toolBox: {
@@ -114,6 +116,11 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         justifyContent: 'space-between',
         alignItmes: 'start',
         padding: "16px"
+    },
+    currentAuctionCard: {
+        maxWidth: "386px",
+        width: '-webkit-fill-available',
+        height: '460px'
     }
 }));
 

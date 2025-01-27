@@ -67,7 +67,7 @@ const CurrentAuctionsByLocation = () => {
             <Box className={classes.locationCards} sx={{ marginBottom: 4 }}>
                 {filteredData.length === 1
                     ? Array(3).fill(filteredData[0]).map((auction: any, index: number) => (
-                        <Box sx={{ width: "100%" }} key={index}>
+                        <Box className={classes.currentAuctionCard} key={index}>
                             <AuctionCard
                                 headerType={"home"}
                                 cardData={auction}
@@ -75,7 +75,7 @@ const CurrentAuctionsByLocation = () => {
                         </Box>
                     ))
                     : filteredData.map((auction: any, index: number) => (
-                        <Box sx={{ width: "100%" }} key={index}>
+                        <Box className={classes.currentAuctionCard} key={index}>
                             <AuctionCard
                                 headerType={"home"}
                                 cardData={auction}

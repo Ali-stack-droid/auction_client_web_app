@@ -5,7 +5,7 @@ export const useAuctionCardStyles = makeStyles({
     card: {
         padding: "15px",
         borderRadius: "15px",
-        minHeight: '440px'
+        minHeight: '-webkit-fill-available'
     },
     description: {
         color: theme.palette.primary.main2,

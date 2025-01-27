@@ -46,6 +46,8 @@ const AllTools = () => {
                                     "&:hover": {
                                         backgroundColor: "#002D7E",
                                     },
+                                    width: '140px',
+                                    heught: '42px'
                                 }}
                             >
                                 Learn More
@@ -72,6 +74,8 @@ const AllTools = () => {
                                     "&:hover": {
                                         backgroundColor: "#002D7E",
                                     },
+                                    width: '140px',
+                                    heught: '42px'
                                 }}
                             >
                                 Learn More
@@ -83,7 +87,7 @@ const AllTools = () => {
                 {/* Center Image */}
                 <Box
                     sx={{
-                        flex: 0.6,
+                        flex: 0.43,
                         height: "100%",
                         display: "flex",
                         justifyContent: "center",
@@ -125,6 +129,8 @@ const AllTools = () => {
                                     "&:hover": {
                                         backgroundColor: "#002D7E",
                                     },
+                                    width: '140px',
+                                    heught: '42px'
                                 }}
                             >
                                 Learn More
@@ -151,6 +157,8 @@ const AllTools = () => {
                                     "&:hover": {
                                         backgroundColor: "#002D7E",
                                     },
+                                    width: '140px',
+                                    heught: '42px'
                                 }}
                             >
                                 Learn More

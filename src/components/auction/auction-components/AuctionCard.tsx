@@ -154,7 +154,7 @@ const AuctionCard = ({
                                         <Typography m={'10px 0'} sx={{ fontSize: '12px', color: '#212121', fontWeight: 500 }}>
                                             You can enter your custom Amount
                                         </Typography>
-                                        <Box mb={'4px'}>
+                                        <Box minHeight={'40px'}>
                                             <TextField
                                                 variant="outlined"
                                                 size="small"
