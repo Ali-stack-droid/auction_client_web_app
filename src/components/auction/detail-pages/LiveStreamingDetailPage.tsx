@@ -24,6 +24,8 @@ const LiveStreamingDetailPage = () => {
     const [auctionDetails, setAuctionDetails]: any = useState({})
     const [auctionLots, setAuctionLots]: any = useState([])
     const [paginationedData, setPaginationedData]: any = useState([])
+    const [bidAmount, setBidAmount] = useState(0);
+
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -188,6 +190,24 @@ const LiveStreamingDetailPage = () => {
         }
     }
 
+    // Handle value change in the TextField
+    const handleChange = (event: any) => {
+        const value = event.target.value;
+        if (/^\d*$/.test(value)) {
+            setBidAmount(value === "" ? 0 : parseInt(value, 10));
+        }
+    };
+
+    // Increment the bid amount
+    const handleIncrement = () => {
+        setBidAmount((prev: any) => prev + 1);
+    };
+
+    // Decrement the bid amount
+    const handleDecrement = () => {
+        setBidAmount((prev: any) => (prev > 0 ? prev - 1 : 0)); // Ensure it doesn't go below 0
+    };
+
 
     return (
         <Box py={2}>
@@ -265,16 +285,18 @@ const LiveStreamingDetailPage = () => {
                         <TextField
                             placeholder="Enter Bid Amount"
                             variant="outlined"
+                            value={bidAmount}
+                            onChange={handleChange}
                         />
                     </Box>
 
                     <IconButton
-                        className={classes.iconBtn}>
+                        className={classes.iconBtn} onClick={handleIncrement}>
                         <AddIcon />
                     </IconButton>
 
                     <IconButton
-                        className={classes.iconBtn}>
+                        className={classes.iconBtn} onClick={handleDecrement}>
                         <RemoveIcon />
                     </IconButton>
                 </Stack>
