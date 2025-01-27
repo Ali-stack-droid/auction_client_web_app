@@ -12,6 +12,7 @@ import PaginationButton from "../auction-components/PaginationButton";
 import { ErrorMessage, SuccessMessage } from "../../../utils/ToastMessages";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomTextField from "../../custom-components/CustomTextField";
+import auctionData from "../auctionData";
 
 
 const AuctionDetailPage = () => {
@@ -37,9 +38,10 @@ const AuctionDetailPage = () => {
     useEffect(() => {
         if (!isFetchingData) {
             setIsFetchingData(true);
-            fetchAuctionDetails()
+            fetchAuctionDetails();
         }
     }, [])
+
 
 
     const fetchAuctionDetails = async () => {
@@ -64,6 +66,7 @@ const AuctionDetailPage = () => {
                     timeRange: `${auction.StartTime} to ${auction.EndTime}`,
                     previewDateRange: `${auction.PrevStartDate} to ${auction.PrevEndDate}`,
                     previewTimeRange: `${auction.PrevStartTime} to ${auction.PrevEndTime}`,
+                    checkoutDateRange: `${auction.PrevStartDate} to ${auction.PrevEndDate}`,
 
                     description: auction.Description,
                     notes: auction.Notes,
@@ -141,74 +144,7 @@ const AuctionDetailPage = () => {
         }
     };
 
-    const handleDelete = async () => {
-        try {
-            const response: any = await deleteAuction(deleteAuctionId);
-            if (response.status === 200) {
-                SuccessMessage('Lot deleted successfully!')
-                if (isDeletedFromDetail) {
-                    navigate('/auction')
-                } else {
-                    setAuctionLots(auctionLots.filter(lot => lot.id !== deleteAuctionId))
-                    setPaginationedData(auctionLots.filter(lot => lot.id !== deleteAuctionId))
-                }
-            } else {
-                ErrorMessage('Error deleting lot!')
-            }
-        } catch (error) {
-            console.error('Error deleting auction:', error);
-        } finally {
-            handleCloseModal()
-        }
-    };
-
     const navigate = useNavigate()
-
-    // Handle Edit
-    const handleEdit = (id: string) => {
-        navigate(`/auction/edit?aucId=${id}`);
-    };
-
-    const handleEditLots = (id: number) => {
-        navigate(`/auction/lots/edit?lotId=${id}`);
-    };
-
-    // Open confirmation modal
-    const handleDeleteAuction = (id: number) => {
-        setDeleteAuctionId(id);
-        setConfirmDelete(true);
-    };
-
-    // Close modal
-    const handleCloseModal = () => {
-        if (!isDeleting) {
-            setIsDeleting(false)
-            setConfirmDelete(false);
-            setDeleteAuctionId(0);
-        }
-    };
-
-    // Confirm deletion
-    const handleConfirmDelete = () => {
-        if (!isDeleting) {
-            setIsDeleting(true)
-            handleDelete(); // Call the delete handler
-        }
-    };
-
-    const handleSeeMoreClick = (type: string) => {
-        if (type === "terms") {
-            setShowMoreTerms(!showMoreTerms);
-        } else {
-            setShowMorePaymentTerms(!showMorePaymentTerms)
-        }
-    };
-
-    const handleMoveModal = (movedLotId: number) => {
-        if (movedLotId > 0) {
-            setAuctionLots((prevData: any) => prevData.filter((item: any) => item.id !== movedLotId));
-        }
-    }
 
     return (
         <Box sx={{ padding: "10px 0" }}>
@@ -237,8 +173,8 @@ const AuctionDetailPage = () => {
 
                             <Box paddingTop={3}>
                                 {[
-                                    { title: "Terms and Conditions", content: "Terms and conditions content goes here." },
-                                    { title: "Payment Information", content: "Payment information content goes here." },
+                                    { title: "Terms and Conditions", content: auctionDetails.TermsConditions },
+                                    { title: "Payment Information", content: auctionDetails.paymentTerms },
                                     { title: "Pickup and Shipping Details", content: "Pickup and shipping details content goes here." },
                                 ].map((item, index) => (
                                     <Accordion
@@ -273,7 +209,7 @@ const AuctionDetailPage = () => {
                                     Auction Details:
                                 </Typography>
                                 <Typography className={classes.description} >
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Adipisci laudantium consectetur obcaecati voluptate facilis dolores? Ut reprehenderit eum voluptatem aliquam et? Sed consequatur harum ex provident perferendis vitae accusantium, fugit eligendi, deleniti voluptas molestias dolore nihil inventore ratione. At, quod?
+                                    {auctionDetails.description}
                                 </Typography>
 
                                 <Divider sx={{ my: 2 }} />
@@ -285,7 +221,7 @@ const AuctionDetailPage = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                            <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
+                                            <Typography className={classes.text}>{auctionDetails.dateRange?.replaceAll('-', '/')}</Typography>
                                         </Box>
                                     </Box>
 
@@ -296,7 +232,7 @@ const AuctionDetailPage = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                            <Typography className={classes.text}>United States of America</Typography>
+                                            <Typography className={classes.text}>{auctionDetails.details?.location}</Typography>
                                         </Box>
                                     </Box>
                                 </Box>
@@ -309,7 +245,7 @@ const AuctionDetailPage = () => {
                                     </Box>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                         <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                        <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
+                                        <Typography className={classes.text}>{auctionDetails.previewDateRange?.replaceAll('-', '/')}</Typography>
                                     </Box>
                                 </Box>
 
@@ -322,7 +258,7 @@ const AuctionDetailPage = () => {
                                     </Box>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                         <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                        <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
+                                        <Typography className={classes.text}>{auctionDetails.previewDateRange?.replaceAll('-', '/')}</Typography>
                                     </Box>
                                 </Box>
 
@@ -335,7 +271,7 @@ const AuctionDetailPage = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                            <Typography className={classes.text}>Lorem ipsum dolor sit amet.</Typography>
+                                            <Typography className={classes.text}>{auctionDetails.type}</Typography>
                                         </Box>
                                     </Box>
 
@@ -428,17 +364,7 @@ const AuctionDetailPage = () => {
                     <CircularProgress size={70} disableShrink />
                 </Box>
             }
-            {/* Confirmation Modal */}
-            <CustomDialogue
-                type={"delete"}
-                title={"Confirm Deletion"}
-                message={"Are you sure you want to delete this auction? This action cannot be undone."}
-                openDialogue={confirmDelete}
-                handleCloseModal={handleCloseModal}
-                handleConfirmModal={handleConfirmDelete}
-                isDeleting={isDeleting}
 
-            />
         </Box >
     );
 };
