@@ -5,6 +5,7 @@ import {
     Container,
     Grid,
     CircularProgress,
+    Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AuctionCard from './auction-components/AuctionCard';
@@ -14,8 +15,9 @@ import PaginationButton from './auction-components/PaginationButton';
 import { deleteAuction, getCurrentAuctions, getCurrentAuctionsByLocation, getCurrentLocations, getPastAuctions, getPastAuctionsByLocation, getPastLocations } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
 import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
+import theme from '../../theme';
 
-const CurrentAuctions = ({ searchTerm }: any) => {
+const CurrentAuctions = () => {
     const [fadeIn, setFadeIn] = useState(false); // Fade control state
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [deleteAuctionId, setDeleteAuctionId] = useState<string | null>(null);
@@ -27,6 +29,8 @@ const CurrentAuctions = ({ searchTerm }: any) => {
     const [filteredData, setFilteredData]: any = useState([]); // Filtered data state
     const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
     const [locations, setLocations]: any = useState([]); // Filtered data state
+
+    const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -87,54 +91,7 @@ const CurrentAuctions = ({ searchTerm }: any) => {
         }
     };
 
-    const handleDelete = async (id: string) => {
-        try {
-            // Call the delete API
-            const response: any = await deleteAuction(id);
-            if (response.status === 200) {
-                SuccessMessage('Auction deleted successfully!')
-                // Update state with filtered data if API call is successful
-                const updatedData = filteredData.filter((auction: any) => auction.id !== id);
-                setFilteredData(updatedData);
-            } else {
-                ErrorMessage('Error deleting auction!')
-            }
-        } catch (error) {
-            console.error('Error deleting auction:', error);
-        } finally {
-            handleCloseModal();
-        }
-    };
-
-    // Open confirmation modal
-    const handleDeleteAuction = (id: string) => {
-        setDeleteAuctionId(id);
-        setConfirmDelete(true);
-    };
-
-    // Close modal
-    const handleCloseModal = () => {
-        if (!isDeleting) {
-            setIsDeleting(false)
-            setConfirmDelete(false);
-            setDeleteAuctionId(null);
-        }
-    };
-
-    // Confirm deletion
-    const handleConfirmDelete = () => {
-        if (deleteAuctionId && !isDeleting) {
-            setIsDeleting(true)
-            handleDelete(deleteAuctionId); // Call the delete handler
-        }
-    };
-
     const navigate = useNavigate()
-
-    // Handle Edit
-    const handleEdit = (id: string) => {
-        navigate(`edit?aucId=${id}`); // Navigate to the edit route with auction ID
-    };
 
     // Filtered Data based on `type` and `location`
     useEffect(() => {
@@ -159,6 +116,7 @@ const CurrentAuctions = ({ searchTerm }: any) => {
                 selectedLocation={selectedLocation}
                 setSelectedLocation={setSelectedLocation}
                 locations={locations}
+                setSearchTerm={setSearchTerm}
             />
 
             <Box>
@@ -176,14 +134,40 @@ const CurrentAuctions = ({ searchTerm }: any) => {
                                             auction.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
                                         );
                                     })
-                                    .map((auction: any) => (
-                                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={auction.id}>
-                                            <AuctionCard
-                                                headerType={"current-auction"}
-                                                cardData={auction}
-                                            />
-                                        </Grid>
-                                    ))}
+                                    .length > 0 ? (
+                                    paginationedData
+                                        .filter((auction: any) => {
+                                            if (!searchTerm) return true; // Show all if no search term
+                                            const lowerCaseTerm = searchTerm.toLowerCase();
+                                            return (
+                                                auction.id.toString().includes(searchTerm) || // Match ID
+                                                auction.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                                auction.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                            );
+                                        })
+                                        .map((auction: any) => (
+                                            <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={auction.id}>
+                                                <AuctionCard
+                                                    headerType={"current-auction"}
+                                                    cardData={auction}
+                                                />
+                                            </Grid>
+                                        ))
+                                ) : (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: '50vh',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Typography sx={{ fontSize: '25px', fontWeight: 700 }}>
+                                            No match found for <span style={{ color: theme.palette.primary.main }}> "{searchTerm}"</span>
+                                        </Typography>
+                                    </Box>
+                                )}
                             </Grid>
                         </Container>
                     </Fade>
@@ -205,16 +189,6 @@ const CurrentAuctions = ({ searchTerm }: any) => {
             </Box>
 
             <PaginationButton filteredData={filteredData} setPaginationedData={setPaginationedData} />
-            {/* Confirmation Modal */}
-            <CustomDialogue
-                title={"Confirm Deletion"}
-                message={"Are you sure you want to delete this auction? This action cannot be undone."}
-                type={"delete"}
-                openDialogue={confirmDelete}
-                handleCloseModal={handleCloseModal}
-                handleConfirmModal={handleConfirmDelete}
-                isDeleting={isDeleting}
-            />
 
         </Box >
     );

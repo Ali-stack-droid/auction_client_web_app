@@ -12,6 +12,7 @@ import PaginationButton from "../auction-components/PaginationButton";
 import { ErrorMessage, SuccessMessage } from "../../../utils/ToastMessages";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomTextField from "../../custom-components/CustomTextField";
+import theme from "../../../theme";
 
 
 const AuctionDetailPage = () => {
@@ -33,6 +34,9 @@ const AuctionDetailPage = () => {
 
     const [isFetchingData, setIsFetchingData] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const [search, setSearch] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -141,74 +145,9 @@ const AuctionDetailPage = () => {
         }
     };
 
-    const handleDelete = async () => {
-        try {
-            const response: any = await deleteAuction(deleteAuctionId);
-            if (response.status === 200) {
-                SuccessMessage('Lot deleted successfully!')
-                if (isDeletedFromDetail) {
-                    navigate('/auction')
-                } else {
-                    setAuctionLots(auctionLots.filter(lot => lot.id !== deleteAuctionId))
-                    setPaginationedData(auctionLots.filter(lot => lot.id !== deleteAuctionId))
-                }
-            } else {
-                ErrorMessage('Error deleting lot!')
-            }
-        } catch (error) {
-            console.error('Error deleting auction:', error);
-        } finally {
-            handleCloseModal()
-        }
-    };
-
     const navigate = useNavigate()
 
-    // Handle Edit
-    const handleEdit = (id: string) => {
-        navigate(`/auction/edit?aucId=${id}`);
-    };
 
-    const handleEditLots = (id: number) => {
-        navigate(`/auction/lots/edit?lotId=${id}`);
-    };
-
-    // Open confirmation modal
-    const handleDeleteAuction = (id: number) => {
-        setDeleteAuctionId(id);
-        setConfirmDelete(true);
-    };
-
-    // Close modal
-    const handleCloseModal = () => {
-        if (!isDeleting) {
-            setIsDeleting(false)
-            setConfirmDelete(false);
-            setDeleteAuctionId(0);
-        }
-    };
-
-    // Confirm deletion
-    const handleConfirmDelete = () => {
-        if (!isDeleting) {
-            setIsDeleting(true)
-            handleDelete(); // Call the delete handler
-        }
-    };
-
-    const handleSeeMoreClick = (type: string) => {
-        if (type === "terms") {
-            setShowMoreTerms(!showMoreTerms);
-        } else {
-            setShowMorePaymentTerms(!showMorePaymentTerms)
-        }
-    };
-
-    const handleMoveModal = (movedLotId: number) => {
-        if (movedLotId > 0) {
-            setAuctionLots((prevData: any) => prevData.filter((item: any) => item.id !== movedLotId));
-        }
-    }
 
     return (
         <Box sx={{ padding: "10px 0" }}>
@@ -362,14 +301,15 @@ const AuctionDetailPage = () => {
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%", padding: "20px 0" }}>
+                                {JSON.stringify(search)}
                                 <CustomTextField
-                                    // value={searchTerm}
-                                    // onChange={handleSearchChange}
+                                    value={search}
+                                    onChange={(e: any) => setSearch(e.target.value)}
                                     placeholder="Search for auction listings here..."
                                     className={classes.searchField}
                                     InputProps={{
                                         endAdornment: (
-                                            <Button variant={'contained'} className={classes.searchButton}>
+                                            <Button variant={'contained'} className={classes.searchButton} onClick={() => setSearchTerm(search)}>
                                                 Search
                                             </Button>
                                         ),
@@ -401,14 +341,52 @@ const AuctionDetailPage = () => {
 
                             <Container disableGutters maxWidth={false} sx={{ mt: 3, pl: 1 }}>
                                 <Grid container spacing={3}>
-                                    {paginationedData && paginationedData.map((lot: any) => (
-                                        <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
-                                            <AuctionCard
-                                                headerType={'lots'}
-                                                cardData={lot}
-                                            />
-                                        </Grid>
-                                    ))}
+                                    {paginationedData
+                                        .filter((lot: any) => {
+                                            if (!searchTerm) return true; // Show all if no search term
+                                            const lowerCaseTerm = searchTerm?.toLowerCase();
+                                            return (
+                                                lot.id?.toString().includes(searchTerm) || // Match ID
+                                                lot.name?.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                                lot.details.location?.toLowerCase()?.includes(lowerCaseTerm) // Match Location
+                                            );
+                                        })
+                                        .length > 0 ? (
+                                        paginationedData
+                                            .filter((lot: any) => {
+                                                if (!searchTerm) return true; // Show all if no search term
+                                                const lowerCaseTerm = searchTerm.toLowerCase();
+                                                return (
+                                                    lot.id.toString().includes(searchTerm) || // Match ID
+                                                    lot.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                                    lot.details.location?.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                                );
+                                            })
+                                            .map((lot: any) => (
+                                                <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
+                                                    <AuctionCard
+                                                        headerType={'lots'}
+                                                        cardData={lot}
+                                                    />
+                                                </Grid>
+                                            ))
+                                    ) : (
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                height: '50vh',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            <Typography sx={{ fontSize: '25px', fontWeight: 700 }}>
+                                                No match found for <span style={{ color: theme.palette.primary.main }}> "{searchTerm}"</span>
+                                            </Typography>
+                                        </Box>
+                                    )}
+
+
                                 </Grid>
                             </Container>
                             <PaginationButton filteredData={auctionLots} setPaginationedData={setPaginationedData} />
@@ -428,17 +406,6 @@ const AuctionDetailPage = () => {
                     <CircularProgress size={70} disableShrink />
                 </Box>
             }
-            {/* Confirmation Modal */}
-            <CustomDialogue
-                type={"delete"}
-                title={"Confirm Deletion"}
-                message={"Are you sure you want to delete this auction? This action cannot be undone."}
-                openDialogue={confirmDelete}
-                handleCloseModal={handleCloseModal}
-                handleConfirmModal={handleConfirmDelete}
-                isDeleting={isDeleting}
-
-            />
         </Box >
     );
 };

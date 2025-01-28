@@ -14,13 +14,14 @@ const AuctionHeader = ({
     selectedLocation,
     setSelectedLocation,
     locations,
-    filterLots
+    filterLots,
+    setSearchTerm
 }: any) => {
     const classes = useAuctionHeaderStyles();
     const navigate = useNavigate();
-    const locationURL = useLocation()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [search, setSearch]: any = useState(""); // Filtered data state
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
@@ -30,14 +31,9 @@ const AuctionHeader = ({
         handleMenuClose();
     };
 
-    const handleAddClick = () => {
-        if (headerType === "current-auctions" || headerType === "live") {
-            navigate('/auction/create')
-        } else {
-            const selectedAuction = getQueryParam('aucId');
-            navigate(`/auction/lots/create?aucId=${selectedAuction}`)
-        }
-    }
+    const handleSearchChange = () => {
+        setSearchTerm(search);
+    };
 
     return (
         <Box>
@@ -52,13 +48,13 @@ const AuctionHeader = ({
                 <Box className={classes.root}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: "60%", padding: "20px 0" }}>
                         <CustomTextField
-                            // value={searchTerm}
-                            // onChange={handleSearchChange}
+                            value={search}
+                            onChange={(e: any) => setSearch(e.target.value)}
                             placeholder="Search for auction listings here..."
                             className={classes.searchField}
                             InputProps={{
                                 endAdornment: (
-                                    <Button variant={'contained'} className={classes.searchButton}>
+                                    <Button variant={'contained'} className={classes.searchButton} onClick={handleSearchChange}>
                                         Search
                                     </Button>
                                 ),

@@ -5,6 +5,7 @@ import {
     Container,
     Grid,
     CircularProgress,
+    Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomDialogue from '../custom-components/CustomDialogue';
@@ -14,6 +15,7 @@ import PaginationButton from '../auction/auction-components/PaginationButton';
 import { deleteAuction, getCurrentLiveAuctions } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
 import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
+import theme from '../../theme';
 
 
 const LiveStreaming = () => {
@@ -29,6 +31,7 @@ const LiveStreaming = () => {
     const [filteredData, setFilteredData] = useState([]); // Filtered data state
     const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
 
+    const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -124,21 +127,58 @@ const LiveStreaming = () => {
                 selectedLocation={selectedLocation}
                 setSelectedLocation={setSelectedLocation}
                 locations={[]}
+                setSearchTerm={setSearchTerm}
             />
             <Box sx={{ minHeight: "70vh" }}>
                 {!isFetchingData && paginationedData?.length ?
                     <Fade in={fadeIn} timeout={200}>
                         <Container disableGutters maxWidth={false} sx={{ mt: 3 }}>
                             <Grid container spacing={3}>
-                                {paginationedData &&
-                                    paginationedData.map((auction: any) => (
-                                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={auction.id}>
-                                            <AuctionCard
-                                                headerType={"live"}
-                                                cardData={auction}
-                                            />
-                                        </Grid>
-                                    ))}
+
+                                {paginationedData
+                                    .filter((auction: any) => {
+                                        if (!searchTerm) return true; // Show all if no search term
+                                        const lowerCaseTerm = searchTerm.toLowerCase();
+                                        return (
+                                            auction.id.toString().includes(searchTerm) || // Match ID
+                                            auction.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                            auction.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                        );
+                                    })
+                                    .length > 0 ? (
+                                    paginationedData
+                                        .filter((auction: any) => {
+                                            if (!searchTerm) return true; // Show all if no search term
+                                            const lowerCaseTerm = searchTerm.toLowerCase();
+                                            return (
+                                                auction.id.toString().includes(searchTerm) || // Match ID
+                                                auction.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                                auction.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                            );
+                                        })
+                                        .map((auction: any) => (
+                                            <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={auction.id}>
+                                                <AuctionCard
+                                                    headerType={"live"}
+                                                    cardData={auction}
+                                                />
+                                            </Grid>
+                                        ))
+                                ) : (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: '50vh',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Typography sx={{ fontSize: '25px', fontWeight: 700 }}>
+                                            No match found for <span style={{ color: theme.palette.primary.main }}> "{searchTerm}"</span>
+                                        </Typography>
+                                    </Box>
+                                )}
                             </Grid>
                         </Container>
                     </Fade>
