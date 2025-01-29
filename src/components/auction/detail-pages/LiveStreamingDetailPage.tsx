@@ -10,6 +10,8 @@ import { getAuctionDetailById, deleteAuction } from '../../Services/Methods';
 import KeyboardReturnRoundedIcon from '@mui/icons-material/KeyboardReturnRounded';
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import theme from '../../../theme';
+import CustomTextField from '../../custom-components/CustomTextField';
 
 const LiveStreamingDetailPage = () => {
     const classes = useLiveStreamDetailStyles();
@@ -210,182 +212,159 @@ const LiveStreamingDetailPage = () => {
 
 
     return (
+
+
         <Box py={2}>
-            {/* Page Title */}
-            <Typography
-                sx={{ marginTop: "20px", marginBottom: "40px", fontWeight: 600, fontSize: '40px' }}
-            >
-                Live Video Streaming:
-            </Typography>
 
-            {/* Streaming Card */}
-            <Card
-                sx={{
-                    padding: "30px 30px 80px 30px",
-                    borderRadius: "12px",
-                    boxShadow: 3,
-                    position: "relative",
-                    marginBottom: '60px'
-                }}
-            >
-                {/* Image Section */}
-                <Box sx={{ position: "relative", marginBottom: "35px" }}>
-                    <CardMedia
-                        component="img"
-                        height="300"
-                        image="/assets/pngs/live-detail.png" // Replace with the image URL
-                        alt="Live Auction"
-                        sx={{ borderRadius: "12px", width: '100%', height: '640px' }}
-                    />
-                    {/* Overlay Badges */}
-                    <Button
-                        variant="contained"
-                        color="error"
-                        className={classes.liveBtn}
+            {!isFetchingData && auctionDetails && auctionLots.length > 0 ?
+                <Box>
+                    {/* Page Title */}
+                    <Typography
+                        sx={{ marginTop: "20px", marginBottom: "40px", fontWeight: 600, fontSize: '40px' }}
                     >
-                        Live Stream
-                    </Button>
-                    <Button
-                        variant="contained"
-                        className={classes.nameBtn}>
-                        John Anderson Smith
-                    </Button>
-                    <Button
-                        variant="contained"
-                        className={classes.rateBtn}
-                    >
-                        Highest Bid: $10,000
-                    </Button>
-                </Box >
+                        Live Video Streaming:
+                    </Typography>
 
-                {/* Auction Title */}
-                < Typography
-                    fontSize={'35px'}
-                    sx={{ fontWeight: 600, marginBottom: "18px", maxWidth: '752px', color: '#2D3748' }}
-                >
-                    Monthly / Weekly Auction Held At London, United Kingdom.
-                </Typography >
-
-                {/* Auction Description */}
-                < Typography
-                    sx={{ color: "#838383", marginBottom: "18px", fontSize: '18px', lineHeight: "1.6", maxWidth: '937px' }}
-                >
-                    The auction held in London was an exclusive event showcasing a
-                    stunning collection of rare and valuable items.Attended by
-                    collectors, enthusiasts, and art connoisseurs from around the world,
-                    the atmosphere buzzed with anticipation.
-                </Typography >
-
-                {/* Bid Input */}
-                < Typography sx={{ fontWeight: 600, fontSize: '22px', marginBottom: "15px" }}>
-                    Place Bid
-                </Typography >
-                <Stack mb={'30px'} direction="row" alignItems="center" spacing={2}>
-                    <Box className={classes.bidAmount}>
-                        <TextField
-                            placeholder="Enter Bid Amount"
-                            variant="outlined"
-                            value={bidAmount}
-                            onChange={handleChange}
-                        />
-                    </Box>
-
-                    <IconButton
-                        className={classes.iconBtn} onClick={handleIncrement}>
-                        <AddIcon />
-                    </IconButton>
-
-                    <IconButton
-                        className={classes.iconBtn} onClick={handleDecrement}>
-                        <RemoveIcon />
-                    </IconButton>
-                </Stack>
-
-                <Button
-                    variant="contained"
-                    className={classes.submitBtn}
-                >
-                    Submit
-                </Button>
-
-            </Card >
-
-            {/* Page Title */}
-            < Typography
-                sx={{ marginTop: "20px", marginBottom: "40px", fontWeight: 600, fontSize: '40px' }}
-            >
-                Upcoming Lots:
-            </Typography >
-
-
-            {/* 
-                {!isFetchingData && auctionDetails && auctionLots.length > 0 ?
-                    <Box>
-                        <Box className={classes.container}>
-                            <Box flex={1} className={classes.mediaSection}>
-                                <AuctionCard
-                                    width={"100%"}
-                                    headerType={"live"}
-                                    cardData={auctionDetails || {}}
-                                />
-                            </Box>
-                            <Box className={classes.rightSection}>
-                                <Typography variant="h6" className={classes.liveBiddersHeader}>Live Bidders</Typography>
-                                <List className={classes.liveBiddersList} >
-                                    {liveBidders.map((bidder, index) => (
-                                        <ListItem key={index} className={classes.liveBidderItem}>
-                                            <Avatar />
-                                            <Box className={classes.bidderBox}>
-                                                <Typography className={classes.bidderName}>{bidder}</Typography>
-                                                <Typography className={classes.bidderMessage}>Lorem ipsum dolor sit amet sim.</Typography>
-                                            </Box>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </Box>
-                        </Box>
-                        {auctionLots.length > 0 &&
-                            <Box width={'80vw'} pt={3}>
-                                <Box className={classes.titleWrapper}>
-                                    <Typography className={classes.title}>
-                                        Auction Lots :
-                                    </Typography>
-                                    <Box className={classes.countBadge}>{auctionLots.length}</Box>
-                                </Box>
-                                <Container disableGutters maxWidth={false} sx={{ mt: 3 }}>
-                                    <Grid container spacing={3}>
-                                        {paginationedData && paginationedData.map((lot: any) => (
-                                            <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
-                                                <AuctionCard
-                                                    key={lot.id}
-                                                    headerType={'lots'}
-                                                    cardData={lot}
-                                                    handleEdit={handleEditLots}
-                                                    handleDelete={handleDeleteAuction}
-                                                    handleMoveModal={handleMoveModal}
-                                                />
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                </Container>
-                                <PaginationButton filteredData={auctionLots} setPaginationedData={setPaginationedData} />
-                            </Box>
-                        }
-                    </Box>
-                    :
-                    <Box
+                    {/* Streaming Card */}
+                    <Card
                         sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: '70vh',
-                            width: '100%',
+                            padding: "30px 30px 80px 30px",
+                            borderRadius: "12px",
+                            boxShadow: 3,
+                            position: "relative",
+                            marginBottom: '60px'
                         }}
                     >
-                        <CircularProgress size={70} disableShrink />
-                    </Box>
-                } */}
+                        {/* Image Section */}
+                        <Box sx={{ position: "relative", marginBottom: "35px" }}>
+                            <CardMedia
+                                component="img"
+                                height="300"
+                                image="/assets/pngs/live-detail.png" // Replace with the image URL
+                                alt="Live Auction"
+                                sx={{ borderRadius: "12px", width: '100%', height: '640px' }}
+                            />
+                            {/* Overlay Badges */}
+                            <Button
+                                variant="contained"
+                                color="error"
+                                className={classes.liveBtn}
+                            >
+                                Live Stream
+                            </Button>
+                            <Button
+                                variant="contained"
+                                className={classes.nameBtn}>
+                                John Anderson Smith
+                            </Button>
+                            <Button
+                                variant="contained"
+                                className={classes.rateBtn}
+                            >
+                                Highest Bid: $10,000
+                            </Button>
+                        </Box >
 
+                        {/* Auction Title */}
+                        < Typography
+                            fontSize={'35px'}
+                            sx={{ fontWeight: 600, marginBottom: "18px", maxWidth: '752px', color: '#2D3748' }}
+                        >
+                            {auctionDetails.name}
+                        </Typography >
+
+                        {/* Auction Description */}
+                        < Typography
+                            sx={{ color: "#838383", marginBottom: "18px", fontSize: '18px', lineHeight: "1.6", maxWidth: '937px' }}
+                        >
+                            {auctionDetails.description}
+                        </Typography >
+
+                        {/* Bid Input */}
+                        < Typography sx={{ fontWeight: 600, fontSize: '22px', marginBottom: "15px" }}>
+                            Place Bid
+                        </Typography >
+                        <Stack mb={'30px'} direction="row" alignItems="center" spacing={2}>
+                            <Box className={classes.bidAmount}>
+                                <TextField
+                                    placeholder="Enter Bid Amount"
+                                    variant="outlined"
+                                    value={bidAmount}
+                                    onChange={handleChange}
+                                />
+                            </Box>
+
+                            <IconButton
+                                className={classes.iconBtn} onClick={handleIncrement}>
+                                <AddIcon />
+                            </IconButton>
+
+                            <IconButton
+                                className={classes.iconBtn} onClick={handleDecrement}>
+                                <RemoveIcon />
+                            </IconButton>
+                        </Stack>
+
+                        <Button
+                            variant="contained"
+                            className={classes.submitBtn}
+                        >
+                            Submit
+                        </Button>
+
+                    </Card >
+
+                    {/* Page Title */}
+
+
+                    {auctionLots.length > 0 &&
+                        <Box overflow={'auto'} pt={3}>
+                            <Box className={classes.titleWrapper}>
+                                < Typography
+                                    sx={{ marginTop: "20px", marginBottom: "40px", fontWeight: 600, fontSize: '40px' }}
+                                >
+                                    Upcoming Lots:
+                                </Typography>
+
+                            </Box>
+
+                            <Container disableGutters maxWidth={false} sx={{ mt: 3, pl: 1 }}>
+                                <Grid container spacing={3}>
+                                    {
+                                        paginationedData
+                                            .map((lot: any) => (
+                                                <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
+                                                    <AuctionCard
+                                                        headerType={'lots'}
+                                                        cardData={lot}
+                                                    />
+                                                </Grid>
+                                            ))
+                                    }
+
+
+                                </Grid>
+                            </Container>
+                            <PaginationButton filteredData={auctionLots} setPaginationedData={setPaginationedData} />
+                        </Box>
+                    }
+
+
+
+                </Box>
+                :
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '70vh',
+                        width: '100%',
+                    }}
+                >
+                    <CircularProgress size={70} disableShrink />
+                </Box>
+            }
         </Box >
     );
 };

@@ -303,7 +303,6 @@ const AuctionDetailPage = () => {
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%", padding: "20px 0" }}>
-                                {JSON.stringify(search)}
                                 <CustomTextField
                                     value={search}
                                     onChange={(e: any) => setSearch(e.target.value)}
