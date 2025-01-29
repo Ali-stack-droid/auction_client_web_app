@@ -4,12 +4,10 @@ import useDetailStyles from "./detail-pages-components/DetailPageStyles";
 import { getQueryParam } from "../../../helper/GetQueryParam";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLocation, useNavigate } from "react-router-dom";
-import CustomDialogue from "../../custom-components/CustomDialogue";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import AuctionCard from "../auction-components/AuctionCard";
-import { deleteAuction, getAuctionDetailById } from "../../Services/Methods";
+import { getAuctionDetailById } from "../../Services/Methods";
 import PaginationButton from "../auction-components/PaginationButton";
-import { ErrorMessage, SuccessMessage } from "../../../utils/ToastMessages";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomTextField from "../../custom-components/CustomTextField";
 import theme from "../../../theme";
@@ -93,7 +91,7 @@ const AuctionDetailPage = () => {
                     shippingMethod: auction.ShippingMethod,
                     termsConditions: auction.TermsConditions,
                     paymentTerms: auction.PaymentTerms,
-                    // termsConxditions: "Welcome to our auction! By participating, you agree to our terms: All bids are binding and non-retractable. Items are sold without warranty, expressed or implied. Payment must be completed within 48 hours of auction close. Shipping costs are borne by the buyer, and delivery timelines may vary. We reserve the right to cancel or reschedule auctions without prior notice. Unauthorized use of our platform is prohibited. All sales are final; no returns or refunds will be entertained.",
+                    // termsConditions: "Welcome to our auction! By participating, you agree to our terms: All bids are binding and non-retractable. Items are sold without warranty, expressed or implied. Payment must be completed within 48 hours of auction close. Shipping costs are borne by the buyer, and delivery timelines may vary. We reserve the right to cancel or reschedule auctions without prior notice. Unauthorized use of our platform is prohibited. All sales are final; no returns or refunds will be entertained.",
                     // paymentTerms: "Welcome to our auction! By participating, you agree to our terms: All bids are binding and non-retractable. Items are sold without warranty, expressed or implied. Payment must be completed within 48 hours of auction close. Shipping costs are borne by the buyer, and delivery timelines may vary. We reserve the right to cancel or reschedule auctions without prior notice. Unauthorized use of our platform is prohibited. All sales are final; no returns or refunds will be entertained.",
                     createdAt: auction.CreatedAt,
                     updatedAt: auction.UpdateddAt,
@@ -280,7 +278,7 @@ const AuctionDetailPage = () => {
                                         </Box>
                                     </Box>
 
-                                    <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                                    {/* <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
                                             <Typography className={classes.bigText}>Buyer Premium</Typography>
@@ -289,7 +287,7 @@ const AuctionDetailPage = () => {
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
                                             <Typography className={classes.text}>10%</Typography>
                                         </Box>
-                                    </Box>
+                                    </Box> */}
                                 </Box>
                             </Box>
                         </Grid>
