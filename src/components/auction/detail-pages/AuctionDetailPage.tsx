@@ -4,12 +4,10 @@ import useDetailStyles from "./detail-pages-components/DetailPageStyles";
 import { getQueryParam } from "../../../helper/GetQueryParam";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLocation, useNavigate } from "react-router-dom";
-import CustomDialogue from "../../custom-components/CustomDialogue";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import AuctionCard from "../auction-components/AuctionCard";
-import { deleteAuction, getAuctionDetailById } from "../../Services/Methods";
+import { getAuctionDetailById } from "../../Services/Methods";
 import PaginationButton from "../auction-components/PaginationButton";
-import { ErrorMessage, SuccessMessage } from "../../../utils/ToastMessages";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomTextField from "../../custom-components/CustomTextField";
 import theme from "../../../theme";
@@ -41,9 +39,10 @@ const AuctionDetailPage = () => {
     useEffect(() => {
         if (!isFetchingData) {
             setIsFetchingData(true);
-            fetchAuctionDetails()
+            fetchAuctionDetails();
         }
     }, [])
+
 
 
     const fetchAuctionDetails = async () => {
@@ -68,6 +67,7 @@ const AuctionDetailPage = () => {
                     timeRange: `${auction.StartTime} to ${auction.EndTime}`,
                     previewDateRange: `${auction.PrevStartDate} to ${auction.PrevEndDate}`,
                     previewTimeRange: `${auction.PrevStartTime} to ${auction.PrevEndTime}`,
+                    checkoutDateRange: `${auction.PrevStartDate} to ${auction.PrevEndDate}`,
 
                     description: auction.Description,
                     notes: auction.Notes,
@@ -176,8 +176,8 @@ const AuctionDetailPage = () => {
 
                             <Box paddingTop={3}>
                                 {[
-                                    { title: "Terms and Conditions", content: "Terms and conditions content goes here." },
-                                    { title: "Payment Information", content: "Payment information content goes here." },
+                                    { title: "Terms and Conditions", content: auctionDetails.TermsConditions },
+                                    { title: "Payment Information", content: auctionDetails.paymentTerms },
                                     { title: "Pickup and Shipping Details", content: "Pickup and shipping details content goes here." },
                                 ].map((item, index) => (
                                     <Accordion
@@ -212,7 +212,7 @@ const AuctionDetailPage = () => {
                                     Auction Details:
                                 </Typography>
                                 <Typography className={classes.description} >
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Adipisci laudantium consectetur obcaecati voluptate facilis dolores? Ut reprehenderit eum voluptatem aliquam et? Sed consequatur harum ex provident perferendis vitae accusantium, fugit eligendi, deleniti voluptas molestias dolore nihil inventore ratione. At, quod?
+                                    {auctionDetails.description}
                                 </Typography>
 
                                 <Divider sx={{ my: 2 }} />
@@ -224,7 +224,7 @@ const AuctionDetailPage = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                            <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
+                                            <Typography className={classes.text}>{auctionDetails.dateRange?.replaceAll('-', '/')}</Typography>
                                         </Box>
                                     </Box>
 
@@ -235,7 +235,7 @@ const AuctionDetailPage = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                            <Typography className={classes.text}>United States of America</Typography>
+                                            <Typography className={classes.text}>{auctionDetails.details?.location}</Typography>
                                         </Box>
                                     </Box>
                                 </Box>
@@ -248,7 +248,7 @@ const AuctionDetailPage = () => {
                                     </Box>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                         <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                        <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
+                                        <Typography className={classes.text}>{auctionDetails.previewDateRange?.replaceAll('-', '/')}</Typography>
                                     </Box>
                                 </Box>
 
@@ -261,7 +261,7 @@ const AuctionDetailPage = () => {
                                     </Box>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                         <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                        <Typography className={classes.text}>26/12/2029 TO 30/12/2024</Typography>
+                                        <Typography className={classes.text}>{auctionDetails.previewDateRange?.replaceAll('-', '/')}</Typography>
                                     </Box>
                                 </Box>
 
@@ -274,7 +274,7 @@ const AuctionDetailPage = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                            <Typography className={classes.text}>Lorem ipsum dolor sit amet.</Typography>
+                                            <Typography className={classes.text}>{auctionDetails.type}</Typography>
                                         </Box>
                                     </Box>
 
@@ -406,6 +406,10 @@ const AuctionDetailPage = () => {
                     <CircularProgress size={70} disableShrink />
                 </Box>
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 30d0aad5bc84b4d360207c986315a9477e4de796
         </Box >
     );
 };
