@@ -18,7 +18,7 @@ import Cookies from 'js-cookie';
 
 
 
-const WatchList = ({ searchTerm }: any) => {
+const WatchList = () => {
     const [fadeIn, setFadeIn] = useState(false); // Fade control state
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [deleteAuctionId, setDeleteAuctionId] = useState<string | null>(null);
@@ -30,6 +30,7 @@ const WatchList = ({ searchTerm }: any) => {
     const [filteredData, setFilteredData]: any = useState([]); // Filtered data state
     const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
     const [locations, setLocations]: any = useState([]); // Filtered data state
+    const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
 
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
     const clientId = (sessionStorage.getItem('authToken') ?
@@ -151,6 +152,7 @@ const WatchList = ({ searchTerm }: any) => {
                 selectedLocation={selectedLocation}
                 setSelectedLocation={setSelectedLocation}
                 locations={locations}
+                setSearchTerm={setSearchTerm}
             />
 
             <Box>

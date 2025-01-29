@@ -17,7 +17,7 @@ import AuctionHeader from '../auction/auction-components/AuctionHeader';
 import PaginationButton from '../auction/auction-components/PaginationButton';
 
 
-const Lots = ({ searchTerm }: any) => {
+const Lots = () => {
     const [isCurrentLot, setIsCurrentLot] = useState(true); // Toggle between Current and Past Lots
     const [filterLots, setFilterLots] = useState('all');
     const [selectedLocation, setSelectedLocation]: any = useState(null); // Filter by location
@@ -31,6 +31,8 @@ const Lots = ({ searchTerm }: any) => {
     const [filteredData, setFilteredData]: any = useState([]); // Filtered data state
     const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
     // const selectedAuction = useSelector((state: RootState) => state.auction.selectedAuction);
+    const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
+
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -187,6 +189,7 @@ const Lots = ({ searchTerm }: any) => {
                 setSelectedLocation={setSelectedLocation}
                 locations={[]}
                 filterLots={filterLots}
+                setSearchTerm={setSearchTerm}
             />
             <Box sx={{ minHeight: "500px" }}>
                 {!isFetchingData && paginationedData?.length ?

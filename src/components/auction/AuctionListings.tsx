@@ -5,6 +5,7 @@ import {
     Container,
     Grid,
     CircularProgress,
+    Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AuctionCard from './auction-components/AuctionCard';
@@ -14,8 +15,9 @@ import PaginationButton from './auction-components/PaginationButton';
 import { deleteAuction, getCurrentAuctions, getCurrentAuctionsByLocation, getCurrentLocations, getPastAuctions, getPastAuctionsByLocation, getPastLocations } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
 import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
+import theme from '../../theme';
 
-const AuctionListings = ({ searchTerm }: any) => {
+const AuctionListings = () => {
     const [fadeIn, setFadeIn] = useState(false); // Fade control state
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [deleteAuctionId, setDeleteAuctionId] = useState<string | null>(null);
@@ -27,6 +29,9 @@ const AuctionListings = ({ searchTerm }: any) => {
     const [filteredData, setFilteredData]: any = useState([]); // Filtered data state
     const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
     const [locations, setLocations]: any = useState([]); // Filtered data state
+
+    const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
+
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -161,6 +166,7 @@ const AuctionListings = ({ searchTerm }: any) => {
                 selectedLocation={selectedLocation}
                 setSelectedLocation={setSelectedLocation}
                 locations={locations}
+                setSearchTerm={setSearchTerm}
             />
 
             <Box>
@@ -169,23 +175,49 @@ const AuctionListings = ({ searchTerm }: any) => {
                         <Container disableGutters maxWidth={false} sx={{ mt: 3 }}>
                             <Grid container spacing={3}>
                                 {paginationedData
-                                    .filter((auction: any) => {
+                                    .filter((lot: any) => {
                                         if (!searchTerm) return true; // Show all if no search term
                                         const lowerCaseTerm = searchTerm.toLowerCase();
                                         return (
-                                            auction.id.toString().includes(searchTerm) || // Match ID
-                                            auction.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
-                                            auction.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                            lot.id.toString().includes(searchTerm) || // Match ID
+                                            lot.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                            lot.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
                                         );
                                     })
-                                    .map((auction: any) => (
-                                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={auction.id}>
-                                            <AuctionCard
-                                                headerType={"lots"}
-                                                cardData={auction}
-                                            />
-                                        </Grid>
-                                    ))}
+                                    .length > 0 ? (
+                                    paginationedData
+                                        .filter((lot: any) => {
+                                            if (!searchTerm) return true; // Show all if no search term
+                                            const lowerCaseTerm = searchTerm.toLowerCase();
+                                            return (
+                                                lot.id.toString().includes(searchTerm) || // Match ID
+                                                lot.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                                lot.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                            );
+                                        })
+                                        .map((lot: any) => (
+                                            <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={lot.id}>
+                                                <AuctionCard
+                                                    headerType={"lots"}
+                                                    cardData={lot}
+                                                />
+                                            </Grid>
+                                        ))
+                                ) : (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: '50vh',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Typography sx={{ fontSize: '25px', fontWeight: 700 }}>
+                                            No match found for <span style={{ color: theme.palette.primary.main }}> "{searchTerm}"</span>
+                                        </Typography>
+                                    </Box>
+                                )}
                             </Grid>
                         </Container>
                     </Fade>

@@ -6,7 +6,6 @@ import Footer from './components/Footer';
 import { useAppProviderStyles } from './AppProviderStyles';
 
 const AppProvider = ({ children }: any) => {
-    const [searchTerm, setSearchTerm] = useState("");
     const location = useLocation();
     const isHomePage = location.pathname === '/home';
     const classes: any = useAppProviderStyles({ isHomePage });
@@ -19,7 +18,7 @@ const AppProvider = ({ children }: any) => {
                 </Box>
 
                 <Box id="childContainer" className={classes.childContainer}>
-                    {React.cloneElement(children, { searchTerm })}
+                    {children}
                 </Box>
 
                 <Footer />

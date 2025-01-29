@@ -18,7 +18,7 @@ import CustomTextField from '../../custom-components/CustomTextField';
 import { CustomMultiLineTextField } from '../../custom-components/CustomMultiLineTextField';
 
 
-const Cart = ({ searchTerm }: any) => {
+const Cart = () => {
 
     const classes = CartStyles();
 

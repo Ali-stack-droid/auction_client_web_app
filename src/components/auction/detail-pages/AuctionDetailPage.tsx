@@ -12,7 +12,7 @@ import PaginationButton from "../auction-components/PaginationButton";
 import { ErrorMessage, SuccessMessage } from "../../../utils/ToastMessages";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomTextField from "../../custom-components/CustomTextField";
-import auctionData from "../auctionData";
+import theme from "../../../theme";
 
 
 const AuctionDetailPage = () => {
@@ -34,6 +34,9 @@ const AuctionDetailPage = () => {
 
     const [isFetchingData, setIsFetchingData] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const [search, setSearch] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -145,6 +148,8 @@ const AuctionDetailPage = () => {
     };
 
     const navigate = useNavigate()
+
+
 
     return (
         <Box sx={{ padding: "10px 0" }}>
@@ -298,14 +303,15 @@ const AuctionDetailPage = () => {
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%", padding: "20px 0" }}>
+                                {JSON.stringify(search)}
                                 <CustomTextField
-                                    // value={searchTerm}
-                                    // onChange={handleSearchChange}
+                                    value={search}
+                                    onChange={(e: any) => setSearch(e.target.value)}
                                     placeholder="Search for auction listings here..."
                                     className={classes.searchField}
                                     InputProps={{
                                         endAdornment: (
-                                            <Button variant={'contained'} className={classes.searchButton}>
+                                            <Button variant={'contained'} className={classes.searchButton} onClick={() => setSearchTerm(search)}>
                                                 Search
                                             </Button>
                                         ),
@@ -337,14 +343,52 @@ const AuctionDetailPage = () => {
 
                             <Container disableGutters maxWidth={false} sx={{ mt: 3, pl: 1 }}>
                                 <Grid container spacing={3}>
-                                    {paginationedData && paginationedData.map((lot: any) => (
-                                        <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
-                                            <AuctionCard
-                                                headerType={'lots'}
-                                                cardData={lot}
-                                            />
-                                        </Grid>
-                                    ))}
+                                    {paginationedData
+                                        .filter((lot: any) => {
+                                            if (!searchTerm) return true; // Show all if no search term
+                                            const lowerCaseTerm = searchTerm?.toLowerCase();
+                                            return (
+                                                lot.id?.toString().includes(searchTerm) || // Match ID
+                                                lot.name?.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                                lot.details.location?.toLowerCase()?.includes(lowerCaseTerm) // Match Location
+                                            );
+                                        })
+                                        .length > 0 ? (
+                                        paginationedData
+                                            .filter((lot: any) => {
+                                                if (!searchTerm) return true; // Show all if no search term
+                                                const lowerCaseTerm = searchTerm.toLowerCase();
+                                                return (
+                                                    lot.id.toString().includes(searchTerm) || // Match ID
+                                                    lot.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                                    lot.details.location?.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                                );
+                                            })
+                                            .map((lot: any) => (
+                                                <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
+                                                    <AuctionCard
+                                                        headerType={'lots'}
+                                                        cardData={lot}
+                                                    />
+                                                </Grid>
+                                            ))
+                                    ) : (
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                height: '50vh',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            <Typography sx={{ fontSize: '25px', fontWeight: 700 }}>
+                                                No match found for <span style={{ color: theme.palette.primary.main }}> "{searchTerm}"</span>
+                                            </Typography>
+                                        </Box>
+                                    )}
+
+
                                 </Grid>
                             </Container>
                             <PaginationButton filteredData={auctionLots} setPaginationedData={setPaginationedData} />
@@ -364,7 +408,6 @@ const AuctionDetailPage = () => {
                     <CircularProgress size={70} disableShrink />
                 </Box>
             }
-
         </Box >
     );
 };
