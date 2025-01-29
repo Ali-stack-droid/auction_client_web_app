@@ -423,7 +423,7 @@ const LotDetailPage = () => {
             <Grid mt={'20px'} container spacing={2}>
                 <Grid className={classes.lotDetail} item xs={12}>
                     <Typography sx={{ fontSize: "12px", color: "#012868", fontWeight: 600 }}>
-                        Order Number: <span style={{ color: "#212121" }}>#345</span>  &nbsp;&nbsp; Lot: <span style={{ color: "#212121" }}>45</span>  &nbsp;&nbsp; Category:
+                        Order Number: <span style={{ color: "#212121" }}>#{lotDetails.details?.orderNumber}</span>  &nbsp;&nbsp; Lot: <span style={{ color: "#212121" }}>45</span>  &nbsp;&nbsp; Category:
                         <span style={{ color: "#212121" }}>ABCXYZ</span> &nbsp;&nbsp; Sub-Category: <span style={{ color: "#212121" }}>ABCXYZ</span>
                     </Typography>
                 </Grid>
@@ -434,8 +434,8 @@ const LotDetailPage = () => {
 
                 <Grid item xs={12} md={6} sx={{ mt: 4 }} className={classes.accordianGrid}>
                     {[
-                        { title: "Terms and Conditions", content: "Terms and conditions content goes here." },
-                        { title: "Payment Information", content: "Payment information content goes here." },
+                        { title: "Terms and Conditions", content: lotDetails.TermsConditions },
+                        { title: "Payment Information", content: lotDetails.paymentTerms },
                         { title: "Pickup and Shipping Details", content: "Pickup and shipping details content goes here." },
                     ].map((item, index) => (
                         <Accordion
