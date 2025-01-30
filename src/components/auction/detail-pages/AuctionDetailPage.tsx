@@ -16,22 +16,11 @@ import theme from "../../../theme";
 const AuctionDetailPage = () => {
     const classes = useDetailStyles();
 
-    const locationURL = useLocation();
-
     const [auctionDetails, setAuctionDetails]: any = useState([])
     const [paginationedData, setPaginationedData]: any = useState([])
 
     const [auctionLots, setAuctionLots] = useState<any[]>([]);
-
-    const [deleteAuctionId, setDeleteAuctionId] = useState(0)
-    const [confirmDelete, setConfirmDelete] = useState(false)
-    const [isDeletedFromDetail, setIsDeletedFromDetail] = useState(false)
-
-    const [showMoreTerms, setShowMoreTerms] = useState(false);
-    const [showMorePaymentTerms, setShowMorePaymentTerms] = useState(false);
-
     const [isFetchingData, setIsFetchingData] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const [search, setSearch] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
@@ -42,8 +31,6 @@ const AuctionDetailPage = () => {
             fetchAuctionDetails();
         }
     }, [])
-
-
 
     const fetchAuctionDetails = async () => {
         try {
@@ -81,6 +68,7 @@ const AuctionDetailPage = () => {
                     prevEndDate: auction.PrevEndDate,
                     prevStartTime: auction.PrevStartTime,
                     prevEndTime: auction.PrevEndTime,
+                    checkoutDate: auction.CheckOutDate,
 
                     country: auction.Country,
                     state: auction.State,
@@ -116,6 +104,8 @@ const AuctionDetailPage = () => {
                     type: "current",
                     highestBid: item.BidStartAmount,
                     sold: item.IsSold,
+                    date: `${item.StartDate} to ${item.EndDate}`,
+                    time: `${item.StartTime} to ${item.EndTime}`,
                     details: {
                         description: item.LongDescription,
                         date: `${item.StartDate} to ${item.EndDate}`,
@@ -261,7 +251,7 @@ const AuctionDetailPage = () => {
                                     </Box>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                         <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                        <Typography className={classes.text}>{auctionDetails.previewDateRange?.replaceAll('-', '/')}</Typography>
+                                        <Typography className={classes.text}>{auctionDetails.checkoutDate?.replaceAll('-', '/') || 'N / A'}</Typography>
                                     </Box>
                                 </Box>
 
