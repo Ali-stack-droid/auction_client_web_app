@@ -114,6 +114,20 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         textTransform: "none",
         fontSize: '15px',
     },
+    menuItem: {
+        width: '160px',
+        display: 'block',
+        textAlign: 'center',
+        '&.selected': {
+            backgroundColor: theme.palette.primary.main,
+            color: '#ffffff',
+            display: 'block',
+            textAlign: 'center',
+        },
+        '&:hover': {
+            backgroundColor: theme.palette.primary.main6,
+        },
+    },
 }));
 
 export default usePaymentTrackingStyles;

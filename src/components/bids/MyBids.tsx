@@ -21,12 +21,27 @@ const PaymentTracking = () => {
     const [viewDetails, setViewDetails] = useState(false);
     const rowsPerPage = 10;
 
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+    const handleMenuClose = () => setAnchorEl(null);
+
     useEffect(() => {
-        fetchBidHistory();
-    }, [isWinning])
+        if (!isFetchingData) {
+            setIsFetchingData(true)
+            fetchBidHistory();
+        }
+    }, [isWinning, selectedInvoice])
+
+    // useEffect(() => {
+    //     fetchBidHistory();
+    // }, [isWinning])
+
+    const handleFilterChange = (filter: any) => {
+        setIsWinning(filter);
+        handleMenuClose();
+    };
 
     const fetchBidHistory = async () => {
-        setIsFetchingData(true);
 
         const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
         const clientId = (sessionStorage.getItem('authToken') ?
@@ -42,16 +57,18 @@ const PaymentTracking = () => {
 
                 const formattedResponse = response.data.map((bid: any) => ({
                     id: bid.Id,
-                    productName: bid.Lots.ShortDescription,
-                    highestBidderName: bid.Clients.Name,
-                    totalBids: bid.TotalLots || 6,
-                    currentPrice: `$${bid.Amount}`,
+                    productName: bid.Name,
+                    highestBidderName: bid.HighestBidder,
+                    totalBids: bid.TotalLots || 0,
+                    currentPrice: `$${bid.CurrentPrice}`,
                 }));
 
                 setInvoices(formattedResponse);
+
             } else {
                 setInvoices([]);
             }
+
         } catch (error) {
             console.error('Error fetching auction data:', error);
         } finally {
@@ -100,9 +117,25 @@ const PaymentTracking = () => {
                         className={classes.filterButton}
                         // onClick={handleMenuOpen}
                         startIcon={<FilterAltIcon />}
+                        onClick={handleMenuOpen}
                     >
                         Filter
                     </Button>
+                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                        <MenuItem
+                            onClick={() => handleFilterChange(true)}
+                            className={`${classes.menuItem} ${isWinning ? 'selected' : ''}`}
+                        >
+                            Won
+                        </MenuItem>
+
+                        <MenuItem
+                            onClick={() => handleFilterChange(false)}
+                            className={`${classes.menuItem} ${!isWinning ? 'selected' : ''}`}
+                        >
+                            Lost
+                        </MenuItem>
+                    </Menu>
                     {/* <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                         {locations.map((location: any) => (
                             <MenuItem
