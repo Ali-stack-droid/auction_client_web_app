@@ -15,9 +15,7 @@ import useDetailStyles from "./detail-pages-components/DetailPageStyles";
 import { getQueryParam } from "../../../helper/GetQueryParam";
 
 import { useLocation, useNavigate } from "react-router-dom";
-import { deleteLot, getBiddersByLotId, getLotDetailsById, getWinnerByLotId } from "../../Services/Methods";
-import { ErrorMessage, SuccessMessage } from "../../../utils/ToastMessages";
-
+import { getLotDetailsById } from "../../Services/Methods";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -26,8 +24,6 @@ import theme from "../../../theme";
 
 const LotDetailPage = () => {
     const classes = useDetailStyles();
-    const navigate = useNavigate();
-    const locationURL = useLocation();
 
     const [lotDetails, setLotDetails]: any = useState({})
     const [isFetchingData, setIsFetchingData] = useState(false)
@@ -253,7 +249,7 @@ const LotDetailPage = () => {
                             textTransform: 'none'
                         }}
                     >
-                        Bid Now: $1600
+                        Bid Now: ${lotDetails.highestBid}
                     </Button>
 
                     <Divider sx={{ my: 2 }} />
@@ -306,7 +302,10 @@ const LotDetailPage = () => {
                     {[
                         { title: "Terms and Conditions", content: lotDetails?.termCondition || "No terms found for this lot!" },
                         { title: "Payment Information", content: lotDetails?.paymentTerms || "No terms found for this lot!" },
-                        { title: "Pickup and Shipping Details", content: lotDetails?.shippingTerms || "No terms found for this lot!" },
+                        {
+                            title: "Pickup and Shipping Details", content:
+                                `We offer shipping for this lot. Please contact us for a quote. We use UPS, USPS, and FedEx for all shipping. We can also accommodate local pickup.`
+                        },
                     ].map((item, index) => (
                         <Accordion
                             sx={{

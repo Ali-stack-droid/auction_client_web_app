@@ -168,7 +168,12 @@ const AuctionDetailPage = () => {
                                 {[
                                     { title: "Terms and Conditions", content: auctionDetails.TermsConditions },
                                     { title: "Payment Information", content: auctionDetails.paymentTerms },
-                                    { title: "Pickup and Shipping Details", content: "Pickup and shipping details content goes here." },
+                                    {
+                                        title: "Pickup and Shipping Details",
+                                        content: auctionDetails.shippingMethod ?
+                                            `We offer shipping for this lot. Please contact us for a quote. We use UPS, USPS, and FedEx for all shipping. We can also accommodate local pickup.`
+                                            : "No shipping method for this lot."
+                                    },
                                 ].map((item, index) => (
                                     <Accordion
                                         sx={{
@@ -267,17 +272,6 @@ const AuctionDetailPage = () => {
                                             <Typography className={classes.text}>{auctionDetails.type}</Typography>
                                         </Box>
                                     </Box>
-
-                                    {/* <Box sx={{ display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px" }} color="primary" />
-                                            <Typography className={classes.bigText}>Buyer Premium</Typography>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                            <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                            <Typography className={classes.text}>10%</Typography>
-                                        </Box>
-                                    </Box> */}
                                 </Box>
                             </Box>
                         </Grid>
