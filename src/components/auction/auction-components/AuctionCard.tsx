@@ -181,7 +181,7 @@ const AuctionCard = ({
                                 }
                             </Box>
                             : headerType === "live" ?
-                                <Button className={classes.bidButton} variant="contained" color="primary">
+                                <Button onClick={() => navigate(`/live/details?aucId=${cardData.id}`)} className={classes.bidButton} variant="contained" color="primary">
                                     Join Auction
                                 </Button>
                                 : <Button className={classes.bidButton} variant="contained" color="primary">
