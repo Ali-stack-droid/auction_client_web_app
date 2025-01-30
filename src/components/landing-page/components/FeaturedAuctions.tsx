@@ -72,7 +72,7 @@ const FeaturedAuctions = () => {
                             />
                         </Box>
                     ))
-                    : filteredData.map((auction: any, index: number) => (
+                    : filteredData.slice(0, 3).map((auction: any, index: number) => (
                         <Box sx={{
                             maxWidth: "386px",
                             width: '-webkit-fill-available',

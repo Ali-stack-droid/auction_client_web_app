@@ -55,15 +55,17 @@ const CurrentAuctionsByLocation = () => {
 
     return (
         <Box className={classes.locationSection} pb={8}>
-            <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
-                <Typography className={classes.heading} color="primary">
-                    Current
-                    <Typography component={'span'} className={classes.headingSpan}>
-                        &nbsp;Auctions&nbsp;
+            {filteredData.length > 0 &&
+                <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
+                    <Typography className={classes.heading} color="primary">
+                        Current
+                        <Typography component={'span'} className={classes.headingSpan}>
+                            &nbsp;Auctions&nbsp;
+                        </Typography>
+                        By Locations
                     </Typography>
-                    By Locations
-                </Typography>
-            </Box>
+                </Box>
+            }
             <Box className={classes.locationCards} sx={{ marginBottom: 4 }}>
                 {filteredData.length === 1
                     ? Array(3).fill(filteredData[0]).map((auction: any, index: number) => (

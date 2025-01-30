@@ -129,7 +129,7 @@ const AuctionCard = ({
 
                 {/* Location, Date, and Lots */}
                 {headerType === "auction" ? (
-                    <AuctionDetails auctionDetails={cardData.details} />
+                    <AuctionDetails auction={cardData} />
                 ) : headerType === "lots" ? (
                     <LotDetails lotData={cardData} />
                 ) : headerType === "current-auction" || headerType === "live" ? (

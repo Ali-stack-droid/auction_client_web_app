@@ -3,29 +3,90 @@ import PlaceIcon from '@mui/icons-material/Place';
 import WatchLaterRoundedIcon from '@mui/icons-material/WatchLaterRounded';
 import ViewInArRoundedIcon from '@mui/icons-material/ViewInArRounded';
 import { useAuctionDetailStyles } from '../AuctionStyles';
+import { useEffect, useState } from 'react';
+import theme from '../../../../theme';
 
-const AuctionDetails = ({ auctionDetails }: any) => {
+const AuctionDetails = ({ auction }: any) => {
     const classes = useAuctionDetailStyles();
+    const [countdown, setCountdown] = useState<string>('00:00:00');
+
+    useEffect(() => {
+        const parseDateTime = () => {
+            if (!auction || !auction.date || !auction.time) {
+                console.error("Invalid lotData:", auction);
+                return { startDateTime: new Date(0), endDateTime: new Date(0) }; // Default to epoch time
+            }
+
+            const [startDate, endDate] = auction.date.split(' to ');
+            const [startTime, endTime] = auction.time.split(' to ');
+
+            return {
+                startDateTime: new Date(`${startDate} ${startTime}`),
+                endDateTime: new Date(`${endDate} ${endTime}`),
+            };
+        };
+
+
+        const calculateCountdown = () => {
+            const { endDateTime } = parseDateTime();
+
+            if (!endDateTime) {
+                console.error("Invalid endDateTime:", endDateTime);
+                setCountdown(''); // Auction ended or invalid data
+                return;
+            }
+
+            const now = new Date();
+            const remainingTime = endDateTime.getTime() - now.getTime();
+
+            if (remainingTime > 0) {
+                const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((remainingTime / (1000 * 60)) % 60);
+                const seconds = Math.floor((remainingTime / 1000) % 60);
+
+                setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+            } else {
+                setCountdown(''); // Auction ended
+            }
+        };
+
+
+        calculateCountdown(); // Initial calculation
+        const interval = setInterval(calculateCountdown, 1000); // Update every second
+
+        return () => clearInterval(interval); // Cleanup on component unmount
+    }, [auction?.date, auction?.time]);
 
     return (
         <Box className={classes.container}>
 
             <Typography color='primary' fontSize={'16px'} fontWeight={700}>
-                ID : #30
+                ID : #{auction?.id}
             </Typography>
 
             <Box mt={'8px'} mb={'20px'} className={classes.row}>
                 {/* Location */}
                 <Box className={classes.iconText}>
                     <PlaceIcon fontSize="small" color="primary" />
-                    <Typography className={classes.text}>{auctionDetails.location}</Typography>
+                    <Typography className={classes.text}>{auction?.details.location}</Typography>
                 </Box>
                 {/* Date Range */}
                 <Box className={`${classes.iconText} ${classes.flexItem}`}>
                     <WatchLaterRoundedIcon fontSize="small" color="primary" />
-                    <Typography className={classes.text} sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
-                        12 : 30 : 44 :01
-                    </Typography>
+                    {countdown !== "" ?
+                        <Box display={"flex"} flex={1} >
+                            <Typography className={classes.text} sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                                &nbsp;{countdown}
+                            </Typography>
+                        </Box>
+                        :
+                        <Box display={"flex"} flex={0.7} >
+                            <Typography color={theme.palette.secondary.main} whiteSpace={'nowrap'}>
+                                Lot Ended
+                            </Typography>
+                        </Box>
+                    }
                 </Box>
             </Box>
 
