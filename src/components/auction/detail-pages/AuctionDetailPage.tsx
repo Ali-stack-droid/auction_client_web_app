@@ -6,11 +6,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLocation, useNavigate } from "react-router-dom";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import AuctionCard from "../auction-components/AuctionCard";
-import { getAuctionDetailById } from "../../Services/Methods";
+import { getAuctionDetailById, getWatchlist } from "../../Services/Methods";
 import PaginationButton from "../auction-components/PaginationButton";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomTextField from "../../custom-components/CustomTextField";
 import theme from "../../../theme";
+import Cookies from "js-cookie";
 
 
 const AuctionDetailPage = () => {
@@ -24,6 +25,46 @@ const AuctionDetailPage = () => {
 
     const [search, setSearch] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+
+    const [favouriteLots, setFavouriteLots]: any = useState([]);
+
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const clientId = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user).id : Cookies.get('user')
+            ? JSON.parse(user).id : '')
+
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            try {
+                // Critical request:
+                const response = await getWatchlist(clientId)
+                if (response.data && response.data.length > 0) {
+                    const allLots = response.data.map((item: any) => item.Lots);
+
+                    const updatedData = allLots.map((item: any) => ({
+                        id: item.Id,
+                        name: item.Name,
+                        image: item.Image,
+                        date: `${item.StartDate} to ${item.EndDate}`,
+                        time: `${item.StartTime} to ${item.EndTime}`,
+                        details: {
+                            location: `${item.City}, ${item.Country}`,
+                            dateRange: `${item.StartDate} to ${item.EndDate}`,
+                            lotsAvailable: item.TotalLots // Replace with actual data if available
+                        }
+                    }));
+                    setFavouriteLots(updatedData);
+                } else {
+                    setFavouriteLots([]);
+                }
+
+            } catch (error) {
+                console.error('Error fetching auction data:', error);
+            }
+        };
+        fetchWatchlist();
+
+    }, [])
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -135,9 +176,9 @@ const AuctionDetailPage = () => {
         }
     };
 
-    const navigate = useNavigate()
-
-
+    const isFaverited = (lotId: any) => {
+        return favouriteLots.some((lot: any) => lot.id === lotId);
+    }
 
     return (
         <Box sx={{ padding: "10px 0" }}>
@@ -350,6 +391,7 @@ const AuctionDetailPage = () => {
                                                     <AuctionCard
                                                         headerType={'lots'}
                                                         cardData={lot}
+                                                        isFaverited={isFaverited(lot.id)}
                                                     />
                                                 </Grid>
                                             ))

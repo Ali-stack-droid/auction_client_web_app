@@ -19,18 +19,14 @@ import Cookies from 'js-cookie';
 
 
 const WatchList = () => {
-    const [fadeIn, setFadeIn] = useState(false); // Fade control state
-    const [confirmDelete, setConfirmDelete] = useState(false);
-    const [deleteAuctionId, setDeleteAuctionId] = useState<string | null>(null);
+    const [fadeIn, setFadeIn] = useState(false);
     const [isFetchingData, setIsFetchingData] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
 
-    const [isCurrentAuction, setIsCurrentAuction] = useState(true); // Toggle between Current and Past Auctions
-    const [selectedLocation, setSelectedLocation]: any = useState(null); // Filter by location
-    const [filteredData, setFilteredData]: any = useState([]); // Filtered data state
-    const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
-    const [locations, setLocations]: any = useState([]); // Filtered data state
-    const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
+    const [isCurrentAuction, setIsCurrentAuction] = useState(true);
+    const [selectedLocation, setSelectedLocation]: any = useState(null);
+    const [filteredData, setFilteredData]: any = useState([]);
+    const [paginationedData, setPaginationedData]: any = useState([]);
+    const [searchTerm, setSearchTerm]: any = useState("");
 
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
     const clientId = (sessionStorage.getItem('authToken') ?
@@ -39,95 +35,45 @@ const WatchList = () => {
 
     useEffect(() => {
         if (!isFetchingData) {
+
+            const fetchWatchlist = async () => {
+
+                try {
+                    // Critical request:
+                    const response = await getWatchlist(clientId)
+                    if (response.data && response.data.length > 0) {
+                        const allLots = response.data.map((item: any) => item.Lots);
+
+                        const updatedData = allLots.map((item: any) => ({
+                            id: item.Id,
+                            name: item.Name,
+                            image: item.Image,
+                            date: `${item.StartDate} to ${item.EndDate}`,
+                            time: `${item.StartTime} to ${item.EndTime}`,
+                            details: {
+                                location: `${item.City}, ${item.Country}`,
+                                dateRange: `${item.StartDate} to ${item.EndDate}`,
+                                lotsAvailable: item.TotalLots // Replace with actual data if available
+                            }
+                        }));
+                        setFilteredData(updatedData);
+                        setPaginationedData(updatedData)
+                    } else {
+                        setFilteredData([]);
+                        setPaginationedData([])
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching auction data:', error);
+                } finally {
+                    setIsFetchingData(false)
+                }
+            };
             setIsFetchingData(true)
             fetchWatchlist();
 
         }
-    }, [isCurrentAuction, selectedLocation])
-
-    const fetchWatchlist = async () => {
-
-        try {
-            // Critical request:
-            const response = await getWatchlist(clientId)
-            if (response.data && response.data.length > 0) {
-                const allLots = response.data.map((item: any) => item.Lots);
-
-                console.log("asd : ", allLots)
-                const updatedData = allLots.map((item: any) => ({
-                    id: item.Id,
-                    name: item.Name,
-                    image: item.Image,
-                    date: `${item.StartDate} to ${item.EndDate}`,
-                    time: `${item.StartTime} to ${item.EndTime}`,
-                    details: {
-                        location: `${item.City}, ${item.Country}`,
-                        dateRange: `${item.StartDate} to ${item.EndDate}`,
-                        lotsAvailable: item.TotalLots // Replace with actual data if available
-                    }
-                }));
-                setFilteredData(updatedData);
-                setPaginationedData(updatedData)
-            } else {
-                setFilteredData([]);
-                setPaginationedData([])
-            }
-
-        } catch (error) {
-            console.error('Error fetching auction data:', error);
-        } finally {
-            setIsFetchingData(false)
-        }
-    };
-
-    const handleDelete = async (id: string) => {
-        try {
-            // Call the delete API
-            const response: any = await deleteAuction(id);
-            if (response.status === 200) {
-                SuccessMessage('Auction deleted successfully!')
-                // Update state with filtered data if API call is successful
-                const updatedData = filteredData.filter((auction: any) => auction.id !== id);
-                setFilteredData(updatedData);
-            } else {
-                ErrorMessage('Error deleting auction!')
-            }
-        } catch (error) {
-            console.error('Error deleting auction:', error);
-        } finally {
-            handleCloseModal();
-        }
-    };
-
-    // Open confirmation modal
-    const handleDeleteAuction = (id: string) => {
-        setDeleteAuctionId(id);
-        setConfirmDelete(true);
-    };
-
-    // Close modal
-    const handleCloseModal = () => {
-        if (!isDeleting) {
-            setIsDeleting(false)
-            setConfirmDelete(false);
-            setDeleteAuctionId(null);
-        }
-    };
-
-    // Confirm deletion
-    const handleConfirmDelete = () => {
-        if (deleteAuctionId && !isDeleting) {
-            setIsDeleting(true)
-            handleDelete(deleteAuctionId); // Call the delete handler
-        }
-    };
-
-    const navigate = useNavigate()
-
-    // Handle Edit
-    const handleEdit = (id: string) => {
-        navigate(`edit?aucId=${id}`); // Navigate to the edit route with auction ID
-    };
+    }, [])
 
     // Filtered Data based on `type` and `location`
     useEffect(() => {
@@ -137,6 +83,11 @@ const WatchList = () => {
             setFadeIn(true); // Trigger fade-in after filtering
         }, 300);
     }, [paginationedData]);
+
+
+    const isFaverited = (lotId: any) => {
+        return setFilteredData.some((lot: any) => lot.id === lotId);
+    }
 
 
     return (
@@ -151,7 +102,7 @@ const WatchList = () => {
                 }}
                 selectedLocation={selectedLocation}
                 setSelectedLocation={setSelectedLocation}
-                locations={locations}
+                locations={[]}
                 setSearchTerm={setSearchTerm}
             />
 
@@ -175,6 +126,7 @@ const WatchList = () => {
                                             <AuctionCard
                                                 headerType={"lots"}
                                                 cardData={auction}
+                                                isFaverited={isFaverited(auction.id)}
                                             />
                                         </Grid>
                                     ))}
@@ -199,16 +151,7 @@ const WatchList = () => {
             </Box>
 
             <PaginationButton filteredData={filteredData} setPaginationedData={setPaginationedData} />
-            {/* Confirmation Modal */}
-            <CustomDialogue
-                title={"Confirm Deletion"}
-                message={"Are you sure you want to delete this auction? This action cannot be undone."}
-                type={"delete"}
-                openDialogue={confirmDelete}
-                handleCloseModal={handleCloseModal}
-                handleConfirmModal={handleConfirmDelete}
-                isDeleting={isDeleting}
-            />
+
 
         </Box >
     );

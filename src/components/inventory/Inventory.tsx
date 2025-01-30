@@ -8,13 +8,14 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomDialogue from '../custom-components/CustomDialogue';
-import { deleteLot, getInventoryLots } from '../Services/Methods';
+import { deleteLot, getInventoryLots, getWatchlist } from '../Services/Methods';
 
 import NoRecordFound from '../../utils/NoRecordFound';
 import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
 import AuctionCard from '../auction/auction-components/AuctionCard';
 import AuctionHeader from '../auction/auction-components/AuctionHeader';
 import PaginationButton from '../auction/auction-components/PaginationButton';
+import Cookies from 'js-cookie';
 
 
 const Lots = () => {
@@ -33,6 +34,47 @@ const Lots = () => {
     // const selectedAuction = useSelector((state: RootState) => state.auction.selectedAuction);
     const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
 
+    const [favouriteLots, setFavouriteLots]: any = useState([]);
+
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const clientId = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user).id : Cookies.get('user')
+            ? JSON.parse(user).id : '')
+
+    useEffect(() => {
+
+        const fetchWatchlist = async () => {
+
+            try {
+                // Critical request:
+                const response = await getWatchlist(clientId)
+                if (response.data && response.data.length > 0) {
+                    const allLots = response.data.map((item: any) => item.Lots);
+
+                    const updatedData = allLots.map((item: any) => ({
+                        id: item.Id,
+                        name: item.Name,
+                        image: item.Image,
+                        date: `${item.StartDate} to ${item.EndDate}`,
+                        time: `${item.StartTime} to ${item.EndTime}`,
+                        details: {
+                            location: `${item.City}, ${item.Country}`,
+                            dateRange: `${item.StartDate} to ${item.EndDate}`,
+                            lotsAvailable: item.TotalLots // Replace with actual data if available
+                        }
+                    }));
+                    setFavouriteLots(updatedData);
+                } else {
+                    setFavouriteLots([]);
+                }
+
+            } catch (error) {
+                console.error('Error fetching auction data:', error);
+            }
+        };
+        fetchWatchlist();
+
+    }, [])
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -106,78 +148,20 @@ const Lots = () => {
 
     // Filtered Data based on `type` and `location`
     useEffect(() => {
-        // const newFilteredData = lotsData.filter((lot) => {
-        //     const matchesLocation = selectedLocation ? lot.location === selectedLocation : true;
-        //     return matchesLocation;
-        // });
-        setFadeIn(false); // Trigger fade-out
+        setFadeIn(false);
         setTimeout(() => {
-            setFadeIn(true); // Trigger fade-in after filtering
-            // setFilteredData(filteredData);
-            // setPaginationedData(filteredData)
+            setFadeIn(true);
         }, 200);
     }, [isCurrentLot, selectedLocation, paginationedData]);
-
-    // Open confirmation modal
-    const handleDeleteLot = (id: number) => {
-        setDeleteLotId(id);
-        setConfirmDelete(true);
-    };
-
-    // Close modal
-    const handleCloseModal = () => {
-        if (!isDeleting) {
-            setIsDeleting(false)
-            setConfirmDelete(false);
-            setDeleteLotId(0);
-        }
-    };
-
-    // Confirm deletion
-    const handleConfirmDelete = () => {
-        if (!isDeleting) {
-            setIsDeleting(true)
-            handleDelete(deleteLotId); // Call the delete handler
-        }
-    };
-
-
-    const navigate = useNavigate();
-
-    // Handle Edit
-    const handleEdit = (id: number) => {
-        // navigate(`edit/${id}`); // Navigate to the edit route with lot ID
-    };
-
-    const handleDelete = async (id: number) => {
-        try {
-            // Call the delete API
-            const response: any = await deleteLot(id);
-            if (response.status === 200) {
-                SuccessMessage('Lot deleted successfully!')
-                // Update state with filtered data if API call is successful
-                const updatedData = filteredData.filter((lot: any) => lot.id !== id); // Remove lot by ID
-                setFilteredData(updatedData); // Update state with filtered data
-            } else {
-                ErrorMessage('Error deleting lot!')
-            }
-        } catch (error) {
-            console.error('Error deleting auction:', error);
-        } finally {
-            handleCloseModal();
-        }
-    };
-
-    const handleMoveModal = (movedLotId: number) => {
-        if (movedLotId > 0) {
-            const afterMovedData = paginationedData.filter((item: any) => item.id !== movedLotId)
-            setFilteredData(afterMovedData);
-        }
-    }
 
     const handleToggle = (e: any) => {
         setFilterLots(e.target.value)
     }
+
+    const isFaverited = (lotId: any) => {
+        return favouriteLots.some((lot: any) => lot.id === lotId);
+    }
+
 
     return (
         <Box sx={{ padding: 2 }}>
@@ -211,6 +195,7 @@ const Lots = () => {
                                                 <AuctionCard
                                                     headerType={"lots"}
                                                     cardData={lot}
+                                                    isFaverited={isFaverited(lot.id)}
                                                 />
                                             </Grid>
                                         ))}
@@ -237,17 +222,6 @@ const Lots = () => {
             </Box>
             <PaginationButton filteredData={filteredData} setPaginationedData={setPaginationedData} />
 
-            {/* Confirmation Modal */}
-            <CustomDialogue
-                type={"delete"}
-                title={"Confirm Deletion"}
-                message={"Are you sure you want to delete this auction? This action cannot be undone."}
-                openDialogue={confirmDelete}
-                handleCloseModal={handleCloseModal}
-                handleConfirmModal={handleConfirmDelete}
-                isDeleting={isDeleting}
-
-            />
         </Box>
     );
 };

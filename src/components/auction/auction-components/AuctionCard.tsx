@@ -1,40 +1,30 @@
 import { Card, CardMedia, Typography, Button, Tooltip, Box, TextField, IconButton } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuctionCardStyles } from './AuctionStyles';
 import AuctionDetails from './card-details-components/AuctionDetails';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import MoveLotModal from '../detail-pages/detail-pages-components/MoveLotModal';
 import HomeDetails from './card-details-components/HomeDetails';
 import LotDetails from './card-details-components/LotDetails';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CurrentAuctionDetails from './card-details-components/CurrentAuctionDetails';
 import Cookies from 'js-cookie';
 import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages';
 import { addToWatchlist } from '../../Services/Methods';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
 const AuctionCard = ({
     headerType,
     cardData,
-    handleEdit,
-    handleDelete,
-    handleMoveModal
+    isFaverited
 }: any) => {
     const classes = useAuctionCardStyles();
     const navigate = useNavigate();
-    const location = useLocation();
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const dispatch = useDispatch()
 
-    const [select, setSelect] = useState(false)
-    const [moveLotId, setMoveLotId] = useState(0)
-
-    const [moveModalOpen, setMoveModalOpen] = useState(false)
-    // const [moveDialogue, setMoveDialogue] = useState(false)
-
-    const dispatch = useDispatch();
-
-
+    const [faverite, setFaverite] = useState(isFaverited)
 
     const handleCardMediaClick = () => {
         if (headerType === "live") {
@@ -55,6 +45,7 @@ const AuctionCard = ({
             const response = await addToWatchlist(clientId, id)
             if (response.data) {
                 SuccessMessage('Added to watchlist!')
+                setFaverite(!faverite)
             }
         } catch {
             ErrorMessage('Error adding to watchlist!')
@@ -98,7 +89,11 @@ const AuctionCard = ({
                             }}
                             onClick={() => handleAddWatchList(cardData.id)} // Add your action here
                         >
-                            <FavoriteBorderIcon />
+                            {faverite ?
+                                <FavoriteRoundedIcon />
+                                :
+                                <FavoriteBorderIcon />
+                            }
                         </IconButton>
                     )}
                 {
@@ -190,18 +185,6 @@ const AuctionCard = ({
                     }
                 </Box>
             </Box>
-
-            {/* Move Lot Confirmation on Move Button*/}
-            {/* <CustomDialogue
-                type={"create"}
-                title={"Move Lot Confirmation!"}
-                message={"Are you sure you want to move this lot from past auction to current auction?"}
-                openDialogue={moveDialogue}
-                handleCloseModal={() => setMoveDialogue(false)}
-                handleConfirmModal={() => { setMoveDialogue(false); setMoveModalOpen(true) }}
-            /> */}
-
-            <MoveLotModal open={moveModalOpen} handleMoveModal={handleMoveModal} setMoveModalOpen={setMoveModalOpen} moveLotId={moveLotId} />
 
         </Card >
     );
