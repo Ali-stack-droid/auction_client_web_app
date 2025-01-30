@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getQueryParam } from '../../../helper/GetQueryParam';
 import KeyboardReturnRoundedIcon from '@mui/icons-material/KeyboardReturnRounded';
 import CustomTextField from '../../custom-components/CustomTextField';
+import CloseIcon from '@mui/icons-material/Close';
 
 const AuctionHeader = ({
     headerType = 'current-auctions', // Default to 'auction'
@@ -90,6 +91,8 @@ const AuctionHeader = ({
                             className={classes.filterButton}
                             onClick={handleMenuOpen}
                             startIcon={<FilterAltIcon />}
+                            disabled={!locations.length ? true : false}
+                        // endIcon={<CloseIcon style={{color='red'}} />}
                         >
                             Location
                         </Button>
@@ -104,6 +107,11 @@ const AuctionHeader = ({
                                 </MenuItem>
                             ))}
                         </Menu>
+
+                        {selectedLocation && (
+                            <IconButton onClick={() => setSelectedLocation(null)}>
+                                <CloseIcon style={{ color: 'red' }} />
+                            </IconButton>)}
                     </Box>
                 </Box>
             }
