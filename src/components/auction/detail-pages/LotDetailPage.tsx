@@ -32,42 +32,50 @@ const LotDetailPage = () => {
     const [countdown, setCountdown] = useState<string>('2 days : 22 hours : 12 minutes : 54 seconds');
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            const now = new Date().getTime();
-
-            if (lotDetails) {
-                // Combine date and time into a single string and parse it
-                const date = lotDetails.startDate; // Example: "22-05-1992"
-                const time = lotDetails.startTime; // Example: "3:32 PM"
-                const [day, month, year] = date.split('-'); // Split date into parts
-
-                // Parse into a Date object
-                const endDate = new Date(`${month}-${day}-${year} ${time}`).getTime();
-
-                if (isNaN(endDate)) {
-                    console.error("Invalid date or time format");
-                    setCountdown("");
-                    return;
-                }
-
-                const timeDifference = endDate - now;
-
-                if (timeDifference <= 0) {
-                    setCountdown("");
-                    clearInterval(intervalId);
-                    return;
-                }
-
-                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-                setCountdown(`${days} days : ${hours} hours : ${minutes} minutes : ${seconds} seconds`);
+        const parseDateTime = () => {
+            if (!lotDetails || !lotDetails.date || !lotDetails.time) {
+                console.error("Invalid lotData:", lotDetails);
+                return { startDateTime: new Date(0), endDateTime: new Date(0) }; // Default to epoch time
             }
-        }, 1000);
 
-        return () => clearInterval(intervalId);
+            const [startDate, endDate] = lotDetails.date.split(' to ');
+            const [startTime, endTime] = lotDetails.time.split(' to ');
+
+            return {
+                startDateTime: new Date(`${startDate} ${startTime}`),
+                endDateTime: new Date(`${endDate} ${endTime}`),
+            };
+        };
+
+        const calculateCountdown = () => {
+            const { endDateTime } = parseDateTime();
+
+            if (!endDateTime) {
+                console.error("Invalid endDateTime:", endDateTime);
+                setCountdown(''); // Auction ended or invalid data
+                return;
+            }
+
+            const now = new Date();
+            const remainingTime = endDateTime.getTime() - now.getTime();
+
+            if (remainingTime > 0) {
+                const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((remainingTime / (1000 * 60)) % 60);
+                const seconds = Math.floor((remainingTime / 1000) % 60);
+
+                setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+            } else {
+                setCountdown(''); // Auction ended
+            }
+        };
+
+
+        calculateCountdown(); // Initial calculation
+        const interval = setInterval(calculateCountdown, 1000); // Update every second
+
+        return () => clearInterval(interval); // Cleanup on component unmount
     }, [lotDetails]);
 
     useEffect(() => {
@@ -107,6 +115,8 @@ const LotDetailPage = () => {
                     endDate: lot.EndDate,
                     startTime: lot.StartTime,
                     endTime: lot.endTime,
+                    date: `${lot.StartDate} to ${lot.EndDate}`,
+                    time: `${lot.StartTime} to ${lot.EndTime}`,
                     details: {
                         description: lot.LongDescription,
                         date: `${lot.StartDate} to ${lot.EndDate}`,

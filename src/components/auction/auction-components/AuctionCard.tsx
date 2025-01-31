@@ -23,6 +23,8 @@ const AuctionCard = ({
     const navigate = useNavigate();
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
     const dispatch = useDispatch()
+    const [hidden, setHidden] = useState(false);
+
 
     const [faverite, setFaverite] = useState(isFaverited)
 
@@ -36,22 +38,6 @@ const AuctionCard = ({
         }
     };
 
-    const handleAddWatchList = async (id: any) => {
-        const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
-        const clientId = (sessionStorage.getItem('authToken') ?
-            JSON.parse(user).id : Cookies.get('user')
-                ? JSON.parse(user).id : '')
-        try {
-            const response = await addToWatchlist(clientId, id)
-            if (response.data) {
-                SuccessMessage('Added to watchlist!')
-                setFaverite(!faverite)
-            }
-        } catch {
-            ErrorMessage('Error adding to watchlist!')
-        }
-    }
-
     const handleBidNow = () => {
         if (user) {
             SuccessMessage('Bid placed successfully!')
@@ -59,6 +45,31 @@ const AuctionCard = ({
             navigate('/login')
         }
     }
+
+    const handleAddWatchList = async (id: any) => {
+        const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+        const clientId = (sessionStorage.getItem('authToken') ?
+            JSON.parse(user).id : Cookies.get('user')
+                ? JSON.parse(user).id : '')
+
+        try {
+            const response = await addToWatchlist(clientId, id)
+            if (response.data) {
+                response.data === "Removed from Wish List..."
+                    ? SuccessMessage('Removed from watchlist!')
+                    : SuccessMessage('Added to watchlist!')
+                setFaverite(!faverite)
+
+                if (response.data === "Removed from Wish List...") {
+                    setHidden(true); // Hide card when removed
+                }
+            }
+        } catch {
+            ErrorMessage('Error adding to watchlist!')
+        }
+    };
+
+    if (hidden) return null; // Hide card completely
 
     return (
         <Card className={classes.card} elevation={2}>

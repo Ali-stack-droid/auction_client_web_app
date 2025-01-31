@@ -86,7 +86,7 @@ const WatchList = () => {
 
 
     const isFaverited = (lotId: any) => {
-        return setFilteredData.some((lot: any) => lot.id === lotId);
+        return filteredData.some((lot: any) => lot.id === lotId);
     }
 
 
