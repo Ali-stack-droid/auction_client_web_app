@@ -19,18 +19,24 @@ const PaymentTracking = () => {
     const [selectedInvoice, setSelectedInvoice] = useState({});
     const [isWinning, setIsWinning] = useState<boolean>(true);
     const [viewDetails, setViewDetails] = useState(false);
+
+    const [search, setSearch] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+
+
     const rowsPerPage = 10;
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
 
+
     useEffect(() => {
         if (!isFetchingData) {
             setIsFetchingData(true)
             fetchBidHistory();
         }
-    }, [isWinning, selectedInvoice])
+    }, [isWinning])
 
     // useEffect(() => {
     //     fetchBidHistory();
@@ -91,19 +97,26 @@ const PaymentTracking = () => {
     // Calculate the number of pages based on the length of tableData
     const totalPages = Math.ceil(invoices.length / rowsPerPage);
 
+    const handleSearchChange = (searchVal: any) => {
+        if (searchVal === "") {
+            setSearchTerm("");
+        }
+        setSearch(searchVal)
+    };
+
     return (
         <Box >
             <Box className={classes.header}>
                 <Typography className={classes.title}>Bid History</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: "60%", padding: "20px 0" }}>
                     <CustomTextField
-                        // value={searchTerm}
-                        // onChange={handleSearchChange}
+                        value={search}
+                        onChange={(e) => handleSearchChange(e.target.value)}
                         placeholder="Search for auction listings here..."
                         className={classes.searchField}
                         InputProps={{
                             endAdornment: (
-                                <Button variant={'contained'} className={classes.searchButton}>
+                                <Button variant={'contained'} className={classes.searchButton} onClick={() => setSearchTerm(search)}>
                                     Search
                                 </Button>
                             ),
@@ -164,20 +177,30 @@ const PaymentTracking = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {invoices.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any, index: number) => (
-                                <TableRow key={row.id + index}>
-                                    <TableCell>#{row.id}</TableCell>
-                                    <TableCell>{row.productName}</TableCell>
-                                    <TableCell>{row.highestBidderName}</TableCell>
-                                    <TableCell>{row.totalBids}</TableCell>
-                                    <TableCell>{row.currentPrice}</TableCell>
-                                    <TableCell>
-                                        <Button variant={'contained'} className={classes.viewButton} onClick={() => handleViewButton(index)}>
-                                            View
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                            {invoices
+                                .filter((bid: any) => {
+                                    if (!searchTerm) return true; // Show all if no search term
+                                    const lowerCaseTerm = searchTerm.toLowerCase();
+                                    return (
+                                        bid.productName.toString().includes(searchTerm) || // Match ID
+                                        bid.highestBidderName.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                        bid.currentPrice.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                    );
+                                })
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any, index: number) => (
+                                    <TableRow key={row.id + index}>
+                                        <TableCell>#{row.id}</TableCell>
+                                        <TableCell>{row.productName}</TableCell>
+                                        <TableCell>{row.highestBidderName}</TableCell>
+                                        <TableCell>{row.totalBids}</TableCell>
+                                        <TableCell>{row.currentPrice}</TableCell>
+                                        <TableCell>
+                                            <Button variant={'contained'} className={classes.viewButton} onClick={() => handleViewButton(index)}>
+                                                View
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                     </Table>
                     <Box className={classes.paginationWrapper}>
