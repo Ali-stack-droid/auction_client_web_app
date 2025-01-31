@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { getBidHistory } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
 import PaymentViewModal from "./BidsViewModal";
-import { bidsData } from "./bidsData";
 import usePaymentTrackingStyles from "../invoices/InvoicesStyles";
 import CustomTextField from "../custom-components/CustomTextField";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';

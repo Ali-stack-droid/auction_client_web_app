@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import usePaymentTrackingStyles from "./InvoicesStyles";
 import { getPaidInvoices, getUnpaidInvoices } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
-import PaymentViewModal from "./InvoiceViewModal";
-import { tableData } from "./paymentData";
 import { useNavigate } from "react-router-dom";
 import InvoiceViewModal from "./InvoiceViewModal";
 import Cookies from "js-cookie";
@@ -13,7 +11,7 @@ const Invoices = () => {
     const classes = usePaymentTrackingStyles();
     const navigate = useNavigate();
 
-    const [invoices, setInvoices]: any = useState(tableData);
+    const [invoices, setInvoices]: any = useState([]);
     const [isFetchingData, setIsFetchingData] = useState(false);
 
     const [page, setPage] = useState<number>(0);
