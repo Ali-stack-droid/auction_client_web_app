@@ -34,7 +34,8 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
     card: {
         borderRadius: '20px',
         padding: '10px',
-        width: '80%'
+        maxWidth: "620px",
+        gap: '20px'
     },
     mediaCards: {
         paddingTop: '95px',
@@ -45,7 +46,6 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         fontWeight: 600
     },
     locationSection: {
-        // background: 'rgba(244, 244, 244, 0.5)',
         display: 'flex',
         flexDirection: 'column'
     },
@@ -53,7 +53,7 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: '16px'
+        gap: '45px'
     },
     cardStyles: {
         height: "267px",
@@ -99,7 +99,7 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         justifyContent: 'center',
         alignItems: 'center',
         gap: "10px",
-        flexWrap: 'wrap', // Ensures wrapping on smaller screens
+        // flexWrap: 'wrap', // Ensures wrapping on smaller screens
     },
     toolsInfo: {
         flex: 0.3,

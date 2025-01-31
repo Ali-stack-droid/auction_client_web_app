@@ -6,12 +6,13 @@ const CardMediaSection = () => {
     const classes = useLandingPageStyles();
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: "95px 0" }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: "16px", width: "100%", }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "16px", width: "100%", }}>
                 <Card className={classes.card}>
                     <CardMedia
                         component="img"
                         sx={{
                             maxHeight: "423px",
+
                             objectFit: "cover",
                             objectPosition: "center",
                             borderRadius: '20px'
@@ -24,6 +25,7 @@ const CardMediaSection = () => {
                     <CardMedia
                         component="img"
                         sx={{
+
                             maxHeight: "423px",
                             objectFit: "cover",
                             objectPosition: "center",
