@@ -1,6 +1,6 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Pagination, Stack, Button, ToggleButton, ToggleButtonGroup, Fade, CircularProgress, Menu, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getBidHistory, getPaidInvoices, getPendingInvoices } from "../Services/Methods";
+import { getBidHistory } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
 import PaymentViewModal from "./BidsViewModal";
 import { bidsData } from "./bidsData";
@@ -59,7 +59,7 @@ const PaymentTracking = () => {
                     id: bid.Id,
                     productName: bid.Name,
                     highestBidderName: bid.HighestBidder,
-                    totalBids: bid.TotalLots || 0,
+                    totalBids: bid.TotalBids || 0,
                     currentPrice: `$${bid.CurrentPrice}`,
                 }));
 

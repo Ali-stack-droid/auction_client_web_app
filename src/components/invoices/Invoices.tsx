@@ -1,12 +1,13 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Pagination, Stack, Button, ToggleButton, ToggleButtonGroup, Fade, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import usePaymentTrackingStyles from "./InvoicesStyles";
-import { getPaidInvoices, getPendingInvoices } from "../Services/Methods";
+import { getPaidInvoices, getUnpaidInvoices } from "../Services/Methods";
 import NoRecordFound from "../../utils/NoRecordFound";
 import PaymentViewModal from "./InvoiceViewModal";
 import { tableData } from "./paymentData";
 import { useNavigate } from "react-router-dom";
 import InvoiceViewModal from "./InvoiceViewModal";
+import Cookies from "js-cookie";
 
 const Invoices = () => {
     const classes = usePaymentTrackingStyles();
@@ -21,40 +22,62 @@ const Invoices = () => {
     const [viewDetails, setViewDetails] = useState(false);
     const rowsPerPage = 10;
 
-    // useEffect(() => {
-    //     fetchInvoices();
-    // }, [paidInvoice])
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const clientId = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user).id : Cookies.get('user')
+            ? JSON.parse(user).id : '')
 
-    // const fetchInvoices = async () => {
-    //     setIsFetchingData(true)
-    //     try {
-    //         const response = paidInvoice
-    //             ? await getPaidInvoices()
-    //             : await getPendingInvoices();
+    useEffect(() => {
+        fetchInvoices();
+    }, [paidInvoice])
 
-    //         if (response.data && response.data.length > 0) {
-    //             const formattedInvoices = response.data.map((invoice: any) => ({
-    //                 invoiceId: invoice.Id,
-    //                 name: invoice.Name,
-    //                 email: invoice.Email,
-    //                 amount: invoice.TotalAmount,
-    //                 deadline: invoice.Date,
-    //                 status: invoice.Status,
-    //                 totalLots: invoice.TotalLots,
-    //                 paidAmount: invoice.PaidAmount,
-    //                 pendingAmount: invoice.Pending,
-    //                 paymentMethod: invoice.PaymenMethod,
-    //             }));
-    //             setInvoices(formattedInvoices);
-    //         } else {
-    //             setInvoices([]);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching auction data:', error);
-    //     } finally {
-    //         setIsFetchingData(false)
-    //     }
-    // };
+    const fetchInvoices = async () => {
+        setIsFetchingData(true)
+        try {
+            const response = paidInvoice
+                ? await getPaidInvoices(5)
+                : await getUnpaidInvoices(5);
+
+            if (response.data && response.data.length > 0) {
+
+
+                const formattedInvoices = response.data.map((invoice: any) => {
+                    const bidDateParts = invoice.BidCreatedAt.split("-"); // Split "DD-MM-YYYY"
+                    const bidDate = new Date(`${bidDateParts[2]}-${bidDateParts[1]}-${bidDateParts[0]}`); // Convert to Date object
+                    bidDate.setDate(bidDate.getDate() + 3); // Add 3 days
+
+                    const formattedPaymentDueDate = `${String(bidDate.getDate()).padStart(2, "0")}-${String(bidDate.getMonth() + 1).padStart(2, "0")}-${bidDate.getFullYear()}`; // Format as DD-MM-YYYY
+
+                    return {
+                        id: invoice.Id,
+                        bidId: invoice.BidId,
+                        lotId: invoice.LotId,
+                        isPicked: invoice.IsPicked,
+                        invoiceId: invoice.InvoiceId,
+                        auctionId: invoice.AuctionId,
+                        bidAmount: invoice.BidAmount,
+                        bidCreatedAt: invoice.BidCreatedAt,
+                        paymentDueDate: formattedPaymentDueDate, // Added payment due date
+                        orderNo: invoice.OrderNo,
+                        lotNo: invoice.LotNo,
+                        location: invoice.Location,
+                        shortDescription: invoice.ShortDescription,
+                        longDescription: invoice.LongDescription,
+                        image: invoice.Image,
+                        bidStartAmount: invoice.BidStartAmount
+                    };
+                });
+
+                setInvoices(formattedInvoices);
+            } else {
+                setInvoices([]);
+            }
+        } catch (error) {
+            console.error('Error fetching auction data:', error);
+        } finally {
+            setIsFetchingData(false)
+        }
+    };
 
     const handleChangePage = (_event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage - 1); // Adjust for 0-based index
@@ -122,13 +145,13 @@ const Invoices = () => {
                         </TableHead>
                         <TableBody>
                             {invoices.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any, index: number) => (
-                                <TableRow key={row.name + index}>
-                                    <TableCell>{row.description}</TableCell>
-                                    <TableCell>{row.datePurchase}</TableCell>
+                                <TableRow key={row.id}>
+                                    <TableCell>{row.shortDescription}</TableCell>
+                                    <TableCell>{row.bidCreatedAt}</TableCell>
                                     <TableCell>{row.paymentDueDate}</TableCell>
                                     <TableCell>
                                         {paidInvoice ?
-                                            <Button variant={'contained'} className={classes.pickedButton}>{row.pickupStatus ? "Picked" : "Not Picked"}</Button>
+                                            <Button variant={'contained'} className={classes.pickedButton}>{row.isPicked ? "Picked" : "Not Picked"}</Button>
                                             :
                                             <Button variant={'contained'} className={classes.viewButton} onClick={() => handleViewButton(index)}>View</Button>
                                         }
@@ -137,7 +160,7 @@ const Invoices = () => {
                                         {paidInvoice ?
                                             <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleViewButton(index)}>Download</Button>
                                             :
-                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handlePayNow(2)}>Pay Now</Button>
+                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handlePayNow(row.id)}>Pay Now</Button>
                                         }
                                     </TableCell>
                                 </TableRow>
