@@ -328,7 +328,12 @@ const AuctionDetailPage = () => {
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%", padding: "20px 0" }}>
                                 <CustomTextField
                                     value={search}
-                                    onChange={(e: any) => setSearch(e.target.value)}
+                                    onChange={(e: any) => {
+                                        if (e.target.value === "") {
+                                            setSearchTerm("");
+                                        }
+                                        setSearch(e.target.value)
+                                    }}
                                     placeholder="Search for auction listings here..."
                                     className={classes.searchField}
                                     InputProps={{

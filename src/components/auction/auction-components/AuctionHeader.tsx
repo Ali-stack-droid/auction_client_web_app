@@ -50,7 +50,12 @@ const AuctionHeader = ({
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: "60%", padding: "20px 0" }}>
                         <CustomTextField
                             value={search}
-                            onChange={(e: any) => setSearch(e.target.value)}
+                            onChange={(e: any) => {
+                                if (e.target.value === "") {
+                                    setSearchTerm("");
+                                }
+                                setSearch(e.target.value)
+                            }}
                             placeholder="Search for auction listings here..."
                             className={classes.searchField}
                             InputProps={{
