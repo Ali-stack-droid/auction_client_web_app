@@ -190,7 +190,7 @@ const AuctionCard = ({
                                 <Button onClick={() => navigate(`/live/details?aucId=${cardData.id}`)} className={classes.bidButton} variant="contained" color="primary">
                                     Join Auction
                                 </Button>
-                                : <Button className={classes.bidButton} variant="contained" color="primary">
+                                : <Button className={classes.bidButton} variant="contained" color="primary" onClick={() => navigate(`/current-auctions/details?aucId=${cardData.id}`)} >
                                     View Auction
                                 </Button>
                     }
