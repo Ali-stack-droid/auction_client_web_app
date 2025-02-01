@@ -14,7 +14,7 @@ import {
 import useDetailStyles from "./detail-pages-components/DetailPageStyles";
 import { getQueryParam } from "../../../helper/GetQueryParam";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getLotDetailsById } from "../../Services/Methods";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -24,6 +24,7 @@ import theme from "../../../theme";
 
 const LotDetailPage = () => {
     const classes = useDetailStyles();
+    const navigate = useNavigate();
 
     const [lotDetails, setLotDetails]: any = useState({})
     const [isFetchingData, setIsFetchingData] = useState(false)
@@ -258,6 +259,7 @@ const LotDetailPage = () => {
                             borderRadius: '14px',
                             textTransform: 'none'
                         }}
+                        onClick={() => navigate(`/cart?aucId=${lotDetails.id}`)}
                     >
                         Bid Now: ${lotDetails.highestBid}
                     </Button>

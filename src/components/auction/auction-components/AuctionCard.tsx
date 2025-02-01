@@ -41,7 +41,7 @@ const AuctionCard = ({
 
     const handleBidNow = () => {
         if (user) {
-            SuccessMessage('Bid placed successfully!')
+            navigate(`/cart?aucId=${cardData.id}`)
         } else {
             navigate('/login')
         }
