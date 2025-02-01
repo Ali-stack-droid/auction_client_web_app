@@ -7,12 +7,10 @@ import {
     CircularProgress,
     Typography,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import CustomDialogue from '../custom-components/CustomDialogue';
 import AuctionCard from '../auction/auction-components/AuctionCard';
 import AuctionHeader from '../auction/auction-components/AuctionHeader';
 import PaginationButton from '../auction/auction-components/PaginationButton';
-import { deleteAuction, getCurrentLiveAuctions } from '../Services/Methods';
+import { getCurrentLiveAuctions } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
 import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
 import theme from '../../theme';
@@ -22,11 +20,8 @@ const LiveStreaming = () => {
     const [isCurrentAuction, setIsCurrentAuction] = useState(true); // Toggle between Current and Past Auctions
     const [selectedLocation, setSelectedLocation]: any = useState(null); // Filter by location
     const [fadeIn, setFadeIn] = useState(false); // Fade control state
-    const [confirmDelete, setConfirmDelete] = useState(false);
-    const [deleteAuctionId, setDeleteAuctionId] = useState<string | null>(null);
 
     const [isFetchingData, setIsFetchingData] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const [filteredData, setFilteredData] = useState([]); // Filtered data state
     const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
@@ -70,42 +65,6 @@ const LiveStreaming = () => {
             setIsFetchingData(false)
         }
     };
-
-    const handleDelete = async (id: string) => {
-        try {
-            // Call the delete API
-            const response: any = await deleteAuction(id);
-            if (response.status === 200) {
-                SuccessMessage('Auction deleted successfully!')
-                // Update state with filtered data if API call is successful
-                const updatedData = filteredData.filter((auction: any) => auction.id !== id);
-                setFilteredData(updatedData);
-            } else {
-                ErrorMessage('Error deleting auction!')
-            }
-        } catch (error) {
-            console.error('Error deleting auction:', error);
-        } finally {
-            handleCloseModal();
-        }
-    };
-
-
-    // Open confirmation modal
-    const handleDeleteAuction = (id: string) => {
-        setDeleteAuctionId(id);
-        setConfirmDelete(true);
-    };
-
-    // Close modal
-    const handleCloseModal = () => {
-        if (!isDeleting) {
-            setIsDeleting(false)
-            setConfirmDelete(false);
-            setDeleteAuctionId(null);
-        }
-    };
-
 
     // Filtered Data based on `type` and `location`
     useEffect(() => {
@@ -161,6 +120,7 @@ const LiveStreaming = () => {
                                                 <AuctionCard
                                                     headerType={"live"}
                                                     cardData={auction}
+                                                    setPaginationedData={setPaginationedData}
                                                 />
                                             </Grid>
                                         ))

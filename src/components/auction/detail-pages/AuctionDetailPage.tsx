@@ -397,6 +397,7 @@ const AuctionDetailPage = () => {
                                                         headerType={'lots'}
                                                         cardData={lot}
                                                         isFaverited={isFaverited(lot.id)}
+                                                        setPaginationedData={setPaginationedData}
                                                     />
                                                 </Grid>
                                             ))

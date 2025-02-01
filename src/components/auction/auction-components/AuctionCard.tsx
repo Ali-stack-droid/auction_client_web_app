@@ -1,5 +1,5 @@
 import { Card, CardMedia, Typography, Button, Tooltip, Box, TextField, IconButton } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuctionCardStyles } from './AuctionStyles';
 import AuctionDetails from './card-details-components/AuctionDetails';
 import React, { useState } from 'react';
@@ -17,14 +17,15 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 const AuctionCard = ({
     headerType,
     cardData,
-    isFaverited
+    isFaverited,
+    setPaginationedData
 }: any) => {
     const classes = useAuctionCardStyles();
     const navigate = useNavigate();
-    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
-    const dispatch = useDispatch()
-    const [hidden, setHidden] = useState(false);
+    const location = useLocation();
 
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const dispatch = useDispatch();
 
     const [faverite, setFaverite] = useState(isFaverited)
 
@@ -58,18 +59,18 @@ const AuctionCard = ({
                 response.data === "Removed from Wish List..."
                     ? SuccessMessage('Removed from watchlist!')
                     : SuccessMessage('Added to watchlist!')
-                setFaverite(!faverite)
 
-                if (response.data === "Removed from Wish List...") {
-                    setHidden(true); // Hide card when removed
+                setFaverite(!faverite);
+
+                if (response.data === "Removed from Wish List..." && location.pathname === '/watchlist') {
+                    setPaginationedData((prev: any) => prev.filter((lot: any) => lot.id !== id))
+                    // setHidden(true); // Hide card when removed
                 }
             }
         } catch {
             ErrorMessage('Error adding to watchlist!')
         }
     };
-
-    if (hidden) return null; // Hide card completely
 
     return (
         <Card className={classes.card} elevation={2}>
@@ -108,7 +109,7 @@ const AuctionCard = ({
                         </IconButton>
                     )}
                 {
-                    ((headerType === "lots" && cardData.isPast) || headerType === "live" || headerType === "inventory") &&
+                    ((headerType === "lots" && cardData.isPast) || headerType === "live") &&
 
                     <Button
                         variant="contained"

@@ -6,11 +6,8 @@ import {
     Grid,
     CircularProgress,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import NoRecordFound from '../../../utils/NoRecordFound';
-import { SuccessMessage, ErrorMessage } from '../../../utils/ToastMessages';
-import CustomDialogue from '../../custom-components/CustomDialogue';
-import { deleteAuction, getWatchlist } from '../../Services/Methods';
+import { getWatchlist } from '../../Services/Methods';
 import AuctionCard from './AuctionCard';
 import AuctionHeader from './AuctionHeader';
 import PaginationButton from './PaginationButton';
@@ -127,6 +124,7 @@ const WatchList = () => {
                                                 headerType={"lots"}
                                                 cardData={auction}
                                                 isFaverited={isFaverited(auction.id)}
+                                                setPaginationedData={setPaginationedData}
                                             />
                                         </Grid>
                                     ))}

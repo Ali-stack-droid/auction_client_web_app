@@ -6,7 +6,7 @@ import AuctionCard from '../auction-components/AuctionCard';
 import PaginationButton from '../auction-components/PaginationButton';
 import useLiveStreamDetailStyles from './detail-pages-components/LiveStreamingDetailStyles';
 import { SuccessMessage, ErrorMessage } from '../../../utils/ToastMessages';
-import { getAuctionDetailById, deleteAuction } from '../../Services/Methods';
+import { getAuctionDetailById } from '../../Services/Methods';
 import KeyboardReturnRoundedIcon from '@mui/icons-material/KeyboardReturnRounded';
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -135,62 +135,6 @@ const LiveStreamingDetailPage = () => {
         }
     };
 
-    const handleDelete = async () => {
-        try {
-            const response: any = await deleteAuction(deleteAuctionId);
-            if (response.status === 200) {
-                SuccessMessage('Lot deleted successfully!')
-                setAuctionLots(auctionLots.filter((lot: any) => lot.id !== deleteAuctionId))
-                setPaginationedData(auctionLots.filter((lot: any) => lot.id !== deleteAuctionId))
-            } else {
-                ErrorMessage('Error deleting lot!')
-            }
-        } catch (error) {
-            console.error('Error deleting auction:', error);
-        } finally {
-            handleCloseModal()
-        }
-    };
-
-    const navigate = useNavigate()
-
-    // Handle Edit
-    const handleEdit = (id: string) => {
-        navigate(`/auction/edit/${id}`);
-    };
-
-    const handleEditLots = (id: string) => {
-        navigate(`/auction/lots/edit?lotId=${id}`);
-    }
-
-    // Open confirmation modal
-    const handleDeleteAuction = (id: number) => {
-        setDeleteAuctionId(id);
-        setConfirmDelete(true);
-    };
-
-    // Close modal
-    const handleCloseModal = () => {
-        if (!isDeleting) {
-            setIsDeleting(false)
-            setConfirmDelete(false);
-            setDeleteAuctionId(0);
-        }
-    };
-
-    // Confirm deletion
-    const handleConfirmDelete = () => {
-        if (!isDeleting) {
-            setIsDeleting(true)
-            handleDelete(); // Call the delete handler
-        }
-    };
-
-    const handleMoveModal = (movedLotId: number) => {
-        if (movedLotId > 0) {
-            setAuctionLots((prevData: any) => prevData.filter((item: any) => item.id !== movedLotId));
-        }
-    }
 
     // Handle value change in the TextField
     const handleChange = (event: any) => {
@@ -337,6 +281,7 @@ const LiveStreamingDetailPage = () => {
                                                     <AuctionCard
                                                         headerType={'lots'}
                                                         cardData={lot}
+                                                        setPaginationedData={setPaginationedData}
                                                     />
                                                 </Grid>
                                             ))

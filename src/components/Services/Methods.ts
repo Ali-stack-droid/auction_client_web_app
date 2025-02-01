@@ -8,32 +8,13 @@ export const getFeaturedAuctionsByLocation = () => getRequest('/auctions/feature
 export const getFeaturedAuctions = () => getRequest('/auctions/featuredauctions')
 export const getFeaturedLots = () => getRequest('/lots/featuredlisting')
 
-
-
-// Dashboard Methods
-export const getDashboardStatistics = () => getRequest('/users/dashboard');
-
 // Auction Methods
-export const createAuction = (payload: FormData) => postWithFormRequest('/auctions/create', payload);
 export const getCurrentAuctions = () => getRequest('/auctions/currentauctions');
 export const getPastAuctions = () => getRequest('/auctions/pastauctions');
-export const editAuction = (payload: any) => postWithFormRequest('/auctions/update', payload);
-export const deleteAuction = (id: any) => getRequest(`/auctions/delete?id=${id}`);
 export const getAuctionDetailById = (id: any) => getRequest(`/lots/auctiondetailbyid?id=${id}`);
 
 // Lot Methos
-export const createLot = (payload: any) => postWithFormRequest('/lots/create', payload);
-export const getCurrentLots = () => getRequest('/lots/currentlots');
-export const getPastLots = () => getRequest('/lots/pastlots');
-export const getLotsByAuctionId = (id: any) => getRequest(`/lots/lotsbyauctionid?id=${id}`);
 export const getLotDetailsById = (id: any) => getRequest(`/lots/lotdetails?id=${id}`);
-export const getWinnerByLotId = (id: any) => getRequest(`/lots/lotwinner?id=${id}`);
-export const deleteLot = (id: any) => getRequest(`/lots/delete?id=${id}`);
-export const getLotDetails = (id: any) => getRequest(`/lots/lotdetails?id=${id}`);
-export const moveLotToAuction = (lotId: any, newAuctionId: any) => putRequest(`/lots/movelot?id=${lotId}&newauctionid=${newAuctionId}`);
-export const getLotWinner = (id: any) => getRequest(`/lots/lotwinner?id=${id}`);
-export const getBiddersByLotId = (id: any) => getRequest(`/lots/biddersbylot?id=${id}`);
-
 
 // WatchList Methods
 export const addToWatchlist = (id: any, lotId: any) => getRequest(`/wishlist/addtowishlist?clientid=${id}&lotid=${lotId}`);
@@ -60,6 +41,3 @@ export const getAddressByCity = (city: any) => getRequest(`/auctions/getaddressb
 
 // Live Streaming Methods
 export const getCurrentLiveAuctions = () => getRequest('/auctions/currentliveauctions');
-
-// Inventory methods /lots/lotinventory
-export const getInventoryLots = () => getRequest('/lots/lotinventory');

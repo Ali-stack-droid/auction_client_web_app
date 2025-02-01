@@ -7,14 +7,11 @@ import {
     CircularProgress,
     Typography,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import AuctionCard from './auction-components/AuctionCard';
-import CustomDialogue from '../custom-components/CustomDialogue';
 import AuctionHeader from './auction-components/AuctionHeader';
 import PaginationButton from './auction-components/PaginationButton';
-import { deleteAuction, getCurrentAuctions, getCurrentAuctionsByLocation, getCurrentLocations, getPastAuctions, getPastAuctionsByLocation, getPastLocations, getWatchlist } from '../Services/Methods';
+import { getCurrentAuctions, getCurrentAuctionsByLocation, getCurrentLocations, getPastAuctions, getPastAuctionsByLocation, getPastLocations, getWatchlist } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
-import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
 import theme from '../../theme';
 import Cookies from 'js-cookie';
 
@@ -192,6 +189,7 @@ const AuctionListings = () => {
                                                     headerType={"lots"}
                                                     cardData={lot}
                                                     isFaverited={isFaverited(lot.id)}
+                                                    setPaginationedData={setPaginationedData}
                                                 />
                                             </Grid>
                                         ))
