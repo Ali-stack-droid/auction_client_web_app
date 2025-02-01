@@ -4,11 +4,12 @@ import auctionData from '../../auction/auctionData'
 import useLandingPageStyles from '../LandingPageStyles'
 import { getFeaturedLots, getWatchlist } from '../../Services/Methods'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 
 const FeaturedAuctions = () => {
     const classes = useLandingPageStyles()
+    const location = useLocation();
     const navigate = useNavigate()
     const [isFetchingData, setIsFetchingData] = useState(false);
     const [filteredData, setFilteredData]: any = useState([]);
@@ -61,7 +62,8 @@ const FeaturedAuctions = () => {
             setIsFetchingData(true)
             fetchAuctionData();
         }
-    }, [])
+    }, [location.pathname])
+
 
     const fetchAuctionData = async () => {
         try {
@@ -110,32 +112,18 @@ const FeaturedAuctions = () => {
                 </Typography>
             </Box>
             <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
-                {filteredData.length === 1 || filteredData.length === 2
-                    ? Array(3).fill(filteredData[0]).map((auction: any, index: number) => (
-                        <Box sx={{
-                            maxWidth: "386px",
-                            width: '-webkit-fill-available',
-                        }} key={index}>
-                            <AuctionCard
-                                headerType={"lots"}
-                                cardData={auction}
-                                isFaverited={isFaverited(auction.id)}
-                            />
-                        </Box>
-                    ))
-                    : filteredData.slice(0, 3).map((auction: any, index: number) => (
-                        <Box sx={{
-                            maxWidth: "386px",
-                            width: '-webkit-fill-available',
-                        }} key={index}>
-                            <AuctionCard
-                                headerType={"lots"}
-                                cardData={auction}
-                                isFaverited={isFaverited(auction.id)}
-                            />
-                        </Box>
-                    ))
-                }
+                {filteredData.slice(0, 3).map((auction: any, index: number) => (
+                    <Box sx={{
+                        maxWidth: "386px",
+                        width: '-webkit-fill-available',
+                    }} key={index}>
+                        <AuctionCard
+                            headerType={"lots"}
+                            cardData={auction}
+                            isFaverited={isFaverited(auction.id)}
+                        />
+                    </Box>
+                ))}
             </Box>
 
             <Button className={classes.allAuctions} variant={"contained"} onClick={handleViewAllListings}>

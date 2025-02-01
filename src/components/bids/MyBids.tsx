@@ -111,7 +111,7 @@ const PaymentTracking = () => {
                     <CustomTextField
                         value={search}
                         onChange={(e) => handleSearchChange(e.target.value)}
-                        placeholder="Search for auction listings here..."
+                        placeholder="Search by Product Name, highest bidder name or current price..."
                         className={classes.searchField}
                         InputProps={{
                             endAdornment: (
