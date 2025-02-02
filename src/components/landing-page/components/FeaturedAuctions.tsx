@@ -6,6 +6,7 @@ import { getFeaturedLots, getWatchlist } from '../../Services/Methods'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import NoRecordFound from '../../../utils/NoRecordFound'
 
 const FeaturedAuctions = () => {
     const classes = useLandingPageStyles()
@@ -112,18 +113,32 @@ const FeaturedAuctions = () => {
                 </Typography>
             </Box>
             <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
-                {filteredData.slice(0, 3).map((auction: any, index: number) => (
-                    <Box sx={{
-                        maxWidth: "386px",
-                        width: '-webkit-fill-available',
-                    }} key={index}>
-                        <AuctionCard
-                            headerType={"lots"}
-                            cardData={auction}
-                            isFaverited={isFaverited(auction.id)}
-                        />
+                {filteredData.length ?
+                    filteredData.slice(0, 3).map((auction: any, index: number) => (
+                        <Box sx={{
+                            maxWidth: "386px",
+                            width: '-webkit-fill-available',
+                        }} key={index}>
+                            <AuctionCard
+                                headerType={"lots"}
+                                cardData={auction}
+                                isFaverited={isFaverited(auction.id)}
+                            />
+                        </Box>
+                    )) :
+                    <Box pb={4}>
+                        <Box p={3}>
+                            <img
+                                src={`${process.env.PUBLIC_URL}/assets/pngs/norecord.png`}
+                                alt="No Record"
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </Box>
+                        <Typography variant="h6" color="textSecondary">
+                            No featured item found!
+                        </Typography>
                     </Box>
-                ))}
+                }
             </Box>
 
             <Button className={classes.allAuctions} variant={"contained"} onClick={handleViewAllListings}>

@@ -61,29 +61,30 @@ const CurrentAuctions = () => {
                 </Typography>
             </Box>
             <Box className={classes.locationCards} sx={{ marginBottom: '40px' }}>
-                {filteredData.length === 1
-                    ? Array(3).fill(filteredData[0]).map((auction: any, index: number) => (
-                        <Box sx={{
-                            maxWidth: "386px",
-                            width: '-webkit-fill-available',
-                        }} key={index}>
-                            <AuctionCard
-                                headerType={"auction"}
-                                cardData={auction}
+                {filteredData.length ? filteredData.map((auction: any, index: number) => (
+                    <Box sx={{
+                        maxWidth: "386px",
+                        width: '-webkit-fill-available',
+                    }} key={index}>
+                        <AuctionCard
+                            headerType={"auction"}
+                            cardData={auction}
+                        />
+                    </Box>
+                ))
+                    :
+                    <Box pb={4}>
+                        <Box p={3}>
+                            <img
+                                src={`${process.env.PUBLIC_URL}/assets/pngs/norecord.png`}
+                                alt="No Record"
+                                style={{ width: '100%', height: '100%' }}
                             />
                         </Box>
-                    ))
-                    : filteredData.map((auction: any, index: number) => (
-                        <Box sx={{
-                            maxWidth: "386px",
-                            width: '-webkit-fill-available',
-                        }} key={index}>
-                            <AuctionCard
-                                headerType={"auction"}
-                                cardData={auction}
-                            />
-                        </Box>
-                    ))
+                        <Typography variant="h6" color="textSecondary">
+                            No current auctions found!
+                        </Typography>
+                    </Box>
                 }
             </Box>
 
