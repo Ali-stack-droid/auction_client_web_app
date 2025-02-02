@@ -18,7 +18,7 @@ const InvoiceViewModal = ({ open, onClose, invoice }: any) => {
             }} // Adjust height here
         >
             <Box p={2}>
-                <DialogContent className={classes.modalContent}>
+                <DialogContent className={classes.invoiceModalContent}>
                     <Typography variant='h4' py={2}>
                         Lot Details
                     </Typography>
