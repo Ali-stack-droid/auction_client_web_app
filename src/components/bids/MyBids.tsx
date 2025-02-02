@@ -183,7 +183,7 @@ const PaymentTracking = () => {
                                     if (!searchTerm) return true; // Show all if no search term
                                     const lowerCaseTerm = searchTerm.toLowerCase();
                                     return (
-                                        bid.name.toString().includes(searchTerm) || // Match ID
+                                        bid.name.toString().toLowerCase().includes(searchTerm) || // Match ID
                                         bid.highestBidderName.toLowerCase().includes(lowerCaseTerm) || // Match Name
                                         bid.currentPrice.toLowerCase().includes(lowerCaseTerm) // Match Location
                                     );

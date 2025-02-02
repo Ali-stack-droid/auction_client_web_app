@@ -102,8 +102,12 @@ const Invoices = () => {
     const handlePayNow = (paymentId: any) => {
         navigate(`/cart?paymentId=${paymentId}`)
     }
-    // Calculate the number of pages based on the length of tableData
+    // Calculate the number of pages based on the length of tableData. Keep it
     const totalPages = Math.ceil(invoices.length / rowsPerPage);
+
+    const handleInvoiceDownload = (ind: number) => {
+
+    }
 
     return (
         <Box >
@@ -159,7 +163,7 @@ const Invoices = () => {
                                     </TableCell>
                                     <TableCell>
                                         {paidInvoice ?
-                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleViewButton(index)}>Download</Button>
+                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleInvoiceDownload(index)}>Download</Button>
                                             :
                                             <Button variant={'contained'} className={classes.downloadButton} onClick={() => handlePayNow(row.id)}>Pay Now</Button>
                                         }
