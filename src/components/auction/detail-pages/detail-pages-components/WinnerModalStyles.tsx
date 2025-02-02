@@ -2,6 +2,13 @@ import { makeStyles } from '@mui/styles';
 import theme from '../../../../theme';
 
 const useWinnerModalStyle = makeStyles({
+    invoiceWrapper: {
+        padding: '10px',
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+            width: 0, background: 'transparent'
+        }
+    },
     modalContent: {
         display: 'flex',
         flexDirection: 'column',
