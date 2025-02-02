@@ -25,7 +25,7 @@ const CustomModal = ({ open, onClose, modalType }: any) => {
         {
             type: "signup",
             title: "Congratulations!",
-            desc: "You are successfully Registered into the system!",
+            desc: "You are successfully registered into the system!",
             svg: `${process.env.PUBLIC_URL}/assets/svgs/congratulation.svg`,
         },
     ];

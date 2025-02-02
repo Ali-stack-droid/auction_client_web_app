@@ -8,8 +8,10 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useNavigate } from 'react-router-dom';
 import { useForgotPasswordStyles } from './LoginStyles';
 import theme from '../../../theme';
+import { forgotPassword } from '../../Services/Methods';
+import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages';
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ setEmail }: any) => {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const classes = useForgotPasswordStyles();
@@ -24,14 +26,31 @@ const ForgotPassword = () => {
                 .email('Invalid email address')
                 .required('Email is required'),
         }),
-        onSubmit: (values) => {
+        onSubmit: (values: any) => {
             setIsSubmitting(true);
-            setTimeout(() => {
-                setIsSubmitting(false);
-                navigate('/reset-password');
-            }, 2000);
+            handleForgotPassword(values.email)
         },
     });
+
+    const handleForgotPassword = async (email: any) => {
+        try {
+            // Critical request:
+            let response: any = await forgotPassword(email)
+            if (response.data.startsWith("OTP has been sent to:")) {
+                setEmail(email)
+                navigate('/reset-password');
+            } else {
+                ErrorMessage("Couldn't send email to " + email)
+                // navigate('/reset-password');
+            }
+
+        } catch (error) {
+            ErrorMessage("Couldn't send email to " + email)
+            console.error('Error fetching auction data:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
     return (
         <Box className={classes.container}>

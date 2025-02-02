@@ -18,6 +18,8 @@ const Authentication = ({ setIsAuthenticated }: any) => {
     const [currentComponent, setCurrentComponent]: any = useState(null);
     const [fadeIn, setFadeIn] = useState(false);
     const [registerData, setRegisterData] = useState({});
+    const [email, setEmail] = useState();
+    const [otp, setOtp] = useState();
 
     useEffect(() => {
         setFadeIn(false); // Trigger fade out
@@ -30,11 +32,11 @@ const Authentication = ({ setIsAuthenticated }: any) => {
                     case '/login':
                         return <LoginForm setIsAuthenticated={setIsAuthenticated} />;
                     case '/forgot-password':
-                        return <ForgotPassword />;
+                        return <ForgotPassword setEmail={setEmail} />;
                     case '/reset-password':
-                        return <ResetPassword />;
+                        return <ResetPassword email={email} setOtp={setOtp} />;
                     case '/new-password':
-                        return <SetNewPassword />;
+                        return <SetNewPassword email={email} otp={otp} />;
                     default:
                         return <Signup setRegisterData={setRegisterData} />;
                 }

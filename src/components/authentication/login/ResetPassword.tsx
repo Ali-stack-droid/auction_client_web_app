@@ -6,8 +6,9 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import theme from '../../../theme';
 import { useNavigate } from 'react-router-dom';
 import { useLoginStyles, useResetPasswordStyles } from './LoginStyles'; // Assuming LoginStyles is correctly exported
+import { ErrorMessage } from '../../../utils/ToastMessages';
 
-const ResetPassword = () => {
+const ResetPassword = ({ email, setOtp }: any) => {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [values, setValues] = useState(['', '', '', '']); // Array to hold 4-digit values
@@ -38,8 +39,13 @@ const ResetPassword = () => {
         const code = values.join('');
         setIsSubmitting(true);
         setTimeout(() => {
-            if (code === '1234') navigate('/new-password');
-            else alert('Invalid code!');
+            if (code === '1234') {
+                setOtp(code)
+                navigate('/new-password');
+            }
+            else {
+                ErrorMessage('Invalid OTP code!');
+            }
             setIsSubmitting(false);
         }, 2000);
     };
@@ -51,7 +57,7 @@ const ResetPassword = () => {
                     Password Reset
                 </Typography>
                 <Typography variant="body1" fontSize={15} mb={2}>
-                    We sent a code to “user123@gmail.com”. Please enter the code below.
+                    We sent a code to “{email}”. Please enter the code below.
                 </Typography>
                 <Box className={classes.codeInputContainer}>
                     {values.map((value, index) => (
@@ -80,7 +86,7 @@ const ResetPassword = () => {
                 </CustomButton>
                 {/* Link to go back to Login page */}
                 <Box mt={2} textAlign="center">
-                    <Link onClick={() => navigate('/')} variant="body2" fontWeight={400} underline="hover" sx={{ cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Link onClick={() => navigate('/login')} variant="body2" fontWeight={400} underline="hover" sx={{ cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <KeyboardBackspaceIcon sx={{ fontSize: 16, px: 0.5 }} /> Back to Login
                     </Link>
                 </Box>
