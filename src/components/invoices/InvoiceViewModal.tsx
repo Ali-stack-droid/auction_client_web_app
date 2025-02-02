@@ -6,9 +6,19 @@ import { WidthFull } from '@mui/icons-material';
 const InvoiceViewModal = ({ open, onClose, invoice }: any) => {
     const classes = useWinnerModalStyle();
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" >
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md"
+            sx={{
+                "& .MuiDialog-paper": {
+                    height: "80vh",
+                    overflowY: 'scroll',
+                    '&::-webkit-scrollbar': {
+                        width: 0, background: 'transparent'
+                    }
+                },
+            }} // Adjust height here
+        >
             <Box p={2}>
-                <DialogContent className={classes.modalContent} >
+                <DialogContent className={classes.modalContent}>
                     <Typography variant='h4' py={2}>
                         Lot Details
                     </Typography>

@@ -10,9 +10,20 @@ const useWinnerModalStyle = makeStyles({
         flexDirection: 'column',
         textAlign: 'center',
         position: 'relative',
-        overflow: 'hidden',
         padding: 0,
         height: "450px",
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+            width: 0, background: 'transparent'
+        }
+    },
+    invoiceModalContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        textAlign: 'center',
+        position: 'relative',
+        padding: 0,
+        height: "80vh",
         overflowY: 'scroll',
         '&::-webkit-scrollbar': {
             width: 0, background: 'transparent'
