@@ -4,10 +4,6 @@ import theme from '../../../../theme';
 const useWinnerModalStyle = makeStyles({
     invoiceWrapper: {
         padding: '10px',
-        overflowY: 'scroll',
-        '&::-webkit-scrollbar': {
-            width: 0, background: 'transparent'
-        }
     },
     modalContent: {
         display: 'flex',
@@ -16,7 +12,11 @@ const useWinnerModalStyle = makeStyles({
         position: 'relative',
         overflow: 'hidden',
         padding: 0,
-        height: "450px"
+        height: "450px",
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+            width: 0, background: 'transparent'
+        }
     },
     label: {
         fontSize: '15px',
@@ -128,6 +128,13 @@ const useWinnerModalStyle = makeStyles({
     detail: {
         display: 'flex',
         flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: '100%',
+    },
+    detailId: {
+        display: 'flex',
+        flex: 0.5,
         flexDirection: 'column',
         alignItems: 'center',
         height: '100%',

@@ -62,10 +62,12 @@ const PaymentTracking = () => {
 
                 const formattedResponse = response.data.map((bid: any) => ({
                     id: bid.Id,
-                    productName: bid.Name,
+                    name: bid.Name,
                     highestBidderName: bid.HighestBidder,
                     totalBids: bid.TotalBids || 0,
                     currentPrice: `$${bid.CurrentPrice}`,
+                    lot: bid.Lot,
+                    client: bid.Client,
                 }));
 
                 setInvoices(formattedResponse);
@@ -181,7 +183,7 @@ const PaymentTracking = () => {
                                     if (!searchTerm) return true; // Show all if no search term
                                     const lowerCaseTerm = searchTerm.toLowerCase();
                                     return (
-                                        bid.productName.toString().includes(searchTerm) || // Match ID
+                                        bid.name.toString().includes(searchTerm) || // Match ID
                                         bid.highestBidderName.toLowerCase().includes(lowerCaseTerm) || // Match Name
                                         bid.currentPrice.toLowerCase().includes(lowerCaseTerm) // Match Location
                                     );
@@ -189,7 +191,7 @@ const PaymentTracking = () => {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any, index: number) => (
                                     <TableRow key={row.id + index}>
                                         <TableCell>#{row.id}</TableCell>
-                                        <TableCell>{row.productName}</TableCell>
+                                        <TableCell>{row.name}</TableCell>
                                         <TableCell>{row.highestBidderName}</TableCell>
                                         <TableCell>{row.totalBids}</TableCell>
                                         <TableCell>{row.currentPrice}</TableCell>
