@@ -3,9 +3,9 @@ import { getRequest, putRequest, postWithFormRequest, postRequest } from './inde
 // Authentication Methods
 export const RegisterUser = (payload: FormData) => postRequest('/clients/create', payload)
 export const LoginUser = (payload: LogInPayload) => getRequest(`/clients/login?email=${payload.email}&password=${payload?.password}`)
-export const forgotPassword = (email: any) => putRequest(`/users/forgotpassword?email=${email}`)
-export const changePassword = (payload: FormData) => postWithFormRequest('/users/changepassword', payload);
-export const updatePassword = (payload: FormData) => postWithFormRequest('/users/updatepassword', payload);
+export const forgotPassword = (email: any) => putRequest(`/clients/forgotpassword?email=${email}`)
+export const changePassword = (payload: FormData) => postWithFormRequest('/clients/changepassword', payload);
+export const updatePassword = (payload: FormData) => postWithFormRequest('/clients/updatepassword', payload);
 
 // Landing page APIs
 export const getFeaturedAuctionsByLocation = () => getRequest('/auctions/featuredauctionsbylocation')
