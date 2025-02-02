@@ -1,7 +1,11 @@
 import { getRequest, putRequest, postWithFormRequest, postRequest } from './index';
 
+// Authentication Methods
 export const RegisterUser = (payload: FormData) => postRequest('/clients/create', payload)
 export const LoginUser = (payload: LogInPayload) => getRequest(`/clients/login?email=${payload.email}&password=${payload?.password}`)
+export const forgotPassword = (email: any) => putRequest(`/users/forgotpassword?email=${email}`)
+export const changePassword = (payload: FormData) => postWithFormRequest('/users/changepassword', payload);
+export const updatePassword = (payload: FormData) => postWithFormRequest('/users/updatepassword', payload);
 
 // Landing page APIs
 export const getFeaturedAuctionsByLocation = () => getRequest('/auctions/featuredauctionsbylocation')
