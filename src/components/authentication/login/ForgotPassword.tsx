@@ -74,7 +74,7 @@ const ForgotPassword = ({ setEmail }: any) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
+                    // helperText={formik.touched.email && formik.errors.email}
                     placeholder="user123@gmail.com"
                 />
 

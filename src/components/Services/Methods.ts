@@ -1,9 +1,11 @@
-import { getRequest, putRequest, postWithFormRequest, postRequest } from './index';
+import { getRequest, putRequest, postWithFormRequest, postRequest, getWithBodyRequest } from './index';
 
 // Authentication Methods
 export const RegisterUser = (payload: FormData) => postRequest('/clients/create', payload)
 export const LoginUser = (payload: LogInPayload) => getRequest(`/clients/login?email=${payload.email}&password=${payload?.password}`)
 export const forgotPassword = (email: any) => putRequest(`/clients/forgotpassword?email=${email}`)
+// export const verifyOtp = (payload: any) => getRequest('/clients/verifyotp', payload);
+export const verifyOtp = (payload: any) => getWithBodyRequest('/clients/verifyotp', payload);
 export const changePassword = (payload: FormData) => postWithFormRequest('/clients/changepassword', payload);
 export const updatePassword = (payload: FormData) => postWithFormRequest('/clients/updatepassword', payload);
 
