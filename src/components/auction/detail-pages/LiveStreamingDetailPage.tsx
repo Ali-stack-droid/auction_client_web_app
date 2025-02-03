@@ -129,7 +129,6 @@ const LiveStreamingDetailPage = () => {
             }
 
         } catch (error) {
-            console.error('Error fetching auction data:', error);
         } finally {
             setIsFetchingData(false);
         }

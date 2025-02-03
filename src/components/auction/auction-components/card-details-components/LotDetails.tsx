@@ -12,7 +12,6 @@ const LotDetails = ({ lotData }: any) => {
     useEffect(() => {
         const parseDateTime = () => {
             if (!lotData || !lotData.date || !lotData.time) {
-                console.error("Invalid lotData:", lotData);
                 return { startDateTime: new Date(0), endDateTime: new Date(0) }; // Default to epoch time
             }
 
@@ -30,7 +29,6 @@ const LotDetails = ({ lotData }: any) => {
             const { endDateTime } = parseDateTime();
 
             if (!endDateTime) {
-                console.error("Invalid endDateTime:", endDateTime);
                 setCountdown(''); // Auction ended or invalid data
                 return;
             }

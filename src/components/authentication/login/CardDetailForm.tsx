@@ -73,8 +73,6 @@ const CardDetailForm = ({ registerData, setIsAuthenticated }: any) => {
                     company: response.data.Company,
                 }
 
-                console.log(response.data)
-
                 setTimeout(() => {
                     setOpenModal(false)
                     sessionStorage.setItem('authToken', JSON.stringify(user));

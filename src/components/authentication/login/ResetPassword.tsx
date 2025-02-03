@@ -6,7 +6,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import theme from '../../../theme';
 import { useNavigate } from 'react-router-dom';
 import { useLoginStyles, useResetPasswordStyles } from './LoginStyles'; // Assuming LoginStyles is correctly exported
-import { ErrorMessage } from '../../../utils/ToastMessages';
+import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages';
 import { verifyOtp } from '../../Services/Methods';
 
 const ResetPassword = ({ email, setOtp }: any) => {
@@ -36,41 +36,6 @@ const ResetPassword = ({ email, setOtp }: any) => {
         }
     };
 
-
-    // const handleFormSubmit = async () => {
-    //     if (values.join('').length !== 4) {
-    //         ErrorMessage("Please enter 4 digits OTP code.");
-    //         return;
-    //     };
-
-    //     setIsSubmitting(true);
-    //     const otp = values.join('');
-    //     console.log(otp)
-    //     console.log(email)
-    //     const payload = {
-    //         OTP: otp,
-    //         Email: email,
-    //     }
-
-    //     try {
-    //         // Critical request:
-    //         let response: any = await verifyOtp(payload)
-    //         console.log(response)
-    //         if (response.data) {
-    //             navigate('/new-password');
-    //         } else {
-    //             ErrorMessage("Couldn't send email to " + email)
-    //             // navigate('/reset-password');
-    //         }
-
-    //     } catch (error) {
-    //         ErrorMessage("Couldn't send email to " + email)
-    //         console.error('Error fetching auction data:', error);
-    //     } finally {
-    //         setIsSubmitting(false);
-    //     }
-    // }
-
     const handleFormSubmit = async () => {
         const otp = values.join('');
 
@@ -81,17 +46,14 @@ const ResetPassword = ({ email, setOtp }: any) => {
         setIsSubmitting(true);
 
         try {
-            const response = await verifyOtp({ params: { OTP: otp, Email: email } });
-            console.log(response);
-
+            const response = await verifyOtp({ OTP: otp, Email: email });
             if (response?.data) {
+                setOtp(otp);
                 navigate('/new-password');
-            } else {
-                ErrorMessage(`Couldn't send email to ${email}`);
+                SuccessMessage("OTP verification successful.");
             }
         } catch (error) {
-            console.error('Error verifying OTP:', error);
-            ErrorMessage(`Couldn't send email to ${email}`);
+            ErrorMessage("OTP verification failed. Please try again.");
         } finally {
             setIsSubmitting(false);
         }

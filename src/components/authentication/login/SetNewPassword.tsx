@@ -55,13 +55,7 @@ const SetNewPassword = ({ email, otp }: any) => {
 
         try {
             // Critical request:
-            const formData = new FormData();
-            formData.append("payload", JSON.stringify(payload));
-
-            console.log(payload)
-
             let response: any = await updatePassword(payload)
-            console.log(response)
 
             if (response.data) {
                 setOpenModal(true);
@@ -75,7 +69,6 @@ const SetNewPassword = ({ email, otp }: any) => {
 
         } catch (error) {
             ErrorMessage("Couldn't reset password!")
-            console.error('Error fetching auction data:', error);
         } finally {
             setIsSubmitting(false);
         }

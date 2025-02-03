@@ -35,7 +35,6 @@ const LotDetailPage = () => {
     useEffect(() => {
         const parseDateTime = () => {
             if (!lotDetails || !lotDetails.date || !lotDetails.time) {
-                console.error("Invalid lotData:", lotDetails);
                 return { startDateTime: new Date(0), endDateTime: new Date(0) }; // Default to epoch time
             }
 
@@ -52,7 +51,6 @@ const LotDetailPage = () => {
             const { endDateTime } = parseDateTime();
 
             if (!endDateTime) {
-                console.error("Invalid endDateTime:", endDateTime);
                 setCountdown(''); // Auction ended or invalid data
                 return;
             }
@@ -143,7 +141,6 @@ const LotDetailPage = () => {
                 setLotDetails([]);
             }
         } catch (error) {
-            console.error('Error fetching auction data:', error);
             setIsFetchingData(false);
         } finally {
             setIsFetchingData(false);

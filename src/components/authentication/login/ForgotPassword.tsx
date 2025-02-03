@@ -46,7 +46,6 @@ const ForgotPassword = ({ setEmail }: any) => {
 
         } catch (error) {
             ErrorMessage("Couldn't send email to " + email)
-            console.error('Error fetching auction data:', error);
         } finally {
             setIsSubmitting(false);
         }

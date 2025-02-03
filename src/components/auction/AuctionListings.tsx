@@ -60,7 +60,7 @@ const AuctionListings = () => {
                 }
 
             } catch (error) {
-                console.error('Error fetching auction data:', error);
+
             }
         };
         fetchWatchlist();
@@ -121,7 +121,7 @@ const AuctionListings = () => {
 
 
         } catch (error) {
-            console.error('Error fetching auction data:', error);
+
         } finally {
             setIsFetchingData(false)
         }

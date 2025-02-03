@@ -26,7 +26,6 @@ const CurrentAuctionsByLocation = () => {
             if (response.data && response.data.length > 0) {
 
                 const currentLocationAuctions = response.data
-                console.log(currentLocationAuctions)
                 const updatedData = currentLocationAuctions[0].Auctions.map((item: any) => ({
                     id: item.Id,
                     name: item.Name || "Monthly Public Auction",
@@ -44,7 +43,6 @@ const CurrentAuctionsByLocation = () => {
             }
 
         } catch (error) {
-            console.error('Error fetching auction data:', error);
         } finally {
             setIsFetchingData(false)
         }

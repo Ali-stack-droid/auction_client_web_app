@@ -35,7 +35,6 @@ const Invoices = () => {
             const response = paidInvoice
                 ? await getPaidInvoices(5)
                 : await getUnpaidInvoices(5);
-            console.log(response.data)
 
             if (response.data && response.data.length > 0) {
 
@@ -74,7 +73,6 @@ const Invoices = () => {
                 setInvoices([]);
             }
         } catch (error) {
-            console.error('Error fetching auction data:', error);
         } finally {
             setIsFetchingData(false)
         }

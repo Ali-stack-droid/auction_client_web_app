@@ -1,13 +1,12 @@
-import { getRequest, putRequest, postWithFormRequest, postRequest, getWithBodyRequest } from './index';
+import { getRequest, putRequest, postWithFormRequest, postRequest } from './index';
 
 // Authentication Methods
 export const RegisterUser = (payload: FormData) => postRequest('/clients/create', payload)
 export const LoginUser = (payload: LogInPayload) => getRequest(`/clients/login?email=${payload.email}&password=${payload?.password}`)
 export const forgotPassword = (email: any) => putRequest(`/clients/forgotpassword?email=${email}`)
-// export const verifyOtp = (payload: any) => getRequest('/clients/verifyotp', payload);
-export const verifyOtp = (payload: any) => getWithBodyRequest('/clients/verifyotp', payload);
-export const changePassword = (payload: FormData) => postWithFormRequest('/clients/changepassword', payload);
-export const updatePassword = (payload: FormData) => postWithFormRequest('/clients/updatepassword', payload);
+export const verifyOtp = (payload: any) => postRequest('/clients/verifyotp', payload);
+export const updatePassword = (payload: any) => putRequest('/clients/updatepassword', payload);
+export const changePassword = (payload: any) => putRequest('/clients/changepassword', payload);
 
 // Landing page APIs
 export const getFeaturedAuctionsByLocation = () => getRequest('/auctions/featuredauctionsbylocation')
@@ -36,8 +35,8 @@ export const getPaidInvoices = (id: any) => getRequest(`/invoices/clientpaidinvo
 export const getUnpaidInvoices = (id: any) => getRequest(`/invoices/clientpendinginvoice?id=${id}`);
 
 // Location Methods
-export const getCurrentLocations = () => getRequest('/auctions/getcurrentlocations');
-export const getPastLocations = () => getRequest('/auctions/getpastlocations');
+export const getCurrentLocations = () => getRequest('/auctions/currentlocations');
+export const getPastLocations = () => getRequest('/auctions/pastlocations');
 export const getCurrentAuctionsByLocation = (location: any) => getRequest(`/auctions/currentlocationauctions?loc=${location}`);
 export const getPastAuctionsByLocation = (location: any) => getRequest(`/auctions/pastlocationauctions?loc=${location}`);
 

@@ -2,16 +2,6 @@
 
 import { client } from './Config';
 
-export const getWithBodyRequest = (url: string, payload = {}, extras: any = {}) =>
-    client.get(url, {
-        ...extras,
-        data: payload, // Axios allows 'data' in GET for some servers
-        headers: {
-            'Content-Type': 'application/json',
-            ...extras.headers,
-        },
-    });
-
 export const getRequest = (url: string, extras = {}) => client.get(url, extras);
 
 export const postRequest = (url: string, payload = {}) => client.post(url, payload);
