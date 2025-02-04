@@ -52,20 +52,18 @@ const CurrentAuctionsByLocation = () => {
 
     return (
         <Box className={classes.locationSection} pb={8}>
-            {filteredData.length > 0 &&
-                <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
-                    <Typography className={classes.heading} color="primary">
-                        Current
-                        <Typography component={'span'} className={classes.headingSpan}>
-                            &nbsp;Auctions&nbsp;
-                        </Typography>
-                        By Locations
+            <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
+                <Typography className={classes.heading} color="primary">
+                    Current
+                    <Typography component={'span'} className={classes.headingSpan}>
+                        &nbsp;Auctions&nbsp;
                     </Typography>
-                </Box>
-            }
+                    By Locations
+                </Typography>
+            </Box>
             <Box className={classes.locationCards} sx={{ marginBottom: 4 }}>
-                {filteredData.length === 1
-                    ? Array(3).fill(filteredData[0]).map((auction: any, index: number) => (
+                {filteredData.length ?
+                    filteredData.map((auction: any, index: number) => (
                         <Box className={classes.currentAuctionCard} key={index}>
                             <AuctionCard
                                 headerType={"home"}
@@ -73,14 +71,19 @@ const CurrentAuctionsByLocation = () => {
                             />
                         </Box>
                     ))
-                    : filteredData.map((auction: any, index: number) => (
-                        <Box className={classes.currentAuctionCard} key={index}>
-                            <AuctionCard
-                                headerType={"home"}
-                                cardData={auction}
+                    :
+                    <Box>
+                        <Box p={4}>
+                            <img
+                                src={`${process.env.PUBLIC_URL}/assets/pngs/norecord.png`}
+                                alt="No Record"
+                                style={{ width: '100%', height: '100%' }}
                             />
                         </Box>
-                    ))
+                        <Typography variant="h6" color="textSecondary">
+                            No auctions found!
+                        </Typography>
+                    </Box>
                 }
 
             </Box>

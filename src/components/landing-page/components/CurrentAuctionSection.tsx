@@ -73,8 +73,8 @@ const CurrentAuctions = () => {
                     </Box>
                 ))
                     :
-                    <Box pb={4}>
-                        <Box p={3}>
+                    <Box pb={4} >
+                        <Box p={8}>
                             <img
                                 src={`${process.env.PUBLIC_URL}/assets/pngs/norecord.png`}
                                 alt="No Record"
