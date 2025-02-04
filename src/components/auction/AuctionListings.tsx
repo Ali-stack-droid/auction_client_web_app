@@ -10,7 +10,10 @@ import {
 import AuctionCard from './auction-components/AuctionCard';
 import AuctionHeader from './auction-components/AuctionHeader';
 import PaginationButton from './auction-components/PaginationButton';
-import { getCurrentAuctions, getCurrentAuctionsByLocation, getCurrentLocations, getPastAuctions, getPastAuctionsByLocation, getPastLocations, getWatchlist } from '../Services/Methods';
+import {
+    getCurrentLocations, getCurrentLots, getCurrentLotsByLocation,
+    getPastLocations, getPastLots, getPastLotsByLocation, getWatchlist
+} from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
 import theme from '../../theme';
 import Cookies from 'js-cookie';
@@ -80,26 +83,26 @@ const AuctionListings = () => {
             let response;
             if (isCurrentAuction) {
                 response = selectedLocation
-                    ? await getCurrentAuctionsByLocation(selectedLocation)
-                    : await getCurrentAuctions()
+                    ? await getCurrentLotsByLocation(selectedLocation)
+                    : await getCurrentLots()
             } else {
                 response = selectedLocation
-                    ? await getPastAuctionsByLocation(selectedLocation)
-                    : await getPastAuctions();
+                    ? await getPastLotsByLocation(selectedLocation)
+                    : await getPastLots();
             }
+
 
             if (response.data && response.data.length > 0) {
                 const updatedData = response.data.map((item: any) => ({
                     id: item.Id,
-                    name: item.Name,
+                    name: item.ShortDescription,
                     image: item.Image,
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,
                     details: {
-                        location: `${item.City}, ${item.Country}`,
                         dateRange: `${item.StartDate} to ${item.EndDate}`,
-                        lotsAvailable: item.TotalLots // Replace with actual data if available
                     }
+
                 }));
                 setFilteredData(updatedData);
                 setPaginationedData(updatedData)
@@ -168,8 +171,7 @@ const AuctionListings = () => {
                                         const lowerCaseTerm = searchTerm.toLowerCase();
                                         return (
                                             lot.id.toString().includes(searchTerm) || // Match ID
-                                            lot.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
-                                            lot.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                            lot.name.toLowerCase().includes(lowerCaseTerm)
                                         );
                                     })
                                     .length > 0 ? (
@@ -179,8 +181,7 @@ const AuctionListings = () => {
                                             const lowerCaseTerm = searchTerm.toLowerCase();
                                             return (
                                                 lot.id.toString().includes(searchTerm) || // Match ID
-                                                lot.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
-                                                lot.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                                lot.name.toLowerCase().includes(lowerCaseTerm)
                                             );
                                         })
                                         .map((lot: any) => (

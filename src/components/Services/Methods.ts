@@ -19,7 +19,11 @@ export const getPastAuctions = () => getRequest('/auctions/pastauctions');
 export const getAuctionDetailById = (id: any) => getRequest(`/lots/auctiondetailbyid?id=${id}`);
 
 // Lot Methos
+export const getCurrentLots = () => getRequest('/lots/currentlots');
+export const getPastLots = () => getRequest('/lots/pastlots');
 export const getLotDetailsById = (id: any) => getRequest(`/lots/lotdetails?id=${id}`);
+export const getCurrentLotsByLocation = (location: any) => getRequest(`/lots/currentlocationlots?location=${location}`);
+export const getPastLotsByLocation = (location: any) => getRequest(`/lots/pastlocationlots?location=${location}`);
 
 // WatchList Methods
 export const addToWatchlist = (id: any, lotId: any) => getRequest(`/wishlist/addtowishlist?clientid=${id}&lotid=${lotId}`);
