@@ -9,7 +9,7 @@ import useHeaderStyles from './HeaderStyles'
 import * as Yup from 'yup';
 import { changePassword, updatePassword } from '../../Services/Methods'
 import { useNavigate } from 'react-router-dom'
-import { ErrorMessage } from '../../../utils/ToastMessages'
+import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages'
 import Cookies from 'js-cookie';
 
 const ChangePasswordModal = ({ changePasswordOpen, setChangePasswordOpen }: any) => {
@@ -67,6 +67,8 @@ const ChangePasswordModal = ({ changePasswordOpen, setChangePasswordOpen }: any)
                 // setOpenModal(true);
                 setTimeout(() => {
                     setIsSubmitting(false);
+                    setChangePasswordOpen(false);
+                    SuccessMessage("Password changed successfully!");
                 }, 2000);
             } else {
                 ErrorMessage("Couldn't reset password!")
