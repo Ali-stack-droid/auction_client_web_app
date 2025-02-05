@@ -6,6 +6,7 @@ import NoRecordFound from "../../utils/NoRecordFound";
 import { useNavigate } from "react-router-dom";
 import InvoiceViewModal from "./InvoiceViewModal";
 import Cookies from "js-cookie";
+import { generateInvoiceHtml } from "./InvoiceTemplate";
 
 const Invoices = () => {
     const classes = usePaymentTrackingStyles();
@@ -104,8 +105,20 @@ const Invoices = () => {
     const totalPages = Math.ceil(invoices.length / rowsPerPage);
 
     const handleInvoiceDownload = (ind: number) => {
+        const invoice = invoices[ind];
 
-    }
+        const invoiceHtml = generateInvoiceHtml(invoice);
+        const blob = new Blob([invoiceHtml], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `Invoice-${invoice.invoiceId}.html`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
 
     return (
         <Box >
