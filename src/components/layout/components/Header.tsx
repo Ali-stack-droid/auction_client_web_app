@@ -18,7 +18,7 @@ const Header = () => {
     const classes = useHeaderStyles();
     const navigate = useNavigate();
     const [profileMenuAnchor, setProfileMenuAnchor] = useState(null);
-    const [changePassword, setChangePassword] = useState(false);
+    const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
     const navLinks = [
         { label: 'Home', path: '/home' },
@@ -48,7 +48,7 @@ const Header = () => {
     };
 
     const handleChangePassword = () => {
-        setChangePassword(true)
+        setChangePasswordOpen(true)
         handleProfileClose();
     }
 
@@ -143,7 +143,7 @@ const Header = () => {
                     }
                 </Box>
             </Toolbar>
-            <ChangePasswordModal changePassword={changePassword} setChangePassword={setChangePassword} />
+            <ChangePasswordModal changePasswordOpen={changePasswordOpen} setChangePasswordOpen={setChangePasswordOpen} />
         </AppBar>
     );
 };
