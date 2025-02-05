@@ -285,6 +285,14 @@ const useDetailStyles = makeStyles(() => ({
         width: '160px',
         height: '40px',
     },
+    menuItem: {
+        '&.selected': {
+            backgroundColor: theme.palette.primary.main,
+        },
+        '&:hover': {
+            backgroundColor: theme.palette.primary.main6,
+        },
+    },
 }
 ));
 

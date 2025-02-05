@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography, Card, CardMedia, Grid, CircularProgress, Container, IconButton, Divider, Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { Box, Button, Typography, Card, CardMedia, Grid, CircularProgress, Container, IconButton, Divider, Accordion, AccordionDetails, AccordionSummary, Menu, MenuItem, capitalize } from "@mui/material";
 import useDetailStyles from "./detail-pages-components/DetailPageStyles";
 import { getQueryParam } from "../../../helper/GetQueryParam";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLocation, useNavigate } from "react-router-dom";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import AuctionCard from "../auction-components/AuctionCard";
-import { getAuctionDetailById, getWatchlist } from "../../Services/Methods";
+import { getAuctionDetailById, getCurrentLocations, getCurrentLots, getCurrentLotsByLocation, getPastLocations, getPastLots, getPastLotsByLocation, getWatchlist } from "../../Services/Methods";
 import PaginationButton from "../auction-components/PaginationButton";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomTextField from "../../custom-components/CustomTextField";
@@ -19,14 +19,18 @@ const AuctionDetailPage = () => {
 
     const [auctionDetails, setAuctionDetails]: any = useState([])
     const [paginationedData, setPaginationedData]: any = useState([])
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const [auctionLots, setAuctionLots] = useState<any[]>([]);
     const [isFetchingData, setIsFetchingData] = useState(false);
 
     const [search, setSearch] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+    const [isCurrentAuction, setIsCurrentAuction] = useState(false);
 
     const [favouriteLots, setFavouriteLots]: any = useState([]);
+    const [locations, setLocations]: any = useState([]);
+    const [selectedLocation, setSelectedLocation]: any = useState('');
 
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
     const clientId = (sessionStorage.getItem('authToken') ?
@@ -127,13 +131,34 @@ const AuctionDetailPage = () => {
                     isSold: auction.IsSold,
                     totalLots: auction.TotalLots
                 };
+                setIsCurrentAuction(formattedAuctionDetails.type === "current");
                 setAuctionDetails(formattedAuctionDetails);
             } else {
                 setAuctionDetails(null)
             }
 
-            if (lots.length > 0) {
-                const formattedLots = lots.map((item: any) => ({
+        } catch (error) {
+        } finally {
+            setIsFetchingData(false);
+        }
+    };
+
+    useEffect(() => {
+        const fetchAuctionLots = async () => {
+            let response;
+            if (isCurrentAuction) {
+                response = selectedLocation
+                    ? await getCurrentLotsByLocation(selectedLocation)
+                    : await getCurrentLots()
+            } else {
+                response = selectedLocation
+                    ? await getPastLotsByLocation(selectedLocation)
+                    : await getPastLots();
+            }
+
+
+            if (response.data.length > 0) {
+                const formattedLots = response.data.map((item: any) => ({
                     id: item.Id,
                     lotNumber: item.LotNo,
                     name: item.ShortDescription,
@@ -146,6 +171,7 @@ const AuctionDetailPage = () => {
                     sold: item.IsSold,
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,
+                    auctionId: item.AuctionId,
                     details: {
                         description: item.LongDescription,
                         date: `${item.StartDate} to ${item.EndDate}`,
@@ -161,22 +187,47 @@ const AuctionDetailPage = () => {
                         },
                     },
                 }));
-                setAuctionLots(formattedLots)
-                setPaginationedData(formattedLots)
+
+                const newLots: any = [];
+                formattedLots.map((lot: any) => {
+                    if (lot.auctionId == getQueryParam('aucId')) {
+                        newLots.push(lot)
+                    }
+                })
+
+                setAuctionLots(newLots)
+                setPaginationedData(newLots)
+
+                const locationResponse = isCurrentAuction
+                    ? await getCurrentLocations()
+                    : await getPastLocations();
+
+                if (locationResponse.data && locationResponse.data.length > 0) {
+                    const updatedLocation = locationResponse.data;
+                    setLocations(updatedLocation);
+                } else {
+                    setLocations([]);
+                }
             } else {
                 setPaginationedData([])
                 setAuctionLots([])
             }
-
-        } catch (error) {
-        } finally {
-            setIsFetchingData(false);
         }
-    };
+
+        fetchAuctionLots();
+    }, [selectedLocation, isCurrentAuction]);
 
     const isFaverited = (lotId: any) => {
         return favouriteLots.some((lot: any) => lot.id === lotId);
     }
+
+    const handleFilterChange = (location: string) => {
+        setSelectedLocation((prev: any) => (prev === location ? null : location));
+        handleMenuClose();
+    };
+
+    const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+    const handleMenuClose = () => setAnchorEl(null);
 
     return (
         <Box sx={{ padding: "10px 0" }}>
@@ -308,7 +359,7 @@ const AuctionDetailPage = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                             <FiberManualRecordIcon sx={{ width: "15px", height: "15px", visibility: 'hidden' }} color="primary" />
-                                            <Typography className={classes.text}>{auctionDetails.type}</Typography>
+                                            <Typography className={classes.text} textTransform={'capitalize'}>{auctionDetails.type}</Typography>
                                         </Box>
                                     </Box>
                                 </Box>
@@ -316,111 +367,108 @@ const AuctionDetailPage = () => {
                         </Grid>
                     </Grid>
 
-                    {auctionLots.length > 0 &&
-                        <Box overflow={'auto'} pt={3}>
-                            <Box className={classes.titleWrapper}>
-                                <Typography className={classes.title}>
-                                    All Auction Listing
-                                </Typography>
-                            </Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%", padding: "20px 0" }}>
-                                <CustomTextField
-                                    value={search}
-                                    onChange={(e: any) => {
-                                        if (e.target.value === "") {
-                                            setSearchTerm("");
-                                        }
-                                        setSearch(e.target.value)
-                                    }}
-                                    placeholder="Search for auction listings here..."
-                                    className={classes.searchField}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <Button variant={'contained'} className={classes.searchButton} onClick={() => setSearchTerm(search)}>
-                                                Search
-                                            </Button>
-                                        ),
-                                    }}
-                                />
+                    <Box overflow={'auto'} pt={3}>
+                        <Box className={classes.titleWrapper}>
+                            <Typography className={classes.title}>
+                                All Auction Listing
+                            </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: "100%", padding: "20px 0" }}>
+                            <CustomTextField
+                                value={search}
+                                onChange={(e: any) => {
+                                    if (e.target.value === "") {
+                                        setSearchTerm("");
+                                    }
+                                    setSearch(e.target.value)
+                                }}
+                                placeholder="Search for auction listings here..."
+                                className={classes.searchField}
+                                InputProps={{
+                                    endAdornment: (
+                                        <Button variant={'contained'} className={classes.searchButton} onClick={() => setSearchTerm(search)}>
+                                            Search
+                                        </Button>
+                                    ),
+                                }}
+                            />
 
-                                <Box className={classes.buttonContainer}>
-                                    <Button
-                                        variant="contained"
-                                        className={classes.filterButton}
-                                        // onClick={handleMenuOpen}
-                                        startIcon={<FilterAltIcon />}
-                                    >
-                                        Filter
-                                    </Button>
-                                    {/* <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                                        {locations.map((location: any) => (
-                                            <MenuItem
-                                                key={location}
-                                                onClick={() => handleFilterChange(location)}
-                                                className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
-                                            >
-                                                {location}
-                                            </MenuItem>
-                                        ))}
-                                    </Menu> */}
-                                </Box>
+                            <Box className={classes.buttonContainer}>
+                                <Button
+                                    variant="contained"
+                                    className={classes.filterButton}
+                                    onClick={handleMenuOpen}
+                                    startIcon={<FilterAltIcon />}
+                                    disabled={!locations.length ? true : false}
+                                >
+                                    Filter
+                                </Button>
+                                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                                    {locations.map((location: any) => (
+                                        <MenuItem
+                                            key={location}
+                                            onClick={() => handleFilterChange(location)}
+                                            className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
+                                        >
+                                            {location}
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
                             </Box>
+                        </Box>
 
-                            <Container disableGutters maxWidth={false} sx={{ mt: 3, pl: 1 }}>
-                                <Grid container spacing={3}>
-                                    {paginationedData
+                        <Container disableGutters maxWidth={false} sx={{ mt: 3, pl: 1 }}>
+                            <Grid container spacing={3}>
+                                {paginationedData
+                                    .filter((lot: any) => {
+                                        if (!searchTerm) return true; // Show all if no search term
+                                        const lowerCaseTerm = searchTerm?.toLowerCase();
+                                        return (
+                                            lot.id?.toString().includes(searchTerm) || // Match ID
+                                            lot.name?.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                            lot.details.location?.toLowerCase()?.includes(lowerCaseTerm) // Match Location
+                                        );
+                                    })
+                                    .length > 0 ? (
+                                    paginationedData
                                         .filter((lot: any) => {
                                             if (!searchTerm) return true; // Show all if no search term
-                                            const lowerCaseTerm = searchTerm?.toLowerCase();
+                                            const lowerCaseTerm = searchTerm.toLowerCase();
                                             return (
-                                                lot.id?.toString().includes(searchTerm) || // Match ID
-                                                lot.name?.toLowerCase().includes(lowerCaseTerm) || // Match Name
-                                                lot.details.location?.toLowerCase()?.includes(lowerCaseTerm) // Match Location
+                                                lot.id.toString().includes(searchTerm) || // Match ID
+                                                lot.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
+                                                lot.details.location?.toLowerCase().includes(lowerCaseTerm) // Match Location
                                             );
                                         })
-                                        .length > 0 ? (
-                                        paginationedData
-                                            .filter((lot: any) => {
-                                                if (!searchTerm) return true; // Show all if no search term
-                                                const lowerCaseTerm = searchTerm.toLowerCase();
-                                                return (
-                                                    lot.id.toString().includes(searchTerm) || // Match ID
-                                                    lot.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
-                                                    lot.details.location?.toLowerCase().includes(lowerCaseTerm) // Match Location
-                                                );
-                                            })
-                                            .map((lot: any) => (
-                                                <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
-                                                    <AuctionCard
-                                                        headerType={'lots'}
-                                                        cardData={lot}
-                                                        isFaverited={isFaverited(lot.id)}
-                                                        setPaginationedData={setPaginationedData}
-                                                    />
-                                                </Grid>
-                                            ))
-                                    ) : (
-                                        <Box
-                                            sx={{
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                height: '50vh',
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <Typography sx={{ fontSize: '25px', fontWeight: 700 }}>
-                                                No match found for <span style={{ color: theme.palette.primary.main }}> "{searchTerm}"</span>
-                                            </Typography>
-                                        </Box>
-                                    )}
-
-
-                                </Grid>
-                            </Container>
-                            <PaginationButton filteredData={auctionLots} setPaginationedData={setPaginationedData} />
-                        </Box>
-                    }
+                                        .map((lot: any) => (
+                                            <Grid item xs={12} sm={6} md={4} xl={3} key={lot.id}>
+                                                <AuctionCard
+                                                    headerType={'lots'}
+                                                    cardData={lot}
+                                                    isFaverited={isFaverited(lot.id)}
+                                                    setPaginationedData={setPaginationedData}
+                                                />
+                                            </Grid>
+                                        ))
+                                ) : (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: '50vh',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Typography sx={{ fontSize: '25px', fontWeight: 700 }}>
+                                            No match found for <span style={{ color: theme.palette.primary.main }}> "{searchTerm ? searchTerm : selectedLocation}"</span>
+                                        </Typography>
+                                    </Box>
+                                )}
+                            </Grid>
+                        </Container>
+                        <PaginationButton filteredData={auctionLots} setPaginationedData={setPaginationedData} />
+                    </Box>
                 </Box>
                 :
                 <Box
