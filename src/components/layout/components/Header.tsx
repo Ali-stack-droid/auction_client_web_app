@@ -1,16 +1,24 @@
-import React from 'react';
-import { AppBar, Toolbar, Button, IconButton, Box, Typography, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Button, IconButton, Box, Typography, Tooltip, Avatar, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useHeaderStyles from './HeaderStyles';
 import Cookies from 'js-cookie';
 import CustomNavLink from '../../custom-components/CustomNavLink';
+import EnhancedEncryptionRoundedIcon from '@mui/icons-material/EnhancedEncryptionRounded';
+import {
+    Logout as LogoutIcon,
+} from '@mui/icons-material';
+import ChangePasswordModal from './ChangePasswordModal';
+
 
 const Header = () => {
-    const location = useLocation(); // Get the current pathname
+    const location = useLocation();
     const classes = useHeaderStyles();
     const navigate = useNavigate();
+    const [profileMenuAnchor, setProfileMenuAnchor] = useState(null);
+    const [changePassword, setChangePassword] = useState(false);
 
     const navLinks = [
         { label: 'Home', path: '/home' },
@@ -30,6 +38,19 @@ const Header = () => {
     }
 
     const isAuthenticated = sessionStorage.getItem('authToken') || Cookies.get('user');
+
+    const handleProfileClick = (event: any) => {
+        setProfileMenuAnchor(event.currentTarget);
+    };
+
+    const handleProfileClose = () => {
+        setProfileMenuAnchor(null);
+    };
+
+    const handleChangePassword = () => {
+        setChangePassword(true)
+        handleProfileClose();
+    }
 
     return (
         <AppBar
@@ -94,10 +115,35 @@ const Header = () => {
                                     <ShoppingCartIcon />
                                 </IconButton>
                             </Tooltip>
+
+                            <IconButton onClick={handleProfileClick}>
+                                <Avatar alt="Admin" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+                            </IconButton>
+                            <Menu
+                                anchorEl={profileMenuAnchor}
+                                open={Boolean(profileMenuAnchor)}
+                                onClose={handleProfileClose}
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            >
+                                <MenuItem onClick={handleChangePassword} >
+                                    <ListItemIcon>
+                                        <EnhancedEncryptionRoundedIcon />
+                                    </ListItemIcon>
+                                    <Typography variant='body1'>Change Password</Typography>
+                                </MenuItem>
+                                <MenuItem onClick={() => navigate('/logout')}>
+                                    <ListItemIcon>
+                                        <LogoutIcon />
+                                    </ListItemIcon>
+                                    <Typography variant='body1'>Logout</Typography>
+                                </MenuItem>
+                            </Menu>
                         </Box>
                     }
                 </Box>
             </Toolbar>
+            <ChangePasswordModal changePassword={changePassword} setChangePassword={setChangePassword} />
         </AppBar>
     );
 };

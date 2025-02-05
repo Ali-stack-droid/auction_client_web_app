@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const TempComponent = ({ setIsAuthenticated }: any) => {
     const navigate = useNavigate();
     useEffect(() => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('authToken');
         Cookies.remove('user');
         setIsAuthenticated(false);
         navigate('/')
