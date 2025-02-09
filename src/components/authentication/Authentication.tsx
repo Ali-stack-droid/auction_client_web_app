@@ -10,6 +10,7 @@ import { useLoginStyles } from './login/LoginStyles';
 import Signup from './login/Signup';
 import CardDetailForm from './login/CardDetailForm';
 import theme from '../../theme';
+import EmailVerification from './login/EmailVerification';
 
 const Authentication = ({ setIsAuthenticated }: any) => {
     const location = useLocation();
@@ -27,18 +28,20 @@ const Authentication = ({ setIsAuthenticated }: any) => {
             // Change the component after fade-out
             setCurrentComponent(() => {
                 switch (location.pathname) {
+                    case '/email-verification':
+                        return <EmailVerification email={email} registerData={registerData} setIsAuthenticated={setIsAuthenticated} />;
                     case '/card-details':
                         return <CardDetailForm registerData={registerData} setIsAuthenticated={setIsAuthenticated} />;
                     case '/login':
                         return <LoginForm setIsAuthenticated={setIsAuthenticated} />;
                     case '/forgot-password':
-                        return <ForgotPassword setEmail={setEmail} />;
+                        return <ForgotPassword setEmail={setEmail} registerData={registerData} setIsAuthenticated={setIsAuthenticated} />;
                     case '/reset-password':
                         return <ResetPassword email={email} setOtp={setOtp} />;
                     case '/new-password':
                         return <SetNewPassword email={email} otp={otp} />;
                     default:
-                        return <Signup setRegisterData={setRegisterData} />;
+                        return <Signup setEmail={setEmail} setRegisterData={setRegisterData} />;
                 }
             });
             setFadeIn(true); // Trigger fade in

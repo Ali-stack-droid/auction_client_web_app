@@ -8,8 +8,9 @@ import { ErrorMessage } from '../../../utils/ToastMessages';
 import theme from '../../../theme';
 import CustomButton from '../../custom-components/CustomButton';
 import CustomTextField from '../../custom-components/CustomTextField';
+import { emailVerification } from '../../Services/Methods';
 
-const SignupForm = ({ setRegisterData }: any) => {
+const SignupForm = ({ setEmail, setRegisterData }: any) => {
     const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
@@ -38,12 +39,7 @@ const SignupForm = ({ setRegisterData }: any) => {
         }),
         onSubmit: (values) => {
             setIsSubmitting(true);
-            setTimeout(() => {
-                setIsSubmitting(false);
-                navigate('/card-details');
-            }, 2000);
-
-            setRegisterData(values)
+            handleEmailVerification(values)
         },
     });
 
@@ -51,6 +47,32 @@ const SignupForm = ({ setRegisterData }: any) => {
         setShowPassword((prev) => !prev);
     };
 
+    const handleEmailVerification = async (payload: any) => {
+        try {
+            const response = await emailVerification(payload.email);
+            if (response.status === 200) {
+                // Handle success response
+                setEmail(payload.email)
+                const user = {
+                    Name: payload.name,
+                    Email: payload.email,
+                    Address: payload.address,
+                    Password: payload.password,
+                    Company: payload.companyName
+                }
+
+                setRegisterData(user)
+                navigate('/email-verification');
+            } else {
+                ErrorMessage("Failed to send verification email");
+            }
+        } catch (error) {
+            ErrorMessage("An error occurred while sending verification email");
+        } finally {
+            setIsSubmitting(false);
+        }
+
+    }
     return (
         <Box display="flex" justifyContent="center" alignItems="center" width="100%">
             <Paper elevation={0} sx={{ padding: 4, maxWidth: 400, width: '100%' }}>

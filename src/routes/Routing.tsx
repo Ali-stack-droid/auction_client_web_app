@@ -73,6 +73,7 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                         <Route path="/forgot-password" element={<Authentication setIsAuthenticated={setIsAuthenticated} />} />
                         <Route path="/reset-password" element={<Authentication setIsAuthenticated={setIsAuthenticated} />} />
                         <Route path="/new-password" element={<Authentication setIsAuthenticated={setIsAuthenticated} />} />
+                        <Route path="/email-verification" element={<Authentication setIsAuthenticated={setIsAuthenticated} />} />
 
                         {/* Protected Routes */}
                         <Route
