@@ -154,7 +154,7 @@ const AuctionCard = ({
                         : headerType === "lots" ?
                             <Box display={'flex'} flexDirection={'column'} width={'100%'}>
                                 <Button className={classes.bidButton} variant="contained" color="primary" onClick={() => handleBidNow()}>
-                                    Bid Now $1600
+                                    Bid Now ${cardData.bidAmount}
                                 </Button>
                                 {user &&
                                     <Box>

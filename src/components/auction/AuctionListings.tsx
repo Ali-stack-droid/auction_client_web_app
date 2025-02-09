@@ -99,6 +99,7 @@ const AuctionListings = () => {
                     image: item.Image,
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,
+                    bidAmount: item.BidStartAmount,
                     details: {
                         dateRange: `${item.StartDate} to ${item.EndDate}`,
                     }
