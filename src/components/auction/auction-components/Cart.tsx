@@ -16,10 +16,12 @@ import * as Yup from "yup";
 import CartStyles from './CartStyles';
 import CustomTextField from '../../custom-components/CustomTextField';
 import { CustomMultiLineTextField } from '../../custom-components/CustomMultiLineTextField';
+import Stripe from 'stripe';
 
 
 const Cart = () => {
 
+    const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY as string);
     const classes = CartStyles();
 
     // Import required modules
@@ -29,6 +31,21 @@ const Cart = () => {
     const [open, setOpen] = useState(false);
 
     const handleClose = () => setOpen(false);
+
+
+    const stripeFunction = async () => {
+        // const customer = await stripe.customers.create({
+        //     email: 'customer@example.com',
+        // });
+
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: 5000, // amount in cents
+            currency: 'usd',
+            payment_method_types: ['card'],
+        });
+
+        console.log(paymentIntent);
+    }
 
     return (
         <Box pb={'80px'}>
