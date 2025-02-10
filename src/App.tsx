@@ -10,6 +10,7 @@ function App() {
   useEffect(() => {
     const checkSession = () => {
       // Check sessionStorage and cookies
+      // sessionStorage.setItem('authToken', JSON.stringify("asd"));
       const authToken = sessionStorage.getItem('authToken');
       const user = Cookies.get('user');
 
