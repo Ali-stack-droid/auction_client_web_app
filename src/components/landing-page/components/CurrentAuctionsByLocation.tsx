@@ -37,7 +37,7 @@ const CurrentAuctionsByLocation = () => {
                         lotsAvailable: item.TotalLots // Replace with actual data if available
                     }
                 }));
-                setFilteredData(updatedData);
+                setFilteredData(updatedData.length > 2 ? updatedData.slice(0, 3) : updatedData);
             } else {
                 setFilteredData([]);
             }
