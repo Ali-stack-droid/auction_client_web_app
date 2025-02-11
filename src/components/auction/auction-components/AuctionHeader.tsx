@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { Box, Button, Typography, ToggleButton, ToggleButtonGroup, Menu, MenuItem, IconButton } from '@mui/material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import useAuctionHeaderStyles from './AuctionHeaderStyles';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getQueryParam } from '../../../helper/GetQueryParam';
-import KeyboardReturnRoundedIcon from '@mui/icons-material/KeyboardReturnRounded';
 import CustomTextField from '../../custom-components/CustomTextField';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -19,7 +16,6 @@ const AuctionHeader = ({
     setSearchTerm
 }: any) => {
     const classes = useAuctionHeaderStyles();
-    const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [search, setSearch]: any = useState(""); // Filtered data state

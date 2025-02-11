@@ -7,22 +7,16 @@ import {
     CircularProgress,
     Typography,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import AuctionCard from './auction-components/AuctionCard';
-import CustomDialogue from '../custom-components/CustomDialogue';
 import AuctionHeader from './auction-components/AuctionHeader';
 import PaginationButton from './auction-components/PaginationButton';
-import { getCurrentAuctions, getCurrentAuctionsByLocation, getCurrentLocations, getPastAuctions, getPastAuctionsByLocation, getPastLocations } from '../Services/Methods';
+import { getCurrentAuctions, getCurrentLocations, getPastAuctions, getPastLocations } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
-import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
 import theme from '../../theme';
 
 const CurrentAuctions = () => {
     const [fadeIn, setFadeIn] = useState(false); // Fade control state
-    const [confirmDelete, setConfirmDelete] = useState(false);
-    const [deleteAuctionId, setDeleteAuctionId] = useState<string | null>(null);
     const [isFetchingData, setIsFetchingData] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const [isCurrentAuction, setIsCurrentAuction] = useState(true); // Toggle between Current and Past Auctions
     const [selectedLocation, setSelectedLocation]: any = useState(null); // Filter by location
@@ -36,22 +30,25 @@ const CurrentAuctions = () => {
         if (!isFetchingData) {
             setIsFetchingData(true)
             fetchAuctionData();
-
         }
-    }, [isCurrentAuction, selectedLocation])
+    }, [isCurrentAuction])
+
+    useEffect(() => {
+        if (selectedLocation) {
+            setPaginationedData(filteredData.filter((item: any) => item.details.address === selectedLocation))
+        } else {
+            setPaginationedData(filteredData)
+        }
+    }, [selectedLocation])
 
     const fetchAuctionData = async () => {
         try {
             // Critical request:
             let response;
             if (isCurrentAuction) {
-                response = selectedLocation
-                    ? await getCurrentAuctionsByLocation(selectedLocation)
-                    : await getCurrentAuctions()
+                response = await getCurrentAuctions()
             } else {
-                response = selectedLocation
-                    ? await getPastAuctionsByLocation(selectedLocation)
-                    : await getPastAuctions();
+                response = await getPastAuctions();
             }
 
             if (response.data && response.data.length > 0) {
@@ -60,6 +57,7 @@ const CurrentAuctions = () => {
                     name: item.Name,
                     image: item.Image,
                     details: {
+                        address: item.Address,
                         location: `${item.City}, ${item.Country}`,
                         dateRange: `${item.StartDate} to ${item.EndDate}`,
                         lotsAvailable: item.TotalLots // Replace with actual data if available
@@ -89,8 +87,6 @@ const CurrentAuctions = () => {
             setIsFetchingData(false)
         }
     };
-
-    const navigate = useNavigate()
 
     // Filtered Data based on `type` and `location`
     useEffect(() => {
@@ -130,7 +126,7 @@ const CurrentAuctions = () => {
                                         return (
                                             auction.id.toString().includes(searchTerm) || // Match ID
                                             auction.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
-                                            auction.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                            auction.details.address.toLowerCase().includes(lowerCaseTerm) // Match Location
                                         );
                                     })
                                     .length > 0 ? (
@@ -141,7 +137,7 @@ const CurrentAuctions = () => {
                                             return (
                                                 auction.id.toString().includes(searchTerm) || // Match ID
                                                 auction.name.toLowerCase().includes(lowerCaseTerm) || // Match Name
-                                                auction.details.location.toLowerCase().includes(lowerCaseTerm) // Match Location
+                                                auction.details.address.toLowerCase().includes(lowerCaseTerm) // Match Location
                                             );
                                         })
                                         .map((auction: any) => (

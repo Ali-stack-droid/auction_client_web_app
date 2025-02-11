@@ -20,6 +20,11 @@ const Header = () => {
     const [profileMenuAnchor, setProfileMenuAnchor] = useState(null);
     const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const clientName = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user).name : Cookies.get('user')
+            ? JSON.parse(user).name : '')
+
     const navLinks = [
         { label: 'Home', path: '/home' },
         { label: 'Current Auctions', path: '/current-auctions' },
@@ -117,7 +122,7 @@ const Header = () => {
                             </Tooltip>
 
                             <IconButton onClick={handleProfileClick}>
-                                <Avatar alt="Admin" src="/static/images/avatar/1.jpg" className={classes.avatar} />
+                                <Avatar alt={clientName ? clientName.toUpperCase() : ''} src="/static/images/avatar/1.jpg" className={classes.avatar} />
                             </IconButton>
                             <Menu
                                 anchorEl={profileMenuAnchor}

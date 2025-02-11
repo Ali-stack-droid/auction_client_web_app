@@ -13,7 +13,7 @@ const AuctionDetails = ({ auctionDetails }: any) => {
         <Box className={classes.container}>
 
             <Typography color='#2A2A2A' fontSize={'14px'} fontWeight={500}>
-                {auctionDetails.details.location}
+                {auctionDetails.details.address}
             </Typography>
 
             <Box className={classes.row}>
