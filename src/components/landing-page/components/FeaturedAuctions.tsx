@@ -77,6 +77,8 @@ const FeaturedAuctions = () => {
                     image: item.Image,
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,
+                    endDate: item.endDate,
+                    endTime: item.endTime,
                     details: {
                         location: `${item.City}, ${item.Country}`,
                         dateRange: `${item.StartDate} to ${item.EndDate}`,
