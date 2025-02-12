@@ -11,26 +11,32 @@ const AuctionDetails = ({ auction }: any) => {
     const [countdown, setCountdown] = useState<string>('00:00:00');
 
     useEffect(() => {
-        const parseDateTime = () => {
-            if (!auction || !auction.date || !auction.time) {
-                return { startDateTime: new Date(0), endDateTime: new Date(0) }; // Default to epoch time
+        const calculateCountdown = () => {
+            if (!auction?.endDate || !auction?.endTime) {
+                setCountdown(''); // Handle missing data
+                return;
             }
 
-            const [startDate, endDate] = auction.date.split(' to ');
-            const [startTime, endTime] = auction.time.split(' to ');
+            // Split endDate into MM-DD-YYYY format
+            const [day, month, year] = auction.endDate.split('-').map(Number);
 
-            return {
-                startDateTime: new Date(`${startDate} ${startTime}`),
-                endDateTime: new Date(`${endDate} ${endTime}`),
-            };
-        };
+            // Create a Date object in LOCAL TIME
+            const endDateTime = new Date(year, month - 1, day);
 
+            // Extract hours and minutes from endTime (assume 12-hour format with AM/PM)
+            const [time, period] = auction.endTime.split(' ');
+            let [hours, minutes] = time.split(':').map(Number);
 
-        const calculateCountdown = () => {
-            const { endDateTime } = parseDateTime();
+            if (period.toLowerCase() === 'pm' && hours !== 12) hours += 12;
+            if (period.toLowerCase() === 'am' && hours === 12) hours = 0;
 
-            if (!endDateTime) {
-                setCountdown(''); // Auction ended or invalid data
+            // Set correct hours & minutes
+            endDateTime.setHours(hours, minutes, 0, 0);
+
+            console.log(auction.id, " - End Time: ", endDateTime);
+
+            if (isNaN(endDateTime.getTime())) {
+                setCountdown(''); // Invalid date
                 return;
             }
 
@@ -49,12 +55,12 @@ const AuctionDetails = ({ auction }: any) => {
             }
         };
 
-
         calculateCountdown(); // Initial calculation
         const interval = setInterval(calculateCountdown, 1000); // Update every second
 
         return () => clearInterval(interval); // Cleanup on component unmount
-    }, [auction?.date, auction?.time]);
+    }, [auction?.endDate, auction?.endTime]);
+
 
     return (
         <Box className={classes.container}>

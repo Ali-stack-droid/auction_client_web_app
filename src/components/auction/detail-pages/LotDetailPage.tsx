@@ -33,25 +33,29 @@ const LotDetailPage = () => {
     const [countdown, setCountdown] = useState<string>('2 days : 22 hours : 12 minutes : 54 seconds');
 
     useEffect(() => {
-        const parseDateTime = () => {
-            if (!lotDetails || !lotDetails.date || !lotDetails.time) {
-                return { startDateTime: new Date(0), endDateTime: new Date(0) }; // Default to epoch time
+        const calculateCountdown = () => {
+            if (!lotDetails?.endDate || !lotDetails?.endTime) {
+                setCountdown(''); // Handle missing data
+                return;
             }
 
-            const [startDate, endDate] = lotDetails.date.split(' to ');
-            const [startTime, endTime] = lotDetails.time.split(' to ');
+            // Split endDate into MM-DD-YYYY format
+            const [day, month, year] = lotDetails.endDate.split('-').map(Number);
 
-            return {
-                startDateTime: new Date(`${startDate} ${startTime}`),
-                endDateTime: new Date(`${endDate} ${endTime}`),
-            };
-        };
+            // Create a Date object in LOCAL TIME
+            const endDateTime = new Date(year, month - 1, day);
 
-        const calculateCountdown = () => {
-            const { endDateTime } = parseDateTime();
+            // Extract hours and minutes from endTime (assume 12-hour format with AM/PM)
+            const [time, period] = lotDetails.endTime.split(' ');
+            let [hours, minutes] = time.split(':').map(Number);
 
-            if (!endDateTime) {
-                setCountdown(''); // Auction ended or invalid data
+            if (period.toLowerCase() === 'pm' && hours !== 12) hours += 12;
+            if (period.toLowerCase() === 'am' && hours === 12) hours = 0;
+
+            // Set correct hours & minutes
+            endDateTime.setHours(hours, minutes, 0, 0);
+            if (isNaN(endDateTime.getTime())) {
+                setCountdown(''); // Invalid date
                 return;
             }
 
@@ -69,7 +73,6 @@ const LotDetailPage = () => {
                 setCountdown(''); // Auction ended
             }
         };
-
 
         calculateCountdown(); // Initial calculation
         const interval = setInterval(calculateCountdown, 1000); // Update every second

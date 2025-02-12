@@ -29,6 +29,8 @@ const CurrentAuctions = () => {
                     id: item.Id,
                     name: item.Name,
                     image: item.Image,
+                    endDate: item.EndDate,
+                    endTime: item.EndTime,
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,
                     details: {
