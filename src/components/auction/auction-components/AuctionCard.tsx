@@ -18,7 +18,9 @@ const AuctionCard = ({
     headerType,
     cardData,
     isFaverited,
-    setPaginationedData
+    setPaginationedData,
+    isLiveLot,
+    handleNextLot
 }: any) => {
     const classes = useAuctionCardStyles();
     const navigate = useNavigate();
@@ -30,6 +32,9 @@ const AuctionCard = ({
     const [faverite, setFaverite] = useState(isFaverited)
 
     const handleCardMediaClick = () => {
+        if (isLiveLot) {
+            return handleNextLot(cardData.id);
+        }
         if (headerType === "live") {
             navigate(`/live/details?aucId=${cardData.id}`);
         } else if (headerType === "lots") {
