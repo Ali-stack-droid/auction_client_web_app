@@ -147,19 +147,16 @@ const AuctionDetailPage = () => {
         const fetchAuctionLots = async () => {
             let response;
             if (isCurrentAuction) {
-                response = selectedLocation
-                    ? await getCurrentLotsByLocation(selectedLocation)
-                    : await getCurrentLots()
+                response = await getCurrentLots()
             } else {
-                response = selectedLocation
-                    ? await getPastLotsByLocation(selectedLocation)
-                    : await getPastLots();
+                response = await getPastLots();
             }
 
 
             if (response.data.length > 0) {
                 const formattedLots = response.data.map((item: any) => ({
                     id: item.Id,
+                    address: item.Address,
                     lotNumber: item.LotNo,
                     name: item.ShortDescription,
                     description: item.LongDescription,
@@ -215,7 +212,15 @@ const AuctionDetailPage = () => {
         }
 
         fetchAuctionLots();
-    }, [selectedLocation, isCurrentAuction]);
+    }, [isCurrentAuction]);
+
+    useEffect(() => {
+        if (selectedLocation) {
+            setPaginationedData(auctionLots.filter((item: any) => item.address === selectedLocation))
+        } else {
+            setPaginationedData(auctionLots)
+        }
+    }, [selectedLocation])
 
     const isFaverited = (lotId: any) => {
         return favouriteLots.some((lot: any) => lot.id === lotId);
