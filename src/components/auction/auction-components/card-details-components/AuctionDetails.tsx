@@ -33,8 +33,6 @@ const AuctionDetails = ({ auction }: any) => {
             // Set correct hours & minutes
             endDateTime.setHours(hours, minutes, 0, 0);
 
-            console.log(auction.id, " - End Time: ", endDateTime);
-
             if (isNaN(endDateTime.getTime())) {
                 setCountdown(''); // Invalid date
                 return;
