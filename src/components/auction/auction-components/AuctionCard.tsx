@@ -132,6 +132,17 @@ const AuctionCard = ({
                         {headerType === "live" && cardData?.isLive ? "Live Streaming Auction" : cardData.sold ? "Sold" : "Unsold"}
                     </Button>
                 }
+                {
+                    (location.pathname === "/listings" && cardData.isLive) &&
+
+                    <Button
+                        variant="contained"
+                        size="small"
+                        className={classes.liveButton}
+                    >
+                        Live
+                    </Button>
+                }
 
             </Box>
             <Box className={classes.contentWrapper}>
