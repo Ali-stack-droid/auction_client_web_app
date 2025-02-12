@@ -72,6 +72,14 @@ const AuctionCard = ({
         }
     };
 
+    const handleSubmit = () => {
+        if (cardData.isLive) {
+            navigate(`/live/details?aucId=${cardData.auctionId}&lotId=${cardData.id}`)
+        } else {
+            navigate(`/listings/details?lotId=${cardData.id}`)
+        }
+    }
+
     return (
         <Card className={classes.card} elevation={2}>
             {/* Auction Image */}
@@ -181,6 +189,7 @@ const AuctionCard = ({
                                             variant="contained"
                                             color="primary"
                                             className={classes.submitBtn}
+                                            onClick={() => handleSubmit()}
                                         >
                                             Submit
                                         </Button>

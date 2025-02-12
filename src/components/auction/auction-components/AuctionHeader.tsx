@@ -35,7 +35,7 @@ const AuctionHeader = ({
     return (
         <Box>
             <Typography className={classes.title}>
-                {headerType === 'listings' ? "All Auction Listings"
+                {headerType === 'listings' ? "All Lots Listing"
                     : headerType === 'live' ? "Live Stream"
                         : headerType === 'watchlist' ? "Watchlist:"
                             : "Current Auction"

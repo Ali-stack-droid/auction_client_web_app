@@ -73,12 +73,15 @@ const FeaturedAuctions = () => {
 
                 const updatedData = response.data.map((item: any) => ({
                     id: item.Id,
+                    auctionId: item.AuctionId,
                     name: item.Name || item.ShortDescription,
                     image: item.Image,
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,
                     endDate: item.EndDate,
                     endTime: item.EndTime,
+                    bidAmount: item.BidStartAmount,
+                    isLive: item.IsLive,
                     details: {
                         location: `${item.City}, ${item.Country}`,
                         dateRange: `${item.StartDate} to ${item.EndDate}`,
