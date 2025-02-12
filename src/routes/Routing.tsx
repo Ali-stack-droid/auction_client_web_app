@@ -29,7 +29,7 @@ const PublicRoute = ({ children }: any) => {
 
 const ProtectedRoute = ({ isAuthenticated, children }: any) => {
     if (!isAuthenticated) {
-        return <Navigate to="/signup" />;
+        return <Navigate to="/login" />;
     }
     return <AppProvider>{children}</AppProvider>;
 };
