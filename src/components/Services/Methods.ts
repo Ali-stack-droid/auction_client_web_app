@@ -10,7 +10,7 @@ export const updatePassword = (payload: any) => putRequest('/clients/updatepassw
 export const changePassword = (payload: any) => putRequest('/clients/changepassword', payload);
 
 // Landing page APIs
-export const getFeaturedAuctionsByLocation = () => getRequest('/auctions/featuredauctionsbylocation')
+export const getFeaturedAuctionsByLocation = () => getRequest('/auctions/auctionsbylocation')
 export const getFeaturedAuctions = () => getRequest('/auctions/featuredauctions')
 export const getFeaturedLots = () => getRequest('/lots/featuredlisting')
 

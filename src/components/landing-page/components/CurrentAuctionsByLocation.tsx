@@ -23,10 +23,11 @@ const CurrentAuctionsByLocation = () => {
         try {
             // Critical request:
             let response = await getFeaturedAuctionsByLocation()
+
             if (response.data && response.data.length > 0) {
 
                 const currentLocationAuctions = response.data
-                const updatedData = currentLocationAuctions[0].Auctions.map((item: any) => ({
+                const updatedData = currentLocationAuctions.map((item: any) => ({
                     id: item.Id,
                     name: item.Name || "Monthly Public Auction",
                     image: item.Image,
@@ -37,7 +38,8 @@ const CurrentAuctionsByLocation = () => {
                         lotsAvailable: item.TotalLots // Replace with actual data if available
                     }
                 }));
-                setFilteredData(updatedData.length > 2 ? updatedData.slice(0, 3) : updatedData);
+                const filteredByLocation = updatedData.filter((item: any) => item.details.location === updatedData[0].details.location);
+                setFilteredData(filteredByLocation.length > 2 ? filteredByLocation.slice(0, 3) : filteredByLocation);
             } else {
                 setFilteredData([]);
             }
