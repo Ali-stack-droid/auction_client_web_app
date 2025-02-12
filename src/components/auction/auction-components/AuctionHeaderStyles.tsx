@@ -90,9 +90,11 @@ const useAuctionHeaderStyles = makeStyles((theme: any) => ({
     menuItem: {
         '&.selected': {
             backgroundColor: theme.palette.primary.main,
+            color: 'white',
         },
         '&:hover': {
             backgroundColor: theme.palette.primary.main6,
+            color: 'initial',
         },
     },
     paginationButton: {
