@@ -126,6 +126,7 @@ const usePaymentTrackingStyles = makeStyles((theme: any) => ({
         },
         '&:hover': {
             backgroundColor: theme.palette.primary.main6,
+            color: 'initial',
         },
     },
 }));

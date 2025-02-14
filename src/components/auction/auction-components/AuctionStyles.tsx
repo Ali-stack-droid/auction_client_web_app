@@ -83,6 +83,18 @@ export const useAuctionCardStyles = makeStyles({
         fontSize: "11px"
 
     },
+    liveButton: {
+        backgroundColor: "#C91818",
+        position: 'absolute',
+        top: "10px",
+        left: "10px",
+        pointerEvents: 'none', // Prevent interaction while keeping styles
+        opacity: 0.9, // Maintain original appearance
+        width: "70px",
+        height: "37.47px",
+        fontSize: "13px",
+        textTransform: "none"
+    },
     soldButton: {
         backgroundColor: "#009045",
         position: 'absolute',

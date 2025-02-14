@@ -97,6 +97,7 @@ const AuctionListings = () => {
                     id: item.Id,
                     name: item.ShortDescription,
                     image: item.Image,
+                    isLive: item.IsLive,
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,
                     endDate: item.EndDate,

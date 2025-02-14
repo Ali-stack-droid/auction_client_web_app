@@ -35,7 +35,7 @@ const AuctionHeader = ({
     return (
         <Box>
             <Typography className={classes.title}>
-                {headerType === 'listings' ? "All Auction Listings"
+                {headerType === 'listings' ? "All Lots Listing"
                     : headerType === 'live' ? "Live Stream"
                         : headerType === 'watchlist' ? "Watchlist:"
                             : "Current Auction"
@@ -76,13 +76,13 @@ const AuctionHeader = ({
                                     value="current"
                                     className={`${classes.toggleButton} ${isCurrent ? 'current' : 'past'}`}
                                 >
-                                    Current {headerType === 'listings' ? 'Lots' : 'Auctions'}
+                                    Current {(headerType === 'lots' || headerType === 'listings') ? 'Lots' : 'Auctions'}
                                 </ToggleButton>
                                 <ToggleButton
                                     value="past"
                                     className={`${classes.toggleButton} ${!isCurrent ? 'current' : 'past'}`}
                                 >
-                                    Past {headerType === 'listings' ? 'Lots' : 'Auctions'}
+                                    Past {(headerType === 'lots' || headerType === 'listings') ? 'Lots' : 'Auctions'}
                                 </ToggleButton>
                             </ToggleButtonGroup>
                         </Box>

@@ -18,7 +18,9 @@ const AuctionCard = ({
     headerType,
     cardData,
     isFaverited,
-    setPaginationedData
+    setPaginationedData,
+    isLiveLot,
+    handleNextLot
 }: any) => {
     const classes = useAuctionCardStyles();
     const navigate = useNavigate();
@@ -30,6 +32,9 @@ const AuctionCard = ({
     const [faverite, setFaverite] = useState(isFaverited)
 
     const handleCardMediaClick = () => {
+        if (isLiveLot) {
+            return handleNextLot(cardData.id);
+        }
         if (headerType === "live") {
             navigate(`/live/details?aucId=${cardData.id}`);
         } else if (headerType === "lots") {
@@ -71,6 +76,14 @@ const AuctionCard = ({
             ErrorMessage('Error adding to watchlist!')
         }
     };
+
+    const handleSubmit = () => {
+        if (cardData.isLive) {
+            navigate(`/live/details?aucId=${cardData.auctionId}&lotId=${cardData.id}`)
+        } else {
+            navigate(`/listings/details?lotId=${cardData.id}`)
+        }
+    }
 
     return (
         <Card className={classes.card} elevation={2}>
@@ -117,6 +130,17 @@ const AuctionCard = ({
                         className={headerType === "live" ? classes.unSoldButtonLive : `${classes.soldButton} ${!cardData.sold ? classes.unSoldButton : ''}`}
                     >
                         {headerType === "live" && cardData?.isLive ? "Live Streaming Auction" : cardData.sold ? "Sold" : "Unsold"}
+                    </Button>
+                }
+                {
+                    (location.pathname === "/listings" && cardData.isLive) &&
+
+                    <Button
+                        variant="contained"
+                        size="small"
+                        className={classes.liveButton}
+                    >
+                        Live
                     </Button>
                 }
 
@@ -181,6 +205,7 @@ const AuctionCard = ({
                                             variant="contained"
                                             color="primary"
                                             className={classes.submitBtn}
+                                            onClick={() => handleSubmit()}
                                         >
                                             Submit
                                         </Button>
