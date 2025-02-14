@@ -76,13 +76,13 @@ const AuctionHeader = ({
                                     value="current"
                                     className={`${classes.toggleButton} ${isCurrent ? 'current' : 'past'}`}
                                 >
-                                    Current {headerType === 'lots' ? 'Lots' : 'Auctions'}
+                                    Current {(headerType === 'lots' || headerType === 'listings') ? 'Lots' : 'Auctions'}
                                 </ToggleButton>
                                 <ToggleButton
                                     value="past"
                                     className={`${classes.toggleButton} ${!isCurrent ? 'current' : 'past'}`}
                                 >
-                                    Past {headerType === 'lots' ? 'Lots' : 'Auctions'}
+                                    Past {(headerType === 'lots' || headerType === 'listings') ? 'Lots' : 'Auctions'}
                                 </ToggleButton>
                             </ToggleButtonGroup>
                         </Box>
