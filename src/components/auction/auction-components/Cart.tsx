@@ -8,7 +8,8 @@ import {
     Radio,
     RadioGroup,
     FormControlLabel,
-    Paper
+    Paper,
+    Dialog
 
 } from "@mui/material";
 import { Formik, Field, useFormik } from "formik";
@@ -17,34 +18,49 @@ import CartStyles from './CartStyles';
 import CustomTextField from '../../custom-components/CustomTextField';
 import { CustomMultiLineTextField } from '../../custom-components/CustomMultiLineTextField';
 import Stripe from 'stripe';
-
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CompletePage from '../../../utils/CompletePage';
+import CheckoutForm from '../../../utils/CheckoutForm';
+import { getQueryParam } from '../../../helper/GetQueryParam';
 
 const Cart = () => {
 
-    const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY as string);
+    // const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY as string);
+    const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY as string);
+    console.log("stripePromise: ", stripePromise)
     const classes = CartStyles();
 
     // Import required modules
 
-    const [submissionAttempt, setSubmissionAttempt] = useState(false);
-
+    const [clientSecret, setClientSecret] = useState("");
     const [open, setOpen] = useState(false);
 
+    const appearance: any = {
+        theme: 'stripe',
+    };
+    // Enable the skeleton loader UI for optimal loading.
+    const loader = 'auto';
+
+    // useEffect(() => {
+    //     // Create PaymentIntent as soon as the page loads
+    //     fetch("/create-payment-intent", {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify({ items: [{ id: getQueryParam('lotId'), amount: 500 }] }),
+    //     })
+    //         .then((res) => res.json())
+    //         .then((data) => setClientSecret(data.clientSecret));
+    // }, []);
+
     const handleClose = () => setOpen(false);
+    const handleClosePayment = () => setClientSecret("");
 
+    const handlePayment = async () => {
+        setTimeout(() => {
+            setClientSecret("mock_client_secret_12345"); // Fake response
+        }, 1000); // Simulate API delay
 
-    const stripeFunction = async () => {
-        // const customer = await stripe.customers.create({
-        //     email: 'customer@example.com',
-        // });
-
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: 5000, // amount in cents
-            currency: 'usd',
-            payment_method_types: ['card'],
-        });
-
-        console.log(paymentIntent);
     }
 
     return (
@@ -284,12 +300,13 @@ const Cart = () => {
                                 {/* Submit Button */}
                                 <Grid className={classes.gridStyle} item xs={12}>
                                     <Button
-                                        onClick={() => setSubmissionAttempt(!submissionAttempt)}
+                                        onClick={() => handlePayment()}
                                         type="submit"
                                         variant="contained"
                                         color="primary"
                                         fullWidth
-                                        className={classes.submitButton}                                    >
+                                        className={classes.submitButton}
+                                    >
                                         Complete Auction Process
                                     </Button>
                                 </Grid>
@@ -297,6 +314,19 @@ const Cart = () => {
                         </form>
                     )}
                 </Formik>
+                {clientSecret && (
+                    // <Elements options={{ clientSecret, appearance, loader }} stripe={stripePromise}>
+                    <Elements options={{ mode: "setup", appearance, loader, currency: "usd", }} stripe={stripePromise}>
+                        {/* <Routes>
+                            <Route path="/checkout" element={<CheckoutForm />} />
+                            <Route path="/complete" element={<CompletePage />} />
+                        </Routes> */}
+                        <Dialog maxWidth="md" open={clientSecret !== ""} onClose={handleClosePayment}>
+                            <CheckoutForm />
+                        </Dialog>
+                        {/* <CompletePage /> */}
+                    </Elements>
+                )}
                 {/* Modal */}
                 <Modal open={open} onClose={handleClose}>
                     <Box
