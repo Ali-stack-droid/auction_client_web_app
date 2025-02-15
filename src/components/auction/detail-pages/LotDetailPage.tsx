@@ -28,9 +28,39 @@ const LotDetailPage = () => {
 
     const [lotDetails, setLotDetails]: any = useState({})
     const [isFetchingData, setIsFetchingData] = useState(false)
+    const [bidAmount, setBidAmount] = useState(0)
 
     const [mainImage, setMainImage] = useState("");
     const [countdown, setCountdown] = useState<string>('2 days : 22 hours : 12 minutes : 54 seconds');
+
+    const fakeBidRanges = [
+        {
+            id: 1,
+            startAmount: 51,
+            endAmount: 201,
+            bidRange: 50,
+        },
+        {
+            id: 2,
+            startAmount: 202,
+            endAmount: 502,
+            bidRange: 100,
+        },
+        {
+            id: 3,
+            startAmount: 503,
+            endAmount: 653,
+            bidRange: 50,
+        },
+        {
+            id: 4,
+            startAmount: 653,
+            endAmount: 1253,
+            bidRange: 200,
+        },
+    ];
+
+
 
     useEffect(() => {
         const calculateCountdown = () => {
@@ -140,6 +170,11 @@ const LotDetailPage = () => {
                 };
                 setMainImage(formattedLotDetails.image || `${process.env.PUBLIC_URL}/assets/pngs/placeholder.png`)
                 setLotDetails(formattedLotDetails);
+                const bidRange = fakeBidRanges.find((range: any) =>
+                    formattedLotDetails.highestBid >= range.startAmount &&
+                    formattedLotDetails.highestBid < range.endAmount
+                );
+                setBidAmount(formattedLotDetails.highestBid + (bidRange ? bidRange.bidRange : 0));
             } else {
                 setLotDetails([]);
             }
@@ -149,6 +184,16 @@ const LotDetailPage = () => {
             setIsFetchingData(false);
         }
     };
+
+    const handleBidNow = () => {
+        const range: any = fakeBidRanges.find((range: any) =>
+            bidAmount >= range.startAmount &&
+            bidAmount < range.endAmount
+        );
+        if (range) {
+            setBidAmount(bidAmount + range.bidRange);
+        }
+    }
 
     return (
 
@@ -273,11 +318,14 @@ const LotDetailPage = () => {
                             placeholder="Enter Your Bid Amount"
                             variant="outlined"
                             sx={{ flex: 1, mr: '10px' }}
+                            value={bidAmount}
+                            inputProps={{ readOnly: true }}
                         />
 
                         <Button
                             className={classes.submitBtn}
                             variant="contained"
+                            onClick={() => handleBidNow()}
                         >
                             Submit
                         </Button>
