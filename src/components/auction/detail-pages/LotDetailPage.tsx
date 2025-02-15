@@ -37,12 +37,12 @@ const LotDetailPage = () => {
         {
             id: 1,
             startAmount: 51,
-            endAmount: 201,
+            endAmount: 200,
             bidRange: 50,
         },
         {
             id: 2,
-            startAmount: 202,
+            startAmount: 200,
             endAmount: 502,
             bidRange: 100,
         },
@@ -192,6 +192,8 @@ const LotDetailPage = () => {
         );
         if (range) {
             setBidAmount(bidAmount + range.bidRange);
+        } else {
+            setBidAmount(bidAmount + 400);
         }
     }
 
@@ -306,7 +308,7 @@ const LotDetailPage = () => {
                         }}
                         onClick={() => navigate(`/cart?aucId=${lotDetails.id}`)}
                     >
-                        Bid Now: ${lotDetails.highestBid}
+                        Bid Now: ${bidAmount}
                     </Button>
 
                     <Divider sx={{ my: 2 }} />
