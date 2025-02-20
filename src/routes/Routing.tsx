@@ -15,6 +15,8 @@ import Invoices from '../components/invoices/Invoices';
 import WatchList from '../components/auction/auction-components/Watchlist';
 import LotDetailPage from '../components/auction/detail-pages/LotDetailPage';
 import Cart from '../components/auction/auction-components/Cart';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 
 
@@ -33,6 +35,8 @@ const ProtectedRoute = ({ isAuthenticated, children }: any) => {
     }
     return <AppProvider>{children}</AppProvider>;
 };
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY as string);
 
 const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
 
@@ -164,7 +168,9 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             path="/cart"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <Cart />
+                                    <Elements stripe={stripePromise}>
+                                        <Cart />
+                                    </Elements>
                                 </ProtectedRoute>
                             }
                         />

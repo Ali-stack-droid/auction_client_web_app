@@ -9,59 +9,108 @@ import {
     RadioGroup,
     FormControlLabel,
     Paper,
-    Dialog
+    Dialog,
+    DialogContent
 
 } from "@mui/material";
-import { Formik, Field, useFormik } from "formik";
+import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import CartStyles from './CartStyles';
 import CustomTextField from '../../custom-components/CustomTextField';
 import { CustomMultiLineTextField } from '../../custom-components/CustomMultiLineTextField';
-import Stripe from 'stripe';
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import CompletePage from '../../../utils/CompletePage';
-import CheckoutForm from '../../../utils/CheckoutForm';
-import { getQueryParam } from '../../../helper/GetQueryParam';
+import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js";
+import axios from 'axios';
+import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages';
 
 const Cart = () => {
 
     // const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY as string);
-    const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY as string);
-    console.log("stripePromise: ", stripePromise)
-    const classes = CartStyles();
+    const classes = CartStyles()
 
-    // Import required modules
-
-    const [clientSecret, setClientSecret] = useState("");
     const [open, setOpen] = useState(false);
-
-    const appearance: any = {
-        theme: 'stripe',
-    };
-    // Enable the skeleton loader UI for optimal loading.
-    const loader = 'auto';
-
-    // useEffect(() => {
-    //     // Create PaymentIntent as soon as the page loads
-    //     fetch("/create-payment-intent", {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ items: [{ id: getQueryParam('lotId'), amount: 500 }] }),
-    //     })
-    //         .then((res) => res.json())
-    //         .then((data) => setClientSecret(data.clientSecret));
-    // }, []);
-
+    const [paymentModal, setPaymentModal] = useState(false);
     const handleClose = () => setOpen(false);
-    const handleClosePayment = () => setClientSecret("");
+    const handleClosePaymentModal = () => setPaymentModal(false);
 
-    const handlePayment = async () => {
-        setTimeout(() => {
-            setClientSecret("mock_client_secret_12345"); // Fake response
-        }, 1000); // Simulate API delay
+    const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY as string);
 
-    }
+
+    const CheckoutForm = () => {
+        const stripe = useStripe();
+        const elements = useElements();
+        const [amount, setAmount] = useState("");
+        const [email, setEmail] = useState("");
+        const [loading, setLoading] = useState(false);
+        const [message, setMessage] = useState("");
+
+        const handleSubmit = async (e: any) => {
+            e.preventDefault();
+
+            if (!stripe || !elements) {
+                return;
+            }
+
+            setLoading(true);
+            setMessage("");
+
+            const cardElement: any = elements.getElement(CardElement);
+            const { token, error }: any = await stripe.createToken(cardElement);
+
+            if (error) {
+                setMessage(error.message);
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await axios.post("https://auction.sttoro.com/api/payment/paymentrequest", {
+                    Token: token.id,
+                    Amount: parseFloat(amount),
+                    Description: "Auction Payment",
+                    Email: email,
+                    InvoiceId: getQueryParam('paymentId')
+                });
+
+                if (response.status === 201) {
+                    SuccessMessage("Payment successful!");
+                } else {
+                    ErrorMessage("Payment failed. Please try again.");
+                }
+            } catch (err: any) {
+                console.error("Error processing payment: " + err.message);
+            } finally {
+                handleClosePaymentModal();
+            }
+
+            setLoading(false);
+        };
+
+        return (
+            <form onSubmit={handleSubmit} style={styles.form}>
+                <h2>💳 Stripe Payment</h2>
+                <input type="text" placeholder="Enter amount" value={amount} onChange={(e) => setAmount(e.target.value)} style={styles.input} required />
+                <input type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} required />
+
+                <CardElement options={{ hidePostalCode: true, style: styles.card }} />
+
+                <button type="submit" disabled={!stripe || loading} style={styles.button}>
+                    {loading ? "Processing..." : "Pay Now"}
+                </button>
+
+                {message && <p style={styles.message}>{message}</p>}
+            </form>
+        );
+    };
+
+    // Styles
+    const styles: any = {
+        form: { width: "400px", margin: "50px auto", padding: "20px", border: "1px solid #ddd", borderRadius: "5px", background: "#fff", textAlign: "center" },
+        input: { width: "100%", padding: "10px", marginBottom: "10px", border: "1px solid #ddd", borderRadius: "5px" },
+        card: { padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginBottom: "10px" },
+        button: { background: "#28a745", color: "#fff", padding: "10px", border: "none", borderRadius: "5px", cursor: "pointer", width: "100%" },
+        message: { marginTop: "10px", color: "#d9534f" },
+    };
 
     return (
         <Box pb={'80px'}>
@@ -300,7 +349,7 @@ const Cart = () => {
                                 {/* Submit Button */}
                                 <Grid className={classes.gridStyle} item xs={12}>
                                     <Button
-                                        onClick={() => handlePayment()}
+                                        onClick={() => setPaymentModal(true)}
                                         type="submit"
                                         variant="contained"
                                         color="primary"
@@ -314,19 +363,14 @@ const Cart = () => {
                         </form>
                     )}
                 </Formik>
-                {clientSecret && (
-                    // <Elements options={{ clientSecret, appearance, loader }} stripe={stripePromise}>
-                    <Elements options={{ mode: "setup", appearance, loader, currency: "usd", }} stripe={stripePromise}>
-                        {/* <Routes>
-                            <Route path="/checkout" element={<CheckoutForm />} />
-                            <Route path="/complete" element={<CompletePage />} />
-                        </Routes> */}
-                        <Dialog maxWidth="md" open={clientSecret !== ""} onClose={handleClosePayment}>
+                <Dialog open={paymentModal} onClose={handleClosePaymentModal} style={{ width: '100%' }}>
+                    <DialogContent>
+                        <Elements stripe={stripePromise}>
                             <CheckoutForm />
-                        </Dialog>
-                        {/* <CompletePage /> */}
-                    </Elements>
-                )}
+                        </Elements>
+                    </DialogContent>
+                </Dialog>
+
                 {/* Modal */}
                 <Modal open={open} onClose={handleClose}>
                     <Box
