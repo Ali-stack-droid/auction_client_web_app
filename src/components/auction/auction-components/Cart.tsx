@@ -22,6 +22,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from 'axios';
 import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages';
+import { getQueryParam } from '../../../helper/GetQueryParam';
 
 const Cart = () => {
 
