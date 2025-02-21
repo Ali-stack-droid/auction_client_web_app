@@ -23,8 +23,11 @@ import { CardElement, Elements, useElements, useStripe } from "@stripe/react-str
 import axios from 'axios';
 import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages';
 import { getQueryParam } from '../../../helper/GetQueryParam';
+import { getInvoiceDetails, getLotDetailsById, getUnpaidInvoices, paymentRequest } from '../../Services/Methods';
+import Cookies from 'js-cookie';
 
 const Cart = () => {
+    const [amount, setAmount] = useState("");
 
     // const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY as string);
     const classes = CartStyles()
@@ -35,15 +38,66 @@ const Cart = () => {
     const handleClosePaymentModal = () => setPaymentModal(false);
 
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY as string);
+    const [isFetchingData, setIsFetchingData] = useState({});
+    const [invoice, setInvoice] = useState({});
+    const [lot, setLot] = useState({});
+    const [email, setEmail] = useState("");
+
+
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const client = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user) : Cookies.get('user')
+            ? JSON.parse(user) : {})
+
+    useEffect(() => {
+
+        const fetchLotDetails = async () => {
+            try {
+                const response = await getLotDetailsById(getQueryParam('lotId'));
+                const lotDescription = response.data?.Lot?.ShortDescription;
+                if (lotDescription) {
+                    setLot(lotDescription);
+                } else {
+                    setLot([]);
+                }
+            } catch (error) {
+                setIsFetchingData(false);
+            } finally {
+                setIsFetchingData(false);
+            }
+        };
+        fetchLotDetails();
+    }, [])
+
+
+    useEffect(() => {
+        const fetchInvoices = async () => {
+            setIsFetchingData(true)
+            try {
+                const response = await getInvoiceDetails(getQueryParam('paymentId'));
+
+                if (response.data) {
+                    setInvoice(response.data);
+                    setAmount(response.data.TotalAmount)
+                    setEmail(client.email)
+                } else {
+                    setInvoice({});
+                }
+            } catch (error) {
+            } finally {
+                setIsFetchingData(false)
+            }
+        };
+        fetchInvoices();
+    }, [])
 
 
     const CheckoutForm = () => {
         const stripe = useStripe();
         const elements = useElements();
-        const [amount, setAmount] = useState("");
-        const [email, setEmail] = useState("");
         const [loading, setLoading] = useState(false);
         const [message, setMessage] = useState("");
+
 
         const handleSubmit = async (e: any) => {
             e.preventDefault();
@@ -64,14 +118,16 @@ const Cart = () => {
                 return;
             }
 
+            const invoiceId: string = getQueryParam('paymentId')!;
+            const payload = {
+                Token: token.id,
+                Amount: parseFloat(amount),
+                Description: lot,
+                Email: email,
+                InvoiceId: parseInt(invoiceId)
+            }
             try {
-                const response = await axios.post("https://auction.sttoro.com/api/payment/paymentrequest", {
-                    Token: token.id,
-                    Amount: parseFloat(amount),
-                    Description: "Auction Payment",
-                    Email: email,
-                    InvoiceId: getQueryParam('paymentId')
-                });
+                const response = await paymentRequest(payload);
 
                 if (response.status === 201) {
                     SuccessMessage("Payment successful!");
@@ -90,7 +146,7 @@ const Cart = () => {
         return (
             <form onSubmit={handleSubmit} style={styles.form}>
                 <h2>💳 Stripe Payment</h2>
-                <input type="text" placeholder="Enter amount" value={amount} onChange={(e) => setAmount(e.target.value)} style={styles.input} required />
+                <input type="text" placeholder="Enter amount" value={amount} onChange={(e) => e.preventDefault()} style={styles.input} required />
                 <input type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} required />
 
                 <CardElement options={{ hidePostalCode: true, style: styles.card }} />

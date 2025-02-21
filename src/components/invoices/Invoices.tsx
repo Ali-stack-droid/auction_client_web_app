@@ -34,8 +34,8 @@ const Invoices = () => {
         setIsFetchingData(true)
         try {
             const response = paidInvoice
-                ? await getPaidInvoices(5)
-                : await getUnpaidInvoices(5);
+                ? await getPaidInvoices(clientId)
+                : await getUnpaidInvoices(clientId);
 
             if (response.data && response.data.length > 0) {
 
@@ -98,8 +98,8 @@ const Invoices = () => {
         setViewDetails(true)
     }
 
-    const handlePayNow = (paymentId: any) => {
-        navigate(`/cart?paymentId=${paymentId}`)
+    const handlePayNow = (paymentId: any, lotId: number) => {
+        navigate(`/cart?paymentId=${paymentId}&lotId=${lotId}`)
     }
     // Calculate the number of pages based on the length of tableData. Keep it
     const totalPages = Math.ceil(invoices.length / rowsPerPage);
@@ -176,7 +176,7 @@ const Invoices = () => {
                                         {paidInvoice ?
                                             <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleInvoiceDownload(index)}>Download</Button>
                                             :
-                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handlePayNow(row.id)}>Pay Now</Button>
+                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handlePayNow(row.invoiceId, row.lotId)}>Pay Now</Button>
                                         }
                                     </TableCell>
                                 </TableRow>

@@ -38,6 +38,7 @@ export const placeBid = (payload: any) => postWithFormRequest('/lots/newbid', pa
 // Payment Tracking Methods
 export const getPaidInvoices = (id: any) => getRequest(`/invoices/clientpaidinvoice?id=${id}`);
 export const getUnpaidInvoices = (id: any) => getRequest(`/invoices/clientpendinginvoice?id=${id}`);
+export const getInvoiceDetails = (id: any) => getRequest(`/invoices/invoicedetailsbyid?id=${id}`);
 
 // Location Methods
 export const getCurrentLocations = () => getRequest('/auctions/currentlocations');
@@ -54,3 +55,4 @@ export const getCurrentLiveAuctions = () => getRequest('/auctions/currentliveauc
 
 // Stripe Methods
 export const createPaymentIntent = () => getRequest('/create-payment-intent');
+export const paymentRequest = (payload: any) => postRequest('/payment/paymentrequest', payload); 
