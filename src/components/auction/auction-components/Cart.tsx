@@ -67,7 +67,7 @@ const Cart = () => {
             }
         };
         fetchLotDetails();
-    }, [])
+    }, [getQueryParam('lotId')])
 
 
     useEffect(() => {
@@ -162,10 +162,10 @@ const Cart = () => {
 
     // Styles
     const styles: any = {
-        form: { width: "400px", margin: "50px auto", padding: "20px", border: "1px solid #ddd", borderRadius: "5px", background: "#fff", textAlign: "center" },
-        input: { width: "100%", padding: "10px", marginBottom: "10px", border: "1px solid #ddd", borderRadius: "5px" },
+        // form: { width: "400px", margin: "50px auto", padding: "10px", border: "1px solid #ddd", borderRadius: "5px", background: "#fff", textAlign: "center" },
+        input: { width: "90%", padding: "10px", marginBottom: "10px", border: "1px solid #ddd", borderRadius: "5px" },
         card: { padding: "10px", border: "1px solid #ddd", borderRadius: "5px", marginBottom: "10px" },
-        button: { background: "#28a745", color: "#fff", padding: "10px", border: "none", borderRadius: "5px", cursor: "pointer", width: "100%" },
+        button: { marginTop: "10px", background: "#28a745", color: "#fff", padding: "10px", border: "none", borderRadius: "5px", cursor: "pointer", width: "100%" },
         message: { marginTop: "10px", color: "#d9534f" },
     };
 
