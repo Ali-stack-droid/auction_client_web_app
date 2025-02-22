@@ -28,7 +28,7 @@ const LotDetailPage = () => {
     const classes = useDetailStyles();
     const navigate = useNavigate();
     const { sendMessage, setUser, createRoom, joinRoom, leaveRoom, deleteRoom, ws, } = useWebSocket();
-   const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
     const clientName = (sessionStorage.getItem('authToken') ?
         JSON.parse(user).name : Cookies.get('user')
             ? JSON.parse(user).name : '')
@@ -36,7 +36,7 @@ const LotDetailPage = () => {
     const [isFetchingData, setIsFetchingData] = useState(false)
     const [bidAmount, setBidAmount] = useState(0)
 
-    const [mainImage, setMainImage] = useState("");
+    const [lotImages, setLotImages] = useState([]);
     const [countdown, setCountdown] = useState<string>('2 days : 22 hours : 12 minutes : 54 seconds');
 
     const fakeBidRanges = [
@@ -132,7 +132,7 @@ const LotDetailPage = () => {
         try {
             const response = await getLotDetailsById(getQueryParam('lotId'));
             const lot = response.data?.Lot;
-            const images = [
+            const images: any = [
                 ...(lot.Image ? [lot.Image] : []),
                 ...(response.data?.Images || []).map((img: any) => img.Image)
             ];
@@ -179,7 +179,7 @@ const LotDetailPage = () => {
                         bidRangeAmount: bid.BidRange,
                     })),
                 };
-                setMainImage(formattedLotDetails.image || `${process.env.PUBLIC_URL}/assets/pngs/placeholder.png`)
+                setLotImages(images)
                 setLotDetails(formattedLotDetails);
                 const bidRange = fakeBidRanges.find((range: any) =>
                     formattedLotDetails.highestBid >= range.startAmount &&
@@ -188,6 +188,7 @@ const LotDetailPage = () => {
                 setBidAmount(formattedLotDetails.highestBid + (bidRange ? bidRange.bidRange : 0));
             } else {
                 setLotDetails([]);
+                setLotImages([])
             }
         } catch (error) {
             setIsFetchingData(false);
@@ -225,7 +226,7 @@ const LotDetailPage = () => {
                     {/* Main Image */}
                     <CardMedia
                         component="img"
-                        image="/assets/pngs/list-detail.png" // Replace with your image URL
+                        image={lotImages.length ? lotImages[0] : "/assets/pngs/list-detail.png"} // Replace with your image URL
                         alt="Main Product"
                         sx={{
                             width: "100%",
@@ -236,11 +237,12 @@ const LotDetailPage = () => {
                     />
                     {/* Thumbnail Images */}
                     <Grid container spacing={2}>
-                        {[1, 2, 3, 4].map((item) => (
-                            <Grid item xs={3} key={item}>
+                        {lotImages.slice(0, 4).map((img) => (
+                            <Grid item xs={3} key={img}>
                                 <CardMedia
                                     component="img"
-                                    image="/assets/pngs/list-detail1.png" // Replace with thumbnail URL
+                                    // image={img || `${process.env.PUBLIC_URL}/assets/pngs/placeholder.png`}
+                                    image={`${process.env.PUBLIC_URL}/assets/pngs/placeholder.png`}
                                     alt="Thumbnail"
                                     sx={{
                                         width: "100%",
