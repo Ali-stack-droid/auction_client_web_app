@@ -38,7 +38,7 @@ const ProtectedRoute = ({ isAuthenticated, children }: any) => {
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY as string);
 
-const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
+const Routing = ({ isAuthenticated, setIsAuthenticated ,socket}: any) => {
 
     const location = useLocation()
     useEffect(() => {
@@ -136,7 +136,7 @@ const Routing = ({ isAuthenticated, setIsAuthenticated }: any) => {
                             path="/live/details"
                             element={
                                 <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                    <LiveStreamingDetailPage />
+                                    <LiveStreamingDetailPage socket={socket} />
                                 </ProtectedRoute>
                             }
                         />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Typography, Box, List, ListItem, Avatar, CircularProgress, Container, Grid, IconButton, Button, Card, CardMedia, Stack, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getQueryParam } from '../../../helper/GetQueryParam';
@@ -13,7 +13,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import theme from '../../../theme';
 import CustomTextField from '../../custom-components/CustomTextField';
 
-const LiveStreamingDetailPage = () => {
+const LiveStreamingDetailPage = ({ socket }: any) => {
     const classes = useLiveStreamDetailStyles();
 
     const [isFetchingData, setIsFetchingData] = useState(false);
@@ -36,6 +36,76 @@ const LiveStreamingDetailPage = () => {
             handleNextLot(lotId);
         }
     }, [auctionLots])
+
+
+    useEffect(() => {
+        setUser("ali cheema")
+        joinRoom("4bebcbfb-15d9-4fbc-b41e-ee0c9add7131")
+    }, []);
+
+
+    const setUser = useCallback((userName: string) => {
+        if (socket) { // Check if WebSocket is connected
+            const data = {
+                event: "setUserName",
+                userName,
+            };
+            socket.send(JSON.stringify(data));
+        } else {
+            console.error("WebSocket is not connected.");
+        }
+    }, []);
+
+
+    const joinRoom = useCallback((roomName: string) => {
+        if (socket) { // Check if WebSocket is connected
+            const data = {
+                event: "joinRoom",
+                roomName,
+            };
+            socket.send(JSON.stringify(data));
+        } else {
+            console.error("WebSocket is not connected.");
+        }
+    }, [socket]);
+
+
+
+    const leaveRoom = useCallback((roomName: string) => {
+        if (socket) { // Check if WebSocket is connected
+            const data = {
+                event: "leaveRoom",
+                roomName,
+            };
+            socket.send(JSON.stringify(data));
+        } else {
+            console.error("WebSocket is not connected.");
+        }
+    }, [socket]);
+
+
+    useEffect(() => {
+        socket.onmessage = (event: any) => {
+            console.log("event data ==", event.data);
+        };
+    }, [socket]);
+
+
+        const sendMessage = useCallback((roomName: string, message: string, lotID?: number, clientId?: number, amount?: number) => {
+        if (socket) { // Check if WebSocket is connected
+            const data = {
+                event: "sendMessageToRoom",
+                roomName,
+                message,
+                lotID,
+                clientId,
+                amount,
+            };
+            socket.send(JSON.stringify(data));
+        } else {
+            console.error("WebSocket is not connected.");
+        }
+    }, [socket]);
 
     const fetchAuctionDetails = async () => {
         try {
@@ -198,6 +268,7 @@ const LiveStreamingDetailPage = () => {
                         <Button
                             variant="contained"
                             className={classes.submitBtn}
+                            onClick={()=> sendMessage("4bebcbfb-15d9-4fbc-b41e-ee0c9add7131","this is the new lot",94,38,400)}
                         >
                             Submit
                         </Button>
