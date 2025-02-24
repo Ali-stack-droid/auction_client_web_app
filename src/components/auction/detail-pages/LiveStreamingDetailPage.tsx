@@ -12,6 +12,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import theme from '../../../theme';
 import CustomTextField from '../../custom-components/CustomTextField';
+import Cookies from 'js-cookie';
+import { createRoom, joinRoom, sendMessage } from './SocketMethods';
 
 const LiveStreamingDetailPage = ({ socket }: any) => {
     const classes = useLiveStreamDetailStyles();
@@ -22,6 +24,13 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
     const [paginationedData, setPaginationedData]: any = useState([])
     const [bidAmount, setBidAmount] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
+
+
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const client = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user) : Cookies.get('user')
+            ? JSON.parse(user) : '')
+
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -37,115 +46,22 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
         }
     }, [auctionLots])
 
-
     useEffect(() => {
-        socket.on("emit-testing-event", (message:any)=>{
-            console.log("emit-testing-event",message);
-        })
-        // setUser("ali cheema")
-        // joinRoom("4bebcbfb-15d9-4fbc-b41e-ee0c9add7131")
-    }, [socket]);
+        if (!socket) return;
 
-    const handleListenMessage = (message: any) => {
-        console.log("Message received: ", message);
-    }
-
-
-    const setUser = useCallback((userName: string) => {
-        if (socket) { // Check if WebSocket is connected
-            const data = {
-                event: "setUserName",
-                userName,
-            };
-            socket.send(JSON.stringify(data));
-        } else {
-            console.error("WebSocket is not connected.");
-        }
-    }, []);
-
-
-    const joinRoom = useCallback((roomName: string) => {
-        if (socket) { // Check if WebSocket is connected
-            const data = {
-                event: "joinRoom",
-                roomName,
-            };
-            socket.send(JSON.stringify(data));
-        } else {
-            console.error("WebSocket is not connected.");
-        }
-    }, [socket]);
-
-
-    const handleSocketEmit = () => {
-        console.log("handleSocketEmit");
-        socket.emit("testing-event2", "Hello from server event 2!");
-
-    }
-
-
-    const leaveRoom = useCallback((roomName: string) => {
-        if (socket) { // Check if WebSocket is connected
-            const data = {
-                event: "leaveRoom",
-                roomName,
-            };
-            socket.send(JSON.stringify(data));
-        } else {
-            console.error("WebSocket is not connected.");
-        }
-    }, [socket]);
-
-
-    useEffect(() => {
-
-        let payload = {
-            message: "Hello from the client!"
-        }
-        console.log(payload);
-        socket.onopen = () => {
-            console.log("Connected to WebSocket server.");
-            socket.send(JSON.stringify({ event: "testing-event", data: payload }));
+        socket.onmessage = (event: MessageEvent) => {
+            const data = JSON.parse(event.data);
+            console.log("📥 Message received:", data);
         };
-        // socket.onMessage("testing-event", (message:any) => {
-        //     console.log("Testing event received!",message);
-        //   });
-        //         socket.onmessage = (event: any) => {
-        // const dataString = event.data 
-        //             console.log("data", event.data);
-        //             // Extract the relevant parts of the string using regex
-        // const lotIdMatch = dataString.match(/LotID: (\d+)/);
-        // const clientIdMatch = dataString.match(/ClientID: (\d+)/);
-        // const amountMatch = dataString.match(/Amount: (\d+)/);
 
-        // // Create the object
-        // const dataObject = {
-        //     lotId: lotIdMatch ? parseInt(lotIdMatch[1]) : null,
-        //     ClientId: clientIdMatch ? parseInt(clientIdMatch[1]) : null,
-        //     Amount: amountMatch ? parseInt(amountMatch[1]) : null,
-        //     ClientName: "alicheema" // Assuming the client name is always "alicheema"
-        // };
-
-        // console.log("dataObject",dataObject);
-        //         };
+        return () => {
+            socket.onmessage = null; // Clean up listener
+        };
     }, [socket]);
 
-
-    const sendMessage = useCallback((roomName: string, message: string, lotID?: number, clientId?: number, amount?: number) => {
-        if (socket) { // Check if WebSocket is connected
-            const data = {
-                event: "sendMessageToRoom",
-                roomName,
-                message,
-                lotID,
-                clientId,
-                amount,
-            };
-            socket.send(JSON.stringify(data));
-        } else {
-            console.error("WebSocket is not connected.");
-        }
-    }, [socket]);
+    useEffect(() => {
+        createRoom(socket, auctionLots[currentIndex]?.roomId)
+    }, [socket, auctionLots, currentIndex]);
 
     const fetchAuctionDetails = async () => {
         try {
@@ -163,6 +79,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                     type: "current",
                     highestBid: item.BidStartAmount,
                     sold: item.IsSold,
+                    roomId: item.RoomId,
                     details: {
                         description: item.LongDescription,
                         date: `${item.StartDate} to ${item.EndDate}`,
@@ -217,6 +134,18 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
         });
     };
 
+    const handleSubmit = () => {
+
+        const roomName = auctionLots[currentIndex].roomId;
+        const message = `${client.name} has placed a bid of $${bidAmount} on this item.`;
+        const lotID = auctionLots[currentIndex].id;
+        const clientId = client.id;
+        const amount = bidAmount;
+
+        sendMessage(socket, roomName, message, lotID, clientId, amount)
+
+    }
+
     return (
         <Box py={2}>
             {!isFetchingData && auctionLots.length > 0 ?
@@ -249,7 +178,6 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                                 variant="contained"
                                 color="error"
                                 className={classes.liveBtn}
-                                onClick={handleSocketEmit}
                             >
                                 Live Stream
                             </Button>
@@ -309,7 +237,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                         <Button
                             variant="contained"
                             className={classes.submitBtn}
-                            onClick={() => sendMessage("4bebcbfb-15d9-4fbc-b41e-ee0c9add7131", "this is the new lot", 94, 38, 400)}
+                            onClick={() => handleSubmit()}
                         >
                             Submit
                         </Button>
