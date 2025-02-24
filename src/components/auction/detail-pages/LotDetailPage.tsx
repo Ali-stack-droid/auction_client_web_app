@@ -21,13 +21,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import theme from "../../../theme";
-import useWebSocket from "../../../utils/useSocket";
 import Cookies from "js-cookie";
 
 const LotDetailPage = () => {
     const classes = useDetailStyles();
     const navigate = useNavigate();
-    const { sendMessage, setUser, createRoom, joinRoom, leaveRoom, deleteRoom, ws, } = useWebSocket();
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
     const clientName = (sessionStorage.getItem('authToken') ?
         JSON.parse(user).name : Cookies.get('user')
@@ -67,8 +65,6 @@ const LotDetailPage = () => {
     ];
 
     useEffect(() => {
-        setUser(clientName)
-        joinRoom("170")
     }, []);
 
 
@@ -198,7 +194,6 @@ const LotDetailPage = () => {
     };
 
     const handleBidNow = () => {
-        sendMessage("400", "170")
         const range: any = fakeBidRanges.find((range: any) =>
             bidAmount >= range.startAmount &&
             bidAmount < range.endAmount

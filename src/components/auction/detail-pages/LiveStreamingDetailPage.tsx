@@ -39,9 +39,16 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
 
 
     useEffect(() => {
-        setUser("ali cheema")
-        joinRoom("4bebcbfb-15d9-4fbc-b41e-ee0c9add7131")
-    }, []);
+        socket.on("emit-testing-event", (message:any)=>{
+            console.log("emit-testing-event",message);
+        })
+        // setUser("ali cheema")
+        // joinRoom("4bebcbfb-15d9-4fbc-b41e-ee0c9add7131")
+    }, [socket]);
+
+    const handleListenMessage = (message: any) => {
+        console.log("Message received: ", message);
+    }
 
 
     const setUser = useCallback((userName: string) => {
@@ -70,6 +77,12 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
     }, [socket]);
 
 
+    const handleSocketEmit = () => {
+        console.log("handleSocketEmit");
+        socket.emit("testing-event2", "Hello from server event 2!");
+
+    }
+
 
     const leaveRoom = useCallback((roomName: string) => {
         if (socket) { // Check if WebSocket is connected
@@ -85,13 +98,40 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
 
 
     useEffect(() => {
-        socket.onmessage = (event: any) => {
-            console.log("event data ==", event.data);
+
+        let payload = {
+            message: "Hello from the client!"
+        }
+        console.log(payload);
+        socket.onopen = () => {
+            console.log("Connected to WebSocket server.");
+            socket.send(JSON.stringify({ event: "testing-event", data: payload }));
         };
+        // socket.onMessage("testing-event", (message:any) => {
+        //     console.log("Testing event received!",message);
+        //   });
+        //         socket.onmessage = (event: any) => {
+        // const dataString = event.data 
+        //             console.log("data", event.data);
+        //             // Extract the relevant parts of the string using regex
+        // const lotIdMatch = dataString.match(/LotID: (\d+)/);
+        // const clientIdMatch = dataString.match(/ClientID: (\d+)/);
+        // const amountMatch = dataString.match(/Amount: (\d+)/);
+
+        // // Create the object
+        // const dataObject = {
+        //     lotId: lotIdMatch ? parseInt(lotIdMatch[1]) : null,
+        //     ClientId: clientIdMatch ? parseInt(clientIdMatch[1]) : null,
+        //     Amount: amountMatch ? parseInt(amountMatch[1]) : null,
+        //     ClientName: "alicheema" // Assuming the client name is always "alicheema"
+        // };
+
+        // console.log("dataObject",dataObject);
+        //         };
     }, [socket]);
 
 
-        const sendMessage = useCallback((roomName: string, message: string, lotID?: number, clientId?: number, amount?: number) => {
+    const sendMessage = useCallback((roomName: string, message: string, lotID?: number, clientId?: number, amount?: number) => {
         if (socket) { // Check if WebSocket is connected
             const data = {
                 event: "sendMessageToRoom",
@@ -209,6 +249,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                                 variant="contained"
                                 color="error"
                                 className={classes.liveBtn}
+                                onClick={handleSocketEmit}
                             >
                                 Live Stream
                             </Button>
@@ -268,7 +309,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                         <Button
                             variant="contained"
                             className={classes.submitBtn}
-                            onClick={()=> sendMessage("4bebcbfb-15d9-4fbc-b41e-ee0c9add7131","this is the new lot",94,38,400)}
+                            onClick={() => sendMessage("4bebcbfb-15d9-4fbc-b41e-ee0c9add7131", "this is the new lot", 94, 38, 400)}
                         >
                             Submit
                         </Button>
