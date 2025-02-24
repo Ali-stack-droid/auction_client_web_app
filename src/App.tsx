@@ -7,24 +7,19 @@ import { io } from "socket.io-client";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // New loading state
-  // const SOCKET_URL = 'ws://localhost:8181'; // Use 'ws' for WebSocket protocol
-  // const socket = new WebSocket(SOCKET_URL);
+  const [loading, setLoading] = useState(true);
 
-  const SOCKET_URL = "http://localhost:8181"; // Use 'http' instead of 'ws' for Socket.IO
-  const socket = io(SOCKET_URL, { transports: ["websocket"] }); // Ensure it uses WebSocket transport
-
+  const SOCKET_URL = "http://localhost:8181";
+  const socket = io(SOCKET_URL, { transports: ["websocket"] });
 
   useEffect(() => {
     // Handle connection open
-    socket.on("connect", () => {
-      console.log("Socket.IO connection established");
+    // socket.on("connect", () => {
+    //   console.log("Socket.IO connection established");
 
-      // Example: Send an initial message to the server if needed
-      // socket.on("testing-event", handleMessages);
-    });
-
-    // Cleanup on unmount
+    //   // Example: Send an initial message to the server if needed
+    //   // socket.on("testing-event", handleMessages);
+    // });
 
 
     const checkSession = () => {

@@ -67,8 +67,6 @@ const LotDetailPage = () => {
     useEffect(() => {
     }, []);
 
-
-
     useEffect(() => {
         const calculateCountdown = () => {
             if (!lotDetails?.endDate || !lotDetails?.endTime) {

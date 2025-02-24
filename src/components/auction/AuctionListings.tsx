@@ -95,6 +95,7 @@ const AuctionListings = () => {
             if (response.data && response.data.length > 0) {
                 const updatedData = response.data.map((item: any) => ({
                     id: item.Id,
+                    auctionId: item.AuctionId,
                     name: item.ShortDescription,
                     image: item.Image,
                     isLive: item.IsLive,
@@ -195,6 +196,7 @@ const AuctionListings = () => {
                                                     cardData={lot}
                                                     isFaverited={isFaverited(lot.id)}
                                                     setPaginationedData={setPaginationedData}
+                                                    liveLotFromListing={true}
                                                 />
                                             </Grid>
                                         ))

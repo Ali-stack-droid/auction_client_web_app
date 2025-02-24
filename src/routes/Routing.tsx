@@ -38,7 +38,7 @@ const ProtectedRoute = ({ isAuthenticated, children }: any) => {
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY as string);
 
-const Routing = ({ isAuthenticated, setIsAuthenticated ,socket}: any) => {
+const Routing = ({ isAuthenticated, setIsAuthenticated, socket }: any) => {
 
     const location = useLocation()
     useEffect(() => {

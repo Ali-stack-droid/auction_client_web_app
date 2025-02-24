@@ -11,6 +11,11 @@ import Cookies from "js-cookie";
 const PaymentTracking = () => {
     const classes = usePaymentTrackingStyles();
 
+    const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
+    const client = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user) : Cookies.get('user')
+            ? JSON.parse(user) : '')
+
     const [invoices, setInvoices]: any = useState([]);
     const [isFetchingData, setIsFetchingData] = useState(false);
 
@@ -55,8 +60,8 @@ const PaymentTracking = () => {
 
         try {
             const response = isWinning
-                ? await getBidHistory(5, true)
-                : await getBidHistory(5, false);
+                ? await getBidHistory(client.id, true)
+                : await getBidHistory(client.id, false);
 
             if (response.data && response.data.length > 0) {
 

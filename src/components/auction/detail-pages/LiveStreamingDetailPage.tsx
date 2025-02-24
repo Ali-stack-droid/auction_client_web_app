@@ -1,19 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Typography, Box, List, ListItem, Avatar, CircularProgress, Container, Grid, IconButton, Button, Card, CardMedia, Stack, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Typography, Box, CircularProgress, Container, Grid, IconButton, Button, Card, CardMedia, Stack, TextField } from '@mui/material';
 import { getQueryParam } from '../../../helper/GetQueryParam';
 import AuctionCard from '../auction-components/AuctionCard';
 import PaginationButton from '../auction-components/PaginationButton';
 import useLiveStreamDetailStyles from './detail-pages-components/LiveStreamingDetailStyles';
-import { SuccessMessage, ErrorMessage } from '../../../utils/ToastMessages';
-import { getAuctionDetailById } from '../../Services/Methods';
-import KeyboardReturnRoundedIcon from '@mui/icons-material/KeyboardReturnRounded';
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import theme from '../../../theme';
-import CustomTextField from '../../custom-components/CustomTextField';
+import { getAuctionDetailById, getBiddersByLotId, getLotDetailsById } from '../../Services/Methods';
 import Cookies from 'js-cookie';
-import { createRoom, joinRoom, sendMessage } from './SocketMethods';
+import { joinRoom, leaveRoom, sendMessage, setUserName } from '../../../utils/SocketMethods';
 
 const LiveStreamingDetailPage = ({ socket }: any) => {
     const classes = useLiveStreamDetailStyles();
@@ -24,7 +17,9 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
     const [paginationedData, setPaginationedData]: any = useState([])
     const [bidAmount, setBidAmount] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const [liveBidders, setLiveBidders]: any = useState([]);
+    const [bidders, setBidders]: any = useState([]);
+    const [bidRanges, setBidRanges]: any = useState([]);
 
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
     const client = (sessionStorage.getItem('authToken') ?
@@ -47,21 +42,85 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
     }, [auctionLots])
 
     useEffect(() => {
-        if (!socket) return;
+        if (!socket || !auctionLots[currentIndex]?.roomId) return;
 
-        socket.onmessage = (event: MessageEvent) => {
-            const data = JSON.parse(event.data);
-            console.log("📥 Message received:", data);
+        setUserName(socket, client.name);
+        joinRoom(socket, auctionLots[currentIndex].roomId);
+
+        const handleJoinRoomError = (message: any) => {
+            fetchBidders(auctionLots[currentIndex].id)
+            setLiveBidders([])
+        }
+
+        const handleChatHistory = (message: any) => {
+            setLiveBidders((prevBidders: any) => [...prevBidders, message]);
+            setBidders([])
+        }
+
+        const handleNewMessage = (data: any) => {
+            setBidders([])
+            setLiveBidders((prevBidders: any) => [...prevBidders, data]);
         };
+
+        // socket.on("chat-history", handleChatHistory);
+        socket.on("chat-history", handleChatHistory);
+        socket.on("send-message-room", handleNewMessage);
+        socket.on("join-room-error", handleJoinRoomError);
 
         return () => {
-            socket.onmessage = null; // Clean up listener
+            socket.off("send-message-room", handleNewMessage);
+            socket.off("chat-history", handleChatHistory);
+            socket.off("join-room-error", handleJoinRoomError);
+            leaveRoom(socket, auctionLots[currentIndex].roomId)
         };
-    }, [socket]);
+    }, [socket, auctionLots, currentIndex]);
+
 
     useEffect(() => {
-        createRoom(socket, auctionLots[currentIndex]?.roomId)
-    }, [socket, auctionLots, currentIndex]);
+
+        const fetchLotDetails = async () => {
+            try {
+                const response = await getLotDetailsById(auctionLots[currentIndex]?.id);
+                const ranges = response.data?.BidsRange;
+                if (ranges) {
+                    setBidRanges(ranges);
+                    const bidRange = ranges.find((range: any) => {
+                        if (bidders.length) {
+                            if (bidders[bidders.length - 1].amount >= range.StartAmount
+                                && bidders[bidders.length - 1].amount < range.EndAmount) {
+                                return true;
+                            } else {
+                                return false
+                            }
+                        } else if (liveBidders.length) {
+                            if (liveBidders[liveBidders.length - 1].amount >= range.StartAmount
+                                && liveBidders[liveBidders.length - 1].amount < range.EndAmount) {
+                                return true;
+                            } else {
+                                return false
+                            }
+                        }
+                    });
+
+                    const amount = liveBidders.length
+                        ? liveBidders[liveBidders.length - 1].amount + (bidRange ? bidRange.BidRange : 0)
+                        : bidders.length ? bidders[bidders.length - 1].amount + (bidRange ? bidRange.BidRange : 0)
+                            : auctionLots[currentIndex].highestBid;
+
+                    setBidAmount(amount);
+                } else {
+                    setBidRanges([]);
+                    setBidAmount(0)
+                }
+            } catch (error) {
+                console.error('Error fetching lot details:', error);
+            } finally {
+            }
+        };
+        if (auctionLots.length) {
+            fetchLotDetails();
+        }
+    }, [auctionLots, currentIndex, bidders])
 
     const fetchAuctionDetails = async () => {
         try {
@@ -80,6 +139,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                     highestBid: item.BidStartAmount,
                     sold: item.IsSold,
                     roomId: item.RoomId,
+                    bidAmount: item.BidStartAmount,
                     details: {
                         description: item.LongDescription,
                         date: `${item.StartDate} to ${item.EndDate}`,
@@ -96,6 +156,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                     },
                 }));
                 setAuctionLots(formattedLots)
+                fetchBidders(formattedLots[currentIndex].id)
                 setPaginationedData(formattedLots)
             } else {
                 setAuctionLots([])
@@ -108,14 +169,37 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
         }
     };
 
-
-    // Handle value change in the TextField
-    const handleChange = (event: any) => {
-        const value = event.target.value;
-        if (/^\d*$/.test(value)) {
-            setBidAmount(value === "" ? 0 : parseInt(value, 10));
+    const fetchBidders = async (id: number) => {
+        try {
+            const response = await getBiddersByLotId(id);
+            const bidders = response.data;
+            if (bidders.length > 0) {
+                const formattedBidders = response.data.map((bidder: any) => ({
+                    id: bidder.Id,
+                    clientId: bidder.ClientId,
+                    name: bidder.Name,
+                    amount: bidder.Amount + " USD",
+                }));
+                setBidders(formattedBidders)
+            } else {
+                setBidders([]);
+            }
+        } catch (error) {
+        } finally {
         }
-    };
+    }
+    // Handle value change in the TextField
+    const updateAmount = () => {
+        const range: any = bidRanges.find((range: any) =>
+            bidAmount >= range.startAmount &&
+            bidAmount < range.endAmount
+        );
+        if (range) {
+            setBidAmount(bidAmount + range.bidRange);
+        } else {
+            setBidAmount(bidAmount + 400);
+        }
+    }
 
     // Increment the bid amount
     const handleIncrement = () => {
@@ -130,11 +214,16 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
     const handleNextLot = (id?: number) => {
         setCurrentIndex((prevIndex) => {
             const newIndex = auctionLots.findIndex((lot: any) => lot.id === id);
+            window?.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
             return newIndex !== -1 ? newIndex : prevIndex; // Set index if found, otherwise keep previous index
         });
     };
 
     const handleSubmit = () => {
+        updateAmount()
 
         const roomName = auctionLots[currentIndex].roomId;
         const message = `${client.name} has placed a bid of $${bidAmount} on this item.`;
@@ -184,13 +273,20 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                             <Button
                                 variant="contained"
                                 className={classes.nameBtn}>
-                                John Anderson Smith
+                                {bidders.length > 0 ? bidders[bidders.length - 1].name
+                                    : liveBidders.length > 0
+                                        ? liveBidders.reduce((prev: any, current: any) => (prev.amount > current.amount ? prev : current)).sender
+                                        : 'No Heighest Bidder'}
+
                             </Button>
                             <Button
                                 variant="contained"
                                 className={classes.rateBtn}
                             >
-                                Highest Bid: $10,000
+                                Highest Bid: ${bidders.length > 0 ? bidders[bidders.length - 1].amount
+                                    : liveBidders.length > 0
+                                        ? liveBidders.reduce((prev: any, current: any) => (prev.amount > current.amount ? prev : current)).amount
+                                        : '0'}
                             </Button>
                         </Box >
 
@@ -219,10 +315,9 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                                     placeholder="Enter Bid Amount"
                                     variant="outlined"
                                     value={bidAmount}
-                                    onChange={handleChange}
                                 />
                             </Box>
-
+                            {/* 
                             <IconButton
                                 className={classes.iconBtn} onClick={handleIncrement}>
                                 <AddIcon />
@@ -231,7 +326,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                             <IconButton
                                 className={classes.iconBtn} onClick={handleDecrement}>
                                 <RemoveIcon />
-                            </IconButton>
+                            </IconButton> */}
                         </Stack>
 
                         <Button
