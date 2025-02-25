@@ -12,6 +12,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
     const classes = useLiveStreamDetailStyles();
 
     const [isFetchingData, setIsFetchingData] = useState(false);
+    const [isPastLot, setIsPastLot] = useState(false);
     // const [auctionDetails, setAuctionDetails]: any = useState({})
     const [auctionLots, setAuctionLots]: any = useState([])
     const [paginationedData, setPaginationedData]: any = useState([])
@@ -82,6 +83,8 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
             try {
                 const response = await getLotDetailsById(auctionLots[currentIndex]?.id);
                 const ranges = response.data?.BidsRange;
+                const isPast = response.data?.Lot?.IsPast;
+                setIsPastLot(isPast);
                 if (ranges) {
                     setBidRanges(ranges);
                     const bidRange = ranges.find((range: any) => {
@@ -305,7 +308,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                         >
                             {auctionLots[currentIndex].description}
                         </Typography >
-                        {!auctionLots[currentIndex].isPast &&
+                        {!isPastLot &&
                             <Box>
                                 < Typography sx={{ fontWeight: 600, fontSize: '22px', marginBottom: "15px" }}>
                                     Place Bid
