@@ -26,6 +26,10 @@ export const getLotDetailsById = (id: any) => getRequest(`/lots/lotdetails?id=${
 export const getCurrentLotsByLocation = (location: any) => getRequest(`/lots/currentlocationlots?location=${location}`);
 export const getPastLotsByLocation = (location: any) => getRequest(`/lots/pastlocationlots?location=${location}`);
 export const getBiddersByLotId = (id: any) => getRequest(`/lots/livebiddersbylot?id=${id}`);
+export const placeBidRequest = (payload: any) => postRequest('/lots/newbid', payload);
+
+
+
 
 // WatchList Methods
 export const addToWatchlist = (id: any, lotId: any) => getRequest(`/wishlist/addtowishlist?clientid=${id}&lotid=${lotId}`);

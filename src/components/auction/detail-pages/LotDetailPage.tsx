@@ -15,54 +15,58 @@ import useDetailStyles from "./detail-pages-components/DetailPageStyles";
 import { getQueryParam } from "../../../helper/GetQueryParam";
 
 import { useNavigate } from "react-router-dom";
-import { getLotDetailsById } from "../../Services/Methods";
+import { getLotDetailsById, placeBidRequest } from "../../Services/Methods";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import theme from "../../../theme";
 import Cookies from "js-cookie";
+import { ErrorMessage, SuccessMessage } from "../../../utils/ToastMessages";
 
 const LotDetailPage = () => {
     const classes = useDetailStyles();
     const navigate = useNavigate();
+
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
-    const clientName = (sessionStorage.getItem('authToken') ?
-        JSON.parse(user).name : Cookies.get('user')
-            ? JSON.parse(user).name : '')
+    const client = (sessionStorage.getItem('authToken') ?
+        JSON.parse(user) : Cookies.get('user')
+            ? JSON.parse(user) : '');
+
     const [lotDetails, setLotDetails]: any = useState({})
     const [isFetchingData, setIsFetchingData] = useState(false)
     const [bidAmount, setBidAmount] = useState(0)
 
     const [lotImages, setLotImages] = useState([]);
-    const [countdown, setCountdown] = useState<string>('2 days : 22 hours : 12 minutes : 54 seconds');
+    const [countdown, setCountdown] = useState('');
+    const [bidRanges, setBidRanges]: any = useState([]);
 
-    const fakeBidRanges = [
-        {
-            id: 1,
-            startAmount: 51,
-            endAmount: 200,
-            bidRange: 50,
-        },
-        {
-            id: 2,
-            startAmount: 200,
-            endAmount: 502,
-            bidRange: 100,
-        },
-        {
-            id: 3,
-            startAmount: 503,
-            endAmount: 653,
-            bidRange: 50,
-        },
-        {
-            id: 4,
-            startAmount: 653,
-            endAmount: 1253,
-            bidRange: 200,
-        },
-    ];
+    // const fakeBidRanges = [
+    //     {
+    //         id: 1,
+    //         startAmount: 51,
+    //         endAmount: 200,
+    //         bidRange: 50,
+    //     },
+    //     {
+    //         id: 2,
+    //         startAmount: 200,
+    //         endAmount: 502,
+    //         bidRange: 100,
+    //     },
+    //     {
+    //         id: 3,
+    //         startAmount: 503,
+    //         endAmount: 653,
+    //         bidRange: 50,
+    //     },
+    //     {
+    //         id: 4,
+    //         startAmount: 653,
+    //         endAmount: 1253,
+    //         bidRange: 200,
+    //     },
+    // ];
 
     useEffect(() => {
     }, []);
@@ -89,6 +93,7 @@ const LotDetailPage = () => {
 
             // Set correct hours & minutes
             endDateTime.setHours(hours, minutes, 0, 0);
+
             if (isNaN(endDateTime.getTime())) {
                 setCountdown(''); // Invalid date
                 return;
@@ -113,7 +118,7 @@ const LotDetailPage = () => {
         const interval = setInterval(calculateCountdown, 1000); // Update every second
 
         return () => clearInterval(interval); // Cleanup on component unmount
-    }, [lotDetails]);
+    }, [lotDetails?.endDate, lotDetails?.endTime]);
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -151,9 +156,10 @@ const LotDetailPage = () => {
                     startDate: lot.StartDate,
                     endDate: lot.EndDate,
                     startTime: lot.StartTime,
-                    endTime: lot.endTime,
+                    endTime: lot.EndTime,
                     date: `${lot.StartDate} to ${lot.EndDate}`,
                     time: `${lot.StartTime} to ${lot.EndTime}`,
+                    isLive: lot.IsLive,
                     details: {
                         description: lot.LongDescription,
                         date: `${lot.StartDate} to ${lot.EndDate}`,
@@ -173,13 +179,14 @@ const LotDetailPage = () => {
                         bidRangeAmount: bid.BidRange,
                     })),
                 };
+                setBidRanges(formattedLotDetails.bidsRange)
                 setLotImages(images)
                 setLotDetails(formattedLotDetails);
-                const bidRange = fakeBidRanges.find((range: any) =>
+                const bidRange = formattedLotDetails.bidsRange.find((range: any) =>
                     formattedLotDetails.highestBid >= range.startAmount &&
                     formattedLotDetails.highestBid < range.endAmount
                 );
-                setBidAmount(formattedLotDetails.highestBid + (bidRange ? bidRange.bidRange : 0));
+                setBidAmount(formattedLotDetails.highestBid + (bidRange ? bidRange.bidRangeAmount : 0));
             } else {
                 setLotDetails([]);
                 setLotImages([])
@@ -191,17 +198,38 @@ const LotDetailPage = () => {
         }
     };
 
-    const handleBidNow = () => {
-        const range: any = fakeBidRanges.find((range: any) =>
-            bidAmount >= range.startAmount &&
-            bidAmount < range.endAmount
-        );
-        if (range) {
-            setBidAmount(bidAmount + range.bidRange);
-        } else {
-            setBidAmount(bidAmount + 400);
+    const placeBid = async (payload: any) => {
+        try {
+            const response = await placeBidRequest(payload);
+            if (response.status === 201) {
+
+                const range: any = bidRanges.find((range: any) =>
+                    bidAmount >= range.startAmount &&
+                    bidAmount < range.endAmount
+                );
+                if (range) {
+                    setBidAmount(bidAmount + range.bidRangeAmount);
+                } else {
+                    setBidAmount(bidAmount + 400);
+                }
+
+                SuccessMessage('Bid placed successfully');
+            } else {
+                ErrorMessage('Failed to place bid');
+            }
+        } catch (error) {
+            console.error('Failed to place bid', { variant: 'error' });
         }
     }
+
+    const handleBidNow = () => {
+        placeBid({
+            ClientId: client.id,
+            LotId: lotDetails.id,
+            Amount: bidAmount
+        })
+    }
+
 
     return (
 
@@ -313,7 +341,7 @@ const LotDetailPage = () => {
                             borderRadius: '14px',
                             textTransform: 'none'
                         }}
-                        onClick={() => navigate(`/cart?aucId=${lotDetails.id}`)}
+                        onClick={() => handleBidNow()}
                     >
                         Bid Now: ${bidAmount}
                     </Button>

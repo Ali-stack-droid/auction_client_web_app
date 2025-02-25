@@ -164,7 +164,7 @@ const AuctionDetailPage = () => {
                     location: "N/A",
                     image: item.Image,
                     type: "current",
-                    highestBid: item.BidStartAmount,
+                    bidAmount: item.BidStartAmount,
                     sold: item.IsSold,
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,

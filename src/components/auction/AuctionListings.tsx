@@ -196,7 +196,7 @@ const AuctionListings = () => {
                                                     cardData={lot}
                                                     isFaverited={isFaverited(lot.id)}
                                                     setPaginationedData={setPaginationedData}
-                                                    liveLotFromListing={true}
+                                                    liveLotFromListing={lot.isLive}
                                                 />
                                             </Grid>
                                         ))
