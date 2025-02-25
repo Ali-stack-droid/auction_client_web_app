@@ -10,6 +10,7 @@ const LotDetails = ({ lotData }: any) => {
     const [countdown, setCountdown] = useState<string>('00:00:00');
 
     useEffect(() => {
+        console.log(lotData.endDate, lotData.endTime)
         const calculateCountdown = () => {
             if (!lotData?.endDate || !lotData?.endTime) {
                 setCountdown(''); // Handle missing data

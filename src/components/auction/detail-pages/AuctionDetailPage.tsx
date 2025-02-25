@@ -159,6 +159,8 @@ const AuctionDetailPage = () => {
                     address: item.Address,
                     lotNumber: item.LotNo,
                     name: item.ShortDescription,
+                    endDate: item.EndDate,
+                    endTime: item.EndTime,
                     description: item.LongDescription,
                     countDown: "N/A",
                     location: "N/A",
@@ -238,8 +240,7 @@ const AuctionDetailPage = () => {
         <Box sx={{ padding: "10px 0" }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Typography className={classes.title}>
-                    {/* {auctionDetails.name} */}
-                    Monthly Public Auction
+                    {auctionDetails.name}
                 </Typography>
             </Box>
 

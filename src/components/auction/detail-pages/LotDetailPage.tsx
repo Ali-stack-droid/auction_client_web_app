@@ -147,6 +147,7 @@ const LotDetailPage = () => {
                     countDown: "N/A", // Update if you calculate countdown elsewhere
                     location: "N/A", // Replace with actual location if available
                     image: lot.Image,
+                    isPast: lot.IsPast,
                     type: lot.IsPast ? "past" : "current",
                     highestBid: lot.BidStartAmount,
                     sold: lot.IsSold,
@@ -327,46 +328,49 @@ const LotDetailPage = () => {
                     </Typography>
 
                     <Divider sx={{ my: 2 }} />
+                    {!lotDetails.isPast &&
+                        <Box>
+                            {/* Bid Now Button */}
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    width: "326px",
+                                    height: "64px",
+                                    borderColor: "#012868",
+                                    color: "#212121",
+                                    fontWeight: 600,
+                                    fontSize: '16px',
+                                    borderRadius: '14px',
+                                    textTransform: 'none'
+                                }}
+                                onClick={() => handleBidNow()}
+                            >
+                                Bid Now: ${bidAmount}
+                            </Button>
 
-                    {/* Bid Now Button */}
-                    <Button
-                        variant="outlined"
-                        sx={{
-                            width: "326px",
-                            height: "64px",
-                            borderColor: "#012868",
-                            color: "#212121",
-                            fontWeight: 600,
-                            fontSize: '16px',
-                            borderRadius: '14px',
-                            textTransform: 'none'
-                        }}
-                        onClick={() => handleBidNow()}
-                    >
-                        Bid Now: ${bidAmount}
-                    </Button>
+                            <Divider sx={{ my: 2 }} />
 
-                    <Divider sx={{ my: 2 }} />
+                            {/* Bid Price Section */}
+                            <Typography sx={{ fontWeight: 600, mt: '30px', fontSize: '18px' }}>Bid Price</Typography>
+                            <Box className={classes.bidAmount} sx={{ display: "flex", alignItems: "center", mt: '10px' }}>
+                                <TextField
+                                    placeholder="Enter Your Bid Amount"
+                                    variant="outlined"
+                                    sx={{ flex: 1, mr: '10px' }}
+                                    value={bidAmount}
+                                    inputProps={{ readOnly: true }}
+                                />
 
-                    {/* Bid Price Section */}
-                    <Typography sx={{ fontWeight: 600, mt: '30px', fontSize: '18px' }}>Bid Price</Typography>
-                    <Box className={classes.bidAmount} sx={{ display: "flex", alignItems: "center", mt: '10px' }}>
-                        <TextField
-                            placeholder="Enter Your Bid Amount"
-                            variant="outlined"
-                            sx={{ flex: 1, mr: '10px' }}
-                            value={bidAmount}
-                            inputProps={{ readOnly: true }}
-                        />
-
-                        <Button
-                            className={classes.submitBtn}
-                            variant="contained"
-                            onClick={() => handleBidNow()}
-                        >
-                            Submit
-                        </Button>
-                    </Box>
+                                <Button
+                                    className={classes.submitBtn}
+                                    variant="contained"
+                                    onClick={() => handleBidNow()}
+                                >
+                                    Submit
+                                </Button>
+                            </Box>
+                        </Box>
+                    }
                 </Grid>
             </Grid>
 

@@ -135,6 +135,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                     countDown: "N/A",
                     location: "N/A",
                     image: item.Image,
+                    isPast: item.IsPast,
                     type: "current",
                     highestBid: item.BidStartAmount,
                     sold: item.IsSold,
@@ -304,20 +305,20 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                         >
                             {auctionLots[currentIndex].description}
                         </Typography >
-
-                        {/* Bid Input */}
-                        < Typography sx={{ fontWeight: 600, fontSize: '22px', marginBottom: "15px" }}>
-                            Place Bid
-                        </Typography >
-                        <Stack mb={'30px'} direction="row" alignItems="center" spacing={2}>
-                            <Box className={classes.bidAmount}>
-                                <TextField
-                                    placeholder="Enter Bid Amount"
-                                    variant="outlined"
-                                    value={bidAmount}
-                                />
-                            </Box>
-                            {/* 
+                        {!auctionLots[currentIndex].isPast &&
+                            <Box>
+                                < Typography sx={{ fontWeight: 600, fontSize: '22px', marginBottom: "15px" }}>
+                                    Place Bid
+                                </Typography >
+                                <Stack mb={'30px'} direction="row" alignItems="center" spacing={2}>
+                                    <Box className={classes.bidAmount}>
+                                        <TextField
+                                            placeholder="Enter Bid Amount"
+                                            variant="outlined"
+                                            value={bidAmount}
+                                        />
+                                    </Box>
+                                    {/* 
                             <IconButton
                                 className={classes.iconBtn} onClick={handleIncrement}>
                                 <AddIcon />
@@ -327,16 +328,16 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                                 className={classes.iconBtn} onClick={handleDecrement}>
                                 <RemoveIcon />
                             </IconButton> */}
-                        </Stack>
+                                </Stack>
 
-                        <Button
-                            variant="contained"
-                            className={classes.submitBtn}
-                            onClick={() => handleSubmit()}
-                        >
-                            Submit
-                        </Button>
-
+                                <Button
+                                    variant="contained"
+                                    className={classes.submitBtn}
+                                    onClick={() => handleSubmit()}
+                                >
+                                    Submit
+                                </Button>
+                            </Box>}
                     </Card >
 
                     {auctionLots.length > 0 &&

@@ -28,6 +28,7 @@ import Cookies from 'js-cookie';
 
 const Cart = () => {
     const [amount, setAmount] = useState("");
+    const [clientEmail, setClientEmail] = useState("");
 
     // const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY as string);
     const classes = CartStyles()
@@ -40,7 +41,7 @@ const Cart = () => {
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY as string);
     const [isFetchingData, setIsFetchingData] = useState({});
     const [invoice, setInvoice] = useState({});
-    const [lot, setLot] = useState({});
+    const [lot, setLot]: any = useState({});
     const [email, setEmail] = useState("");
 
 
@@ -54,9 +55,9 @@ const Cart = () => {
         const fetchLotDetails = async () => {
             try {
                 const response = await getLotDetailsById(getQueryParam('lotId'));
-                const lotDescription = response.data?.Lot?.ShortDescription;
-                if (lotDescription) {
-                    setLot(lotDescription);
+                const lot = response.data?.Lot;
+                if (lot) {
+                    setLot(lot);
                 } else {
                     setLot([]);
                 }
@@ -122,7 +123,7 @@ const Cart = () => {
             const payload = {
                 Token: token.id,
                 Amount: parseFloat(amount),
-                Description: lot,
+                Description: lot.ShortDescription,
                 Email: email,
                 InvoiceId: parseInt(invoiceId)
             }
@@ -146,8 +147,8 @@ const Cart = () => {
         return (
             <form onSubmit={handleSubmit} style={styles.form}>
                 <h2>💳 Stripe Payment</h2>
-                <input type="text" placeholder="Enter amount" value={amount} onChange={(e) => e.preventDefault()} style={styles.input} required />
-                <input type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} required />
+                <input type="text" placeholder="Enter amount" value={lot.BidStartAmount} onChange={(e) => e.preventDefault()} style={styles.input} required />
+                <input type="email" placeholder="Enter email" value={clientEmail} onChange={(e) => e.preventDefault()} style={styles.input} required />
 
                 <CardElement options={{ hidePostalCode: true, style: styles.card }} />
 
@@ -226,7 +227,7 @@ const Cart = () => {
                                         fullWidth
                                         name="email"
                                         placeholder="Email"
-                                        onChange={formik.handleChange}
+                                        onChange={(e: any) => { formik.handleChange(e); setClientEmail(e.target.value) }}
                                         error={formik.touched.email && Boolean(formik.errors.email)}
                                         helperText={formik.touched.email && typeof formik.errors.email === 'string' ? formik.errors.email : ''}
                                     />
