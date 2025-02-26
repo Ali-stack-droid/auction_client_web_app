@@ -237,7 +237,7 @@ const AuctionCard = ({
                                                                 color="primary"
                                                                 className={classes.submitBtn}
                                                                 onClick={handleSubmit}
-                                                                sx={{ height: '31px', minWidth: '60px' }}
+                                                                sx={{ height: '31px', minWidth: '100px' }}
                                                             >
                                                                 Submit
                                                             </Button>
