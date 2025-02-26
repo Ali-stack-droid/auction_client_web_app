@@ -2,11 +2,6 @@ import { makeStyles } from '@mui/styles';
 import theme from '../../../theme';
 
 export const useAuctionCardStyles = makeStyles({
-    lotDetails: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
     card: {
         padding: "15px",
         borderRadius: "15px",
