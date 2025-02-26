@@ -36,6 +36,7 @@ const LotDetailPage = () => {
     const [lotDetails, setLotDetails]: any = useState({})
     const [isFetchingData, setIsFetchingData] = useState(false)
     const [bidAmount, setBidAmount] = useState(0)
+    const [amount, setAmount] = useState(bidAmount);
 
     const [lotImages, setLotImages] = useState([]);
     const [countdown, setCountdown] = useState('');
@@ -188,6 +189,7 @@ const LotDetailPage = () => {
                     formattedLotDetails.highestBid < range.endAmount
                 );
                 setBidAmount(formattedLotDetails.highestBid + (bidRange ? bidRange.bidRangeAmount : 0));
+                setAmount(formattedLotDetails.highestBid + (bidRange ? bidRange.bidRangeAmount : 0));
             } else {
                 setLotDetails([]);
                 setLotImages([])
@@ -210,8 +212,10 @@ const LotDetailPage = () => {
                 );
                 if (range) {
                     setBidAmount(bidAmount + range.bidRangeAmount);
+                    setAmount(bidAmount + range.bidRangeAmount);
                 } else {
                     setBidAmount(bidAmount + 400);
+                    setAmount(bidAmount + 400);
                 }
 
                 SuccessMessage('Bid placed successfully');
@@ -357,14 +361,16 @@ const LotDetailPage = () => {
                                     placeholder="Enter Your Bid Amount"
                                     variant="outlined"
                                     sx={{ flex: 1, mr: '10px' }}
-                                    value={bidAmount}
-                                    inputProps={{ readOnly: true }}
+                                    value={amount}
+                                    onChange={(e: any) => setAmount(e.target.value)}
+                                // inputProps={{ readOnly: true }}
                                 />
 
                                 <Button
                                     className={classes.submitBtn}
                                     variant="contained"
                                     onClick={() => handleBidNow()}
+                                    disabled={amount < bidAmount}
                                 >
                                     Submit
                                 </Button>
