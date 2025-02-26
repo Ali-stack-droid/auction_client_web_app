@@ -176,7 +176,7 @@ const Invoices = () => {
                                         {paidInvoice ?
                                             <Button variant={'contained'} className={classes.downloadButton} onClick={() => handleInvoiceDownload(index)}>Download</Button>
                                             :
-                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handlePayNow(row.invoiceId, row.lotId)}>Pay Now</Button>
+                                            <Button variant={'contained'} className={classes.downloadButton} onClick={() => handlePayNow(row.id, row.lotId)}>Pay Now</Button>
                                         }
                                     </TableCell>
                                 </TableRow>

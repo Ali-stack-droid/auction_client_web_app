@@ -28,6 +28,12 @@ const CustomModal = ({ open, onClose, modalType }: any) => {
             desc: "You are successfully registered into the system!",
             svg: `${process.env.PUBLIC_URL}/assets/svgs/congratulation.svg`,
         },
+        {
+            type: "payment",
+            title: "Congratulations!",
+            desc: "Your payment process is successful!",
+            svg: `${process.env.PUBLIC_URL}/assets/svgs/congratulation.svg`,
+        },
     ];
 
     // Find the content for the current modalType

@@ -25,6 +25,8 @@ import { ErrorMessage, SuccessMessage } from '../../../utils/ToastMessages';
 import { getQueryParam } from '../../../helper/GetQueryParam';
 import { getInvoiceDetails, getLotDetailsById, getUnpaidInvoices, paymentRequest } from '../../Services/Methods';
 import Cookies from 'js-cookie';
+import CustomModal from '../../custom-components/CustomModal';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const [amount, setAmount] = useState("");
@@ -32,9 +34,11 @@ const Cart = () => {
 
     // const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY as string);
     const classes = CartStyles()
+    const navigate = useNavigate()
 
     const [open, setOpen] = useState(false);
     const [paymentModal, setPaymentModal] = useState(false);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
     const handleClose = () => setOpen(false);
     const handleClosePaymentModal = () => setPaymentModal(false);
 
@@ -122,7 +126,7 @@ const Cart = () => {
             const invoiceId: string = getQueryParam('paymentId')!;
             const payload = {
                 Token: token.id,
-                Amount: parseFloat(amount),
+                Amount: parseFloat(lot.BidStartAmount),
                 Description: lot.ShortDescription,
                 Email: email,
                 InvoiceId: parseInt(invoiceId)
@@ -131,7 +135,12 @@ const Cart = () => {
                 const response = await paymentRequest(payload);
 
                 if (response.status === 201) {
-                    SuccessMessage("Payment successful!");
+                    setPaymentSuccess(true);
+                    setTimeout(() => {
+                        setPaymentSuccess(false);
+                        navigate('/home')
+                    }, 3000);
+                    // SuccessMessage("Payment successful!");
                 } else {
                     ErrorMessage("Payment failed. Please try again.");
                 }
@@ -445,6 +454,9 @@ const Cart = () => {
                         </Button>
                     </Box>
                 </Modal>
+
+                <CustomModal open={paymentSuccess} modalType={'payment'} onClose={() => setPaymentSuccess(false)} />
+
             </Box>
         </Box >
     );
