@@ -2,6 +2,11 @@ import { makeStyles } from '@mui/styles';
 import theme from '../../../theme';
 
 export const useAuctionCardStyles = makeStyles({
+    lotDetails: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     card: {
         padding: "15px",
         borderRadius: "15px",
@@ -184,10 +189,10 @@ export const useAuctionCardStyles = makeStyles({
     submitBtn: {
         fontSize: "11px",
         fontWeight: 600,
-        width: "100px",
-        height: "27.47px",
+        // width: "120px",
+        // height: '39.99px',
         textTransform: 'capitalize',
-        marginTop: '12px'
+        // marginTop: '12px'
     }
 });
 

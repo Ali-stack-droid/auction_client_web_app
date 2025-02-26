@@ -1,4 +1,4 @@
-import { Card, CardMedia, Typography, Button, Tooltip, Box, TextField, IconButton } from '@mui/material';
+import { Card, CardMedia, Typography, Button, Tooltip, Box, TextField, IconButton, InputAdornment } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuctionCardStyles } from './AuctionStyles';
 import AuctionDetails from './card-details-components/AuctionDetails';
@@ -188,30 +188,64 @@ const AuctionCard = ({
                                         <Typography m={'10px 0'} sx={{ fontSize: '12px', color: '#212121', fontWeight: 500 }}>
                                             You can enter your custom Amount
                                         </Typography>
-                                        <Box minHeight={'40px'}>
+                                        {/* <Box className={classes.lotDetails}>
+                                            <Box minHeight={'40px'}>
+                                                <TextField
+                                                    variant="outlined"
+                                                    size="small"
+                                                    sx={{
+                                                        flex: 1,
+                                                        // width: '175px',
+                                                        height: '31px',
+                                                        '& .MuiInputBase-input::placeholder': {
+                                                            fontSize: '13px',
+                                                        },
+                                                    }}
+                                                    placeholder="Enter Bid Amount"
+                                                />
+                                            </Box>
+
+
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                className={classes.submitBtn}
+                                                onClick={() => handleSubmit()}
+                                            >
+                                                Submit
+                                            </Button>
+                                        </Box> */}
+
+                                        <Box >
                                             <TextField
+                                                type='number'
                                                 variant="outlined"
                                                 size="small"
-                                                sx={{
-                                                    width: '175px',
-                                                    height: '31px',
-                                                    '& .MuiInputBase-input::placeholder': {
-                                                        fontSize: '13px',
-                                                    },
-                                                }}
                                                 placeholder="Enter Bid Amount"
+                                                fullWidth
+                                                sx={{
+                                                    mb: 1,
+                                                    flex: 1,
+                                                    height: '31px',
+                                                    '& .MuiInputBase-input::placeholder': { fontSize: '13px' },
+                                                }}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <Button
+                                                                variant="contained"
+                                                                color="primary"
+                                                                className={classes.submitBtn}
+                                                                onClick={handleSubmit}
+                                                                sx={{ height: '31px', minWidth: '60px' }}
+                                                            >
+                                                                Submit
+                                                            </Button>
+                                                        </InputAdornment>
+                                                    ),
+                                                }}
                                             />
                                         </Box>
-
-
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            className={classes.submitBtn}
-                                            onClick={() => handleSubmit()}
-                                        >
-                                            Submit
-                                        </Button>
                                     </Box>
                                 }
                             </Box>
