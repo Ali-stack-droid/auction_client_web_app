@@ -267,8 +267,7 @@ const LotDetailPage = () => {
                             <Grid item xs={3} key={img}>
                                 <CardMedia
                                     component="img"
-                                    // image={img || `${process.env.PUBLIC_URL}/assets/pngs/placeholder.png`}
-                                    image={`${process.env.PUBLIC_URL}/assets/pngs/placeholder.png`}
+                                    image={img || `${process.env.PUBLIC_URL}/assets/pngs/placeholder.png`}
                                     alt="Thumbnail"
                                     sx={{
                                         width: "100%",
