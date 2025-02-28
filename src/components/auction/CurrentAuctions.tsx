@@ -10,7 +10,7 @@ import {
 import AuctionCard from './auction-components/AuctionCard';
 import AuctionHeader from './auction-components/AuctionHeader';
 import PaginationButton from './auction-components/PaginationButton';
-import { getCitiesByState, getCurrentAuctions, getCurrentLocations, getPastAuctions, getPastLocations, getStatesByCountry } from '../Services/Methods';
+import { getAllLocations, getCitiesByState, getCurrentAuctions, getCurrentLocations, getPastAuctions, getPastLocations, getStatesByCountry } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
 import theme from '../../theme';
 
@@ -59,9 +59,8 @@ const CurrentAuctions = () => {
 
     const fetchAddresses = async () => {
         try {
-            const locationResponse = isCurrentAuction
-                ? await getCurrentLocations()
-                : await getPastLocations();
+            const locationResponse = await getAllLocations();
+
             const addresses = locationResponse.data;
             if (addresses.length > 0) {
                 const updatedAddresses = addresses.sort((a: any, b: any) => a.localeCompare(b)); // alphabetically ordered
