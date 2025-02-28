@@ -10,21 +10,69 @@ import {
 import AuctionCard from './auction-components/AuctionCard';
 import AuctionHeader from './auction-components/AuctionHeader';
 import PaginationButton from './auction-components/PaginationButton';
-import { getCurrentAuctions, getCurrentLocations, getPastAuctions, getPastLocations } from '../Services/Methods';
+import { getCitiesByState, getCurrentAuctions, getCurrentLocations, getPastAuctions, getPastLocations, getStatesByCountry } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
 import theme from '../../theme';
 
 const CurrentAuctions = () => {
     const [fadeIn, setFadeIn] = useState(false); // Fade control state
     const [isFetchingData, setIsFetchingData] = useState(false);
-
     const [isCurrentAuction, setIsCurrentAuction] = useState(true); // Toggle between Current and Past Auctions
-    const [selectedLocation, setSelectedLocation]: any = useState(null); // Filter by location
-    const [filteredData, setFilteredData]: any = useState([]); // Filtered data state
-    const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
-    const [locations, setLocations]: any = useState([]); // Filtered data state
-
     const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
+
+    // Filter location states:
+    const [selectedLocation, setSelectedLocation]: any = useState("");
+    const [filteredData, setFilteredData]: any = useState([]);
+    const [paginationedData, setPaginationedData]: any = useState([]);
+    const [stateId, setStateId]: any = useState(0);
+    const [cityId, setCityId]: any = useState(0);
+    const [locations, setLocations]: any = useState([]);
+    const [states, setStates]: any = useState([]);
+
+    useEffect(() => {
+        if (stateId !== 0 && cityId === 0 && selectedLocation === "") {
+            fetchCitiesByState();
+        } else if (stateId !== 0 && cityId !== 0 && selectedLocation === "") {
+            fetchAddresses();
+        } else if (selectedLocation !== "") {
+            setPaginationedData(filteredData.filter((item: any) => item.cityId === cityId && item.stateId === stateId && item.address === selectedLocation))
+        } else {
+            setPaginationedData(filteredData);
+            setLocations(states);
+        }
+    }, [selectedLocation, cityId, stateId])
+
+    const fetchCitiesByState = async () => {
+        try {
+            const response = await getCitiesByState(stateId);
+            const cities = response.data;
+            if (cities.length > 0) {
+                const updatedCities = cities;
+                setLocations(updatedCities);
+            } else {
+                setLocations([])
+            }
+        } catch (error) {
+        } finally {
+        }
+    };
+
+    const fetchAddresses = async () => {
+        try {
+            const locationResponse = isCurrentAuction
+                ? await getCurrentLocations()
+                : await getPastLocations();
+            const addresses = locationResponse.data;
+            if (addresses.length > 0) {
+                const updatedAddresses = addresses.sort((a: any, b: any) => a.localeCompare(b)); // alphabetically ordered
+                setLocations(updatedAddresses);
+            } else {
+                setLocations([])
+            }
+        } catch (error) {
+        } finally {
+        }
+    };
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -32,14 +80,6 @@ const CurrentAuctions = () => {
             fetchAuctionData();
         }
     }, [isCurrentAuction])
-
-    useEffect(() => {
-        if (selectedLocation) {
-            setPaginationedData(filteredData.filter((item: any) => item.details.address === selectedLocation))
-        } else {
-            setPaginationedData(filteredData)
-        }
-    }, [selectedLocation])
 
     const fetchAuctionData = async () => {
         try {
@@ -56,6 +96,9 @@ const CurrentAuctions = () => {
                     id: item.Id,
                     name: item.Name,
                     image: item.Image,
+                    cityId: item.CityId,
+                    stateId: item.StateId,
+                    address: item.Address,
                     details: {
                         address: item.Address,
                         location: `${item.City}, ${item.Country}`,
@@ -70,17 +113,14 @@ const CurrentAuctions = () => {
                 setPaginationedData([])
             }
 
-            const locationResponse = isCurrentAuction
-                ? await getCurrentLocations()
-                : await getPastLocations();
-
+            const locationResponse = await getStatesByCountry(1);
             if (locationResponse.data && locationResponse.data.length > 0) {
                 const updatedLocation = locationResponse.data;
                 setLocations(updatedLocation);
+                setStates(updatedLocation);
             } else {
                 setLocations([]);
             }
-
 
         } catch (error) {
         } finally {
@@ -103,6 +143,7 @@ const CurrentAuctions = () => {
             <AuctionHeader
                 headerType={"current-auctions"}
                 isCurrent={isCurrentAuction}
+                setSearchTerm={setSearchTerm}
                 onToggle={() => {
                     if (!isFetchingData) {
                         setIsCurrentAuction((prev) => !prev)
@@ -110,8 +151,11 @@ const CurrentAuctions = () => {
                 }}
                 selectedLocation={selectedLocation}
                 setSelectedLocation={setSelectedLocation}
+                cityId={cityId}
+                stateId={stateId}
+                setCityId={setCityId}
+                setStateId={setStateId}
                 locations={locations}
-                setSearchTerm={setSearchTerm}
             />
 
             <Box>

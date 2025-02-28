@@ -10,7 +10,7 @@ import {
 import AuctionCard from '../auction/auction-components/AuctionCard';
 import AuctionHeader from '../auction/auction-components/AuctionHeader';
 import PaginationButton from '../auction/auction-components/PaginationButton';
-import { getCurrentLiveAuctions } from '../Services/Methods';
+import { getAllLocations, getCitiesByState, getCurrentLiveAuctions, getStatesByCountry } from '../Services/Methods';
 import NoRecordFound from '../../utils/NoRecordFound';
 import { ErrorMessage, SuccessMessage } from '../../utils/ToastMessages';
 import theme from '../../theme';
@@ -18,15 +18,61 @@ import theme from '../../theme';
 
 const LiveStreaming = () => {
     const [isCurrentAuction, setIsCurrentAuction] = useState(true); // Toggle between Current and Past Auctions
-    const [selectedLocation, setSelectedLocation]: any = useState(null); // Filter by location
     const [fadeIn, setFadeIn] = useState(false); // Fade control state
-
     const [isFetchingData, setIsFetchingData] = useState(false);
-
-    const [filteredData, setFilteredData] = useState([]); // Filtered data state
-    const [paginationedData, setPaginationedData]: any = useState([]); // Filtered data state
-
     const [searchTerm, setSearchTerm]: any = useState(""); // Filtered data state
+
+    // Filter location states:
+    const [selectedLocation, setSelectedLocation]: any = useState("");
+    const [filteredData, setFilteredData]: any = useState([]);
+    const [paginationedData, setPaginationedData]: any = useState([]);
+    const [stateId, setStateId]: any = useState(0);
+    const [cityId, setCityId]: any = useState(0);
+    const [locations, setLocations]: any = useState([]);
+    const [states, setStates]: any = useState([]);
+
+    useEffect(() => {
+        if (stateId !== 0 && cityId === 0 && selectedLocation === "") {
+            fetchCitiesByState();
+        } else if (stateId !== 0 && cityId !== 0 && selectedLocation === "") {
+            fetchAddresses();
+        } else if (selectedLocation !== "") {
+            setPaginationedData(filteredData.filter((item: any) => item.cityId === cityId && item.stateId === stateId && item.address === selectedLocation))
+        } else {
+            setPaginationedData(filteredData);
+            setLocations(states);
+        }
+    }, [selectedLocation, cityId, stateId])
+
+    const fetchCitiesByState = async () => {
+        try {
+            const response = await getCitiesByState(stateId);
+            const cities = response.data;
+            if (cities.length > 0) {
+                const updatedCities = cities;
+                setLocations(updatedCities);
+            } else {
+                setLocations([])
+            }
+        } catch (error) {
+        } finally {
+        }
+    };
+
+    const fetchAddresses = async () => {
+        try {
+            const locationResponse = await getAllLocations();
+            const addresses = locationResponse.data;
+            if (addresses.length > 0) {
+                const updatedAddresses = addresses.sort((a: any, b: any) => a.localeCompare(b)); // alphabetically ordered
+                setLocations(updatedAddresses);
+            } else {
+                setLocations([])
+            }
+        } catch (error) {
+        } finally {
+        }
+    };
 
     useEffect(() => {
         if (!isFetchingData) {
@@ -45,6 +91,9 @@ const LiveStreaming = () => {
                     image: item.Image,
                     description: item.Description,
                     isLive: item.LiveStreaming,
+                    cityId: item.CityId,
+                    stateId: item.StateId,
+                    address: item.Address,
                     details: {
                         location: `${item.City}, ${item.Country}`,
                         dateRange: `${item.StartDate} to ${item.EndDate}`,
@@ -58,6 +107,16 @@ const LiveStreaming = () => {
                 setFilteredData([]);
                 setPaginationedData([])
             }
+
+            const locationResponse = await getStatesByCountry(1);
+            if (locationResponse.data && locationResponse.data.length > 0) {
+                const updatedLocation = locationResponse.data;
+                setLocations(updatedLocation);
+                setStates(updatedLocation);
+            } else {
+                setLocations([]);
+            }
+
             setIsFetchingData(false)
 
         } catch (error) {
@@ -82,10 +141,14 @@ const LiveStreaming = () => {
                 headerType={"live"}
                 isCurrent={isCurrentAuction}
                 onToggle={() => setIsCurrentAuction((prev) => !prev)}
+                setSearchTerm={setSearchTerm}
                 selectedLocation={selectedLocation}
                 setSelectedLocation={setSelectedLocation}
-                locations={[]}
-                setSearchTerm={setSearchTerm}
+                cityId={cityId}
+                stateId={stateId}
+                setCityId={setCityId}
+                setStateId={setStateId}
+                locations={locations}
             />
             <Box sx={{ minHeight: "70vh" }}>
                 {!isFetchingData && paginationedData?.length ?

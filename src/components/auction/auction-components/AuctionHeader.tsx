@@ -9,11 +9,15 @@ const AuctionHeader = ({
     headerType = 'current-auctions', // Default to 'auction'
     isCurrent,
     onToggle,
+    setSearchTerm,
     selectedLocation,
     setSelectedLocation,
-    locations,
     filterLots,
-    setSearchTerm
+    cityId,
+    stateId,
+    setCityId,
+    setStateId,
+    locations,
 }: any) => {
     const classes = useAuctionHeaderStyles();
 
@@ -23,10 +27,17 @@ const AuctionHeader = ({
     const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
 
-    const handleFilterChange = (location: string) => {
-        setSelectedLocation((prev: any) => (prev === location ? null : location));
-        handleMenuClose();
+    const handleFilterChange = (locationId: string) => {
+        if (!stateId) {
+            setStateId(locationId);
+        } else if (!cityId) {
+            setCityId(locationId);
+        } else {
+            setSelectedLocation((prev: any) => (prev === locationId ? null : locationId));
+            handleMenuClose();
+        }
     };
+
 
     const handleSearchChange = () => {
         setSearchTerm(search);
@@ -93,26 +104,26 @@ const AuctionHeader = ({
                             onClick={handleMenuOpen}
                             startIcon={<FilterAltIcon />}
                             disabled={!locations.length ? true : false}
-                        // endIcon={<CloseIcon style={{color='red'}} />}
                         >
                             Location
                         </Button>
                         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                             {locations.map((location: any) => (
                                 <MenuItem
-                                    key={location}
-                                    onClick={() => handleFilterChange(location)}
+                                    key={location.Id ? location.id : location}
+                                    onClick={() => handleFilterChange(location.Id ? location.Id : location)}
                                     className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
                                 >
-                                    {location}
+                                    {location.Name ? location.Name : location}
                                 </MenuItem>
                             ))}
                         </Menu>
-
-                        {selectedLocation && (
-                            <IconButton onClick={() => setSelectedLocation(null)}>
+                        {(selectedLocation !== "" || stateId > 0 || cityId > 0) ? (
+                            <IconButton onClick={() => { setStateId(0); setCityId(0); setSelectedLocation(""); }}>
                                 <CloseIcon style={{ color: 'red' }} />
-                            </IconButton>)}
+                            </IconButton>)
+                            : null
+                        }
                     </Box>
                 </Box>
             }

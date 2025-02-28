@@ -6,12 +6,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLocation, useNavigate } from "react-router-dom";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import AuctionCard from "../auction-components/AuctionCard";
-import { getAuctionDetailById, getCurrentLocations, getCurrentLots, getCurrentLotsByLocation, getPastLocations, getPastLots, getPastLotsByLocation, getWatchlist } from "../../Services/Methods";
+import { getAllLocations, getAuctionDetailById, getCitiesByState, getCurrentLocations, getCurrentLots, getCurrentLotsByLocation, getPastLocations, getPastLots, getPastLotsByLocation, getStatesByCountry, getWatchlist } from "../../Services/Methods";
 import PaginationButton from "../auction-components/PaginationButton";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CustomTextField from "../../custom-components/CustomTextField";
 import theme from "../../../theme";
 import Cookies from "js-cookie";
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const AuctionDetailPage = () => {
@@ -29,13 +30,62 @@ const AuctionDetailPage = () => {
     const [isCurrentAuction, setIsCurrentAuction] = useState(false);
 
     const [favouriteLots, setFavouriteLots]: any = useState([]);
-    const [locations, setLocations]: any = useState([]);
-    const [selectedLocation, setSelectedLocation]: any = useState('');
 
     const user: any = sessionStorage.getItem('authToken') || Cookies.get('user');
     const clientId = (sessionStorage.getItem('authToken') ?
         JSON.parse(user).id : Cookies.get('user')
             ? JSON.parse(user).id : '')
+
+    // Filter location states:
+    const [selectedLocation, setSelectedLocation]: any = useState("");
+    const [filteredData, setFilteredData]: any = useState([]);
+    const [stateId, setStateId]: any = useState(0);
+    const [cityId, setCityId]: any = useState(0);
+    const [locations, setLocations]: any = useState([]);
+    const [states, setStates]: any = useState([]);
+
+    useEffect(() => {
+        if (stateId !== 0 && cityId === 0 && selectedLocation === "") {
+            fetchCitiesByState();
+        } else if (stateId !== 0 && cityId !== 0 && selectedLocation === "") {
+            fetchAddresses();
+        } else if (selectedLocation !== "") {
+            setPaginationedData(filteredData.filter((item: any) => item.cityId === cityId && item.stateId === stateId && item.address === selectedLocation))
+        } else {
+            setPaginationedData(filteredData);
+            setLocations(states);
+        }
+    }, [selectedLocation, cityId, stateId])
+
+    const fetchCitiesByState = async () => {
+        try {
+            const response = await getCitiesByState(stateId);
+            const cities = response.data;
+            if (cities.length > 0) {
+                const updatedCities = cities;
+                setLocations(updatedCities);
+            } else {
+                setLocations([])
+            }
+        } catch (error) {
+        } finally {
+        }
+    };
+
+    const fetchAddresses = async () => {
+        try {
+            const locationResponse = await getAllLocations();
+            const addresses = locationResponse.data;
+            if (addresses.length > 0) {
+                const updatedAddresses = addresses.sort((a: any, b: any) => a.localeCompare(b)); // alphabetically ordered
+                setLocations(updatedAddresses);
+            } else {
+                setLocations([])
+            }
+        } catch (error) {
+        } finally {
+        }
+    };
 
     useEffect(() => {
         const fetchWatchlist = async () => {
@@ -152,11 +202,9 @@ const AuctionDetailPage = () => {
                 response = await getPastLots();
             }
 
-
             if (response.data.length > 0) {
                 const formattedLots = response.data.map((item: any) => ({
                     id: item.Id,
-                    address: item.Address,
                     lotNumber: item.LotNo,
                     name: item.ShortDescription,
                     endDate: item.EndDate,
@@ -171,6 +219,9 @@ const AuctionDetailPage = () => {
                     date: `${item.StartDate} to ${item.EndDate}`,
                     time: `${item.StartTime} to ${item.EndTime}`,
                     auctionId: item.AuctionId,
+                    cityId: item.CityId,
+                    stateId: item.StateId,
+                    address: item.Address,
                     details: {
                         description: item.LongDescription,
                         date: `${item.StartDate} to ${item.EndDate}`,
@@ -197,16 +248,15 @@ const AuctionDetailPage = () => {
                 setAuctionLots(newLots)
                 setPaginationedData(newLots)
 
-                const locationResponse = isCurrentAuction
-                    ? await getCurrentLocations()
-                    : await getPastLocations();
-
+                const locationResponse = await getStatesByCountry(1);
                 if (locationResponse.data && locationResponse.data.length > 0) {
                     const updatedLocation = locationResponse.data;
                     setLocations(updatedLocation);
+                    setStates(updatedLocation);
                 } else {
                     setLocations([]);
                 }
+
             } else {
                 setPaginationedData([])
                 setAuctionLots([])
@@ -228,9 +278,15 @@ const AuctionDetailPage = () => {
         return favouriteLots.some((lot: any) => lot.id === lotId);
     }
 
-    const handleFilterChange = (location: string) => {
-        setSelectedLocation((prev: any) => (prev === location ? null : location));
-        handleMenuClose();
+    const handleFilterChange = (locationId: string) => {
+        if (!stateId) {
+            setStateId(locationId);
+        } else if (!cityId) {
+            setCityId(locationId);
+        } else {
+            setSelectedLocation((prev: any) => (prev === locationId ? null : locationId));
+            handleMenuClose();
+        }
     };
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
@@ -407,19 +463,25 @@ const AuctionDetailPage = () => {
                                     startIcon={<FilterAltIcon />}
                                     disabled={!locations.length ? true : false}
                                 >
-                                    Filter
+                                    Location
                                 </Button>
                                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                                     {locations.map((location: any) => (
                                         <MenuItem
-                                            key={location}
-                                            onClick={() => handleFilterChange(location)}
+                                            key={location.Id ? location.id : location}
+                                            onClick={() => handleFilterChange(location.Id ? location.Id : location)}
                                             className={`${classes.menuItem} ${selectedLocation === location ? 'selected' : ''}`}
                                         >
-                                            {location}
+                                            {location.Name ? location.Name : location}
                                         </MenuItem>
                                     ))}
                                 </Menu>
+                                {(selectedLocation !== "" || stateId > 0 || cityId > 0) ? (
+                                    <IconButton onClick={() => { setStateId(0); setCityId(0); setSelectedLocation(""); }}>
+                                        <CloseIcon style={{ color: 'red' }} />
+                                    </IconButton>)
+                                    : null
+                                }
                             </Box>
                         </Box>
 
