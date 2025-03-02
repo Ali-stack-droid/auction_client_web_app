@@ -4,8 +4,6 @@ import {
     StreamCall,
     StreamTheme,
     StreamVideo,
-    SpeakerLayout,
-    CallControls,
     StreamVideoClient,
     ParticipantView,
     useCallStateHooks
@@ -13,9 +11,9 @@ import {
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 
 const apiKey = "mmhfdzb5evj2";
-const user_id = "client-user"; // Unique client user ID
+const user_id = "client-user";
 const user = { id: user_id };
-const callId = "static-call-id"; // Same static call ID
+const callId = "static-call-id";
 
 const tokenProvider = async () => {
     const { token } = await fetch(
@@ -28,7 +26,8 @@ const tokenProvider = async () => {
     return token as string;
 };
 
-export default function ClientVideoStream() {
+// Accepts a prop `onNoCall` to render alternative content
+export default function ClientVideoStream({ onNoCall }: any) {
     const [client, setClient] = useState<StreamVideoClient>();
     const [call, setCall] = useState<Call>();
 
@@ -59,33 +58,40 @@ export default function ClientVideoStream() {
         };
     }, [client]);
 
-    if (!client || !call) return (<h1>No Video Exist</h1>);
+    if (!client || !call) return onNoCall; // Show CardMedia when no call exists
 
     return (
         <StreamVideo client={client}>
             <StreamTheme className="my-theme-overrides">
                 <StreamCall call={call}>
-                    <VideoLayout />
+                    <VideoLayout onNoCall={onNoCall} />
                 </StreamCall>
             </StreamTheme>
         </StreamVideo>
     );
 }
 
-// Custom layout to show only admin video and connected user count
-const VideoLayout = () => {
+const VideoLayout = ({ onNoCall }: any) => {
     const { useParticipants } = useCallStateHooks();
     const participants = useParticipants();
-
-    // Find the admin participant (assuming admin-user is the admin's user ID)
     const adminParticipant = participants.find(p => p.userId === "admin-user");
 
     return (
-        <div className="admin-layout">
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '80vh',
+            maxHeight: '600px',
+            overflow: 'hidden',
+        }}>
             {adminParticipant ? (
-                <ParticipantView participant={adminParticipant} />
+                <>
+                    <ParticipantView participant={adminParticipant} />
+                    <style>{`.str-video__call-controls__button {display: none !important;} .str-video__participant-details__name {color:white !important}`}</style>
+                </>
             ) : (
-                <h2>Waiting for Admin to Join...</h2>
+                onNoCall
             )}
         </div>
     );

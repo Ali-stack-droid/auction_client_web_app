@@ -8,6 +8,11 @@ const useLiveStreamDetailStyles = makeStyles(() => ({
         alignItems: 'center',
         gap: 15,
     },
+    liveMedia: {
+        cursor: "pointer",
+        borderRadius: "15px",
+        width: "100%",
+    },
     countBadge: {
         display: 'flex',
         justifyContent: 'center',

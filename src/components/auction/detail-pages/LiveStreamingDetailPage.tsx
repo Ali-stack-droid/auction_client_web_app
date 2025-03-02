@@ -8,6 +8,8 @@ import { getAuctionDetailById, getBiddersByLotId, getLotDetailsById } from '../.
 import Cookies from 'js-cookie';
 import { joinRoom, leaveRoom, sendMessage, setUserName } from '../../../utils/SocketMethods';
 import VideoStreaming from './VideoStreaming';
+import ClientVideoStream from './VideoStreaming';
+import YouTube from 'react-youtube';
 
 const LiveStreamingDetailPage = ({ socket }: any) => {
     const classes = useLiveStreamDetailStyles();
@@ -145,6 +147,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                     sold: item.IsSold,
                     roomId: item.RoomId,
                     bidAmount: item.BidStartAmount,
+                    isYoutube: item.IsYoutube || false,
                     details: {
                         description: item.LongDescription,
                         date: `${item.StartDate} to ${item.EndDate}`,
@@ -240,6 +243,12 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
 
     }
 
+    const opts = {
+        height: '450',
+        width: '100%',
+        playerVars: { autoplay: 1 },
+    };
+
     return (
         <Box py={2}>
             {!isFetchingData && auctionLots.length > 0 ?
@@ -259,18 +268,22 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                         }}
                     >
                         {/* Image Section */}
-                        <Box sx={{ position: "relative", marginBottom: "35px", display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid red', }}>
-                            {/* <CardMedia
-                                component="img"
-                                height="300"
-                                image={auctionLots[currentIndex].image} // Replace with the image URL
-                                alt="Live Auction"
-                                sx={{ borderRadius: "12px", width: '100%', height: '640px' }}
-                            /> */}
-                            <Box sx={{ border: '1px solid red', width: '50%', }}>
-                                <VideoStreaming />
-                            </Box>
-                            {/* Overlay Badges */}
+                        <Box sx={{ position: "relative", marginBottom: "35px" }}>
+                            {auctionLots[currentIndex].isYoutube ?
+                                <YouTube videoId="LxDJlhj6Yk0" opts={opts} className={classes.liveMedia} />
+                                :
+                                <ClientVideoStream
+                                    onNoCall={
+                                        <CardMedia
+                                            component="img"
+                                            height="300"
+                                            image={auctionLots[currentIndex].image}
+                                            alt="Live Auction"
+                                            sx={{ borderRadius: "12px", width: '100%', height: '640px' }}
+                                        />
+                                    }
+                                />
+                            }
                             <Button
                                 variant="contained"
                                 color="error"
