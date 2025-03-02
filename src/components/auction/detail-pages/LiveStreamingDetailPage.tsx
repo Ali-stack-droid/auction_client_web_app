@@ -7,6 +7,7 @@ import useLiveStreamDetailStyles from './detail-pages-components/LiveStreamingDe
 import { getAuctionDetailById, getBiddersByLotId, getLotDetailsById } from '../../Services/Methods';
 import Cookies from 'js-cookie';
 import { joinRoom, leaveRoom, sendMessage, setUserName } from '../../../utils/SocketMethods';
+import VideoStreaming from './VideoStreaming';
 
 const LiveStreamingDetailPage = ({ socket }: any) => {
     const classes = useLiveStreamDetailStyles();
@@ -258,14 +259,17 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                         }}
                     >
                         {/* Image Section */}
-                        <Box sx={{ position: "relative", marginBottom: "35px" }}>
-                            <CardMedia
+                        <Box sx={{ position: "relative", marginBottom: "35px", display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid red', }}>
+                            {/* <CardMedia
                                 component="img"
                                 height="300"
                                 image={auctionLots[currentIndex].image} // Replace with the image URL
                                 alt="Live Auction"
                                 sx={{ borderRadius: "12px", width: '100%', height: '640px' }}
-                            />
+                            /> */}
+                            <Box sx={{ border: '1px solid red', width: '50%', }}>
+                                <VideoStreaming />
+                            </Box>
                             {/* Overlay Badges */}
                             <Button
                                 variant="contained"
