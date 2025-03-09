@@ -56,6 +56,7 @@ export const getAddressByCity = (city: any) => getRequest(`/auctions/getaddressb
 
 // Live Streaming Methods
 export const getCurrentLiveAuctions = () => getRequest('/auctions/currentliveauctions');
+export const getStreamByLotId = (id: any) => getRequest(`/stream/streaminfobylotid?id=${id}`);
 
 // Stripe Methods
 export const createPaymentIntent = () => getRequest('/create-payment-intent');
