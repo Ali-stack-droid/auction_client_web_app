@@ -11,7 +11,7 @@ import {
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { getStreamByLotId } from "../../Services/Methods";
 
-const apiKey = "k532vzf4a7cx";
+const apiKey = process.env.REACT_APP_STREAM_API_KEY as string;
 const user_id = "4"; // Unique client user ID
 const user = { id: user_id, name: "client" };
 
