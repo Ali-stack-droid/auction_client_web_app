@@ -213,7 +213,7 @@ const Cart = () => {
                         zipCode: Yup.string().required("Zip Code is required"),
                     })}
                     onSubmit={(values: any) => {
-                        alert(JSON.stringify(values));
+                        // alert(JSON.stringify(values));
                         // formik.resetForm();
                     }}
                 >
