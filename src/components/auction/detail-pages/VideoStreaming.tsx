@@ -15,7 +15,7 @@ const apiKey = process.env.REACT_APP_STREAM_API_KEY as string;
 const user_id = "4"; // Unique client user ID
 const user = { id: user_id, name: "client" };
 
-export default function ClientVideoStream({ lotId }: { lotId: string }) {
+export default function ClientVideoStream({ lotId, onNoCall }: any) {
     const [client, setClient] = useState<StreamVideoClient | null>(null);
     const [call, setCall] = useState<Call | null>(null);
     const [callId, setCallId] = useState<string | null>(null);
@@ -68,7 +68,7 @@ export default function ClientVideoStream({ lotId }: { lotId: string }) {
         };
     }, [client, callId]);
 
-    if (!token || !callId) return <h1>This call hasn't started yet</h1>;
+    if (!token || !callId) return onNoCall;
     if (!client || !call) return <h1>Loading...</h1>;
 
     return (
