@@ -7,7 +7,6 @@ import useLiveStreamDetailStyles from './detail-pages-components/LiveStreamingDe
 import { getAuctionDetailById, getBiddersByLotId, getLotDetailsById } from '../../Services/Methods';
 import Cookies from 'js-cookie';
 import { joinRoom, leaveRoom, sendMessage, setUserName } from '../../../utils/SocketMethods';
-import VideoStreaming from './VideoStreaming';
 import ClientVideoStream from './VideoStreaming';
 import YouTube from 'react-youtube';
 
@@ -273,6 +272,7 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                                 <YouTube videoId="LxDJlhj6Yk0" opts={opts} className={classes.liveMedia} />
                                 :
                                 <ClientVideoStream
+                                    lotId={auctionLots[currentIndex].id}
                                     onNoCall={
                                         <CardMedia
                                             component="img"

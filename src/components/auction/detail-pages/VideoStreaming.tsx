@@ -68,10 +68,10 @@ export default function ClientVideoStream({ lotId, onNoCall }: any) {
         };
     }, [client, callId]);
 
-
     if (!token || !callId) return onNoCall;
     if (!client || !call) return <h1>Loading...</h1>;
 
+    // .htaccess
     return (
         <StreamVideo client={client}>
             <StreamTheme className="my-theme-overrides">
