@@ -10,9 +10,10 @@ import {
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import { getStreamByLotId } from "../../Services/Methods";
+import { v4 as uuidv4 } from 'uuid';
 
 const apiKey = process.env.REACT_APP_STREAM_API_KEY as string;
-const user_id = "4"; // Unique client user ID
+const user_id = uuidv4();
 const user = { id: user_id, name: "client" };
 
 export default function ClientVideoStream({ lotId, onNoCall }: any) {
@@ -20,6 +21,7 @@ export default function ClientVideoStream({ lotId, onNoCall }: any) {
     const [call, setCall] = useState<Call | null>(null);
     const [callId, setCallId] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null);
+    const [adminId, setAdminId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchLotDetails = async () => {
@@ -29,6 +31,7 @@ export default function ClientVideoStream({ lotId, onNoCall }: any) {
                     const latestLiveStream = response.data[response.data.length - 1];
                     setCallId(latestLiveStream.CallId);
                     setToken(latestLiveStream.Token);
+                    setAdminId(latestLiveStream.UserId);
                 }
             } catch (error) {
                 console.error("Error fetching live stream details:", error);
@@ -51,6 +54,7 @@ export default function ClientVideoStream({ lotId, onNoCall }: any) {
     }, [token, callId]);
 
     useEffect(() => {
+        console.log({ client, callId });
         if (!client || !callId) return;
 
         const myCall = client.call("default", callId);
@@ -76,18 +80,18 @@ export default function ClientVideoStream({ lotId, onNoCall }: any) {
         <StreamVideo client={client}>
             <StreamTheme className="my-theme-overrides">
                 <StreamCall call={call}>
-                    <VideoLayout />
+                    <VideoLayout adminId={adminId} />
                 </StreamCall>
             </StreamTheme>
         </StreamVideo>
     );
 }
 
-const VideoLayout = () => {
+const VideoLayout = ({ adminId }: any) => {
     const { useParticipants } = useCallStateHooks();
     const participants = useParticipants();
-    const adminParticipant = participants.find(p => p.userId === "4");
-
+    const adminParticipant = participants.find(p => p.userId === adminId);
+    console.log('participants: ', participants)
     return (
         <div style={{
             display: 'flex',
@@ -97,14 +101,14 @@ const VideoLayout = () => {
             maxHeight: '600px',
             overflow: 'hidden',
         }}>
-            {adminParticipant ? (
+            {JSON.stringify(adminId)}
+            {JSON.stringify(adminParticipant)}
+            {adminParticipant &&
                 <>
                     <ParticipantView participant={adminParticipant} />
                     <style>{`.str-video__call-controls__button {display: none !important;} .str-video__participant-details__name {color:white !important}`}</style>
                 </>
-            ) : (
-                <h1>Waiting for the host...</h1>
-            )}
+            }
         </div>
     );
 };
