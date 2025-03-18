@@ -32,10 +32,10 @@ const useLandingPageStyles = makeStyles((theme: any) => ({
         textTransform: 'none'
     },
     card: {
-        borderRadius: '20px',
-        padding: '10px',
-        maxWidth: "620px",
-        gap: '20px'
+        borderRadius: '20px !important',
+        padding: '10px !important',
+        maxWidth: '620px !important',
+        gap: '20px !important'
     },
     mediaCards: {
         paddingTop: '95px',
