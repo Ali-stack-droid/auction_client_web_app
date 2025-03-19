@@ -13,18 +13,8 @@ function App() {
   const socket = io(SOCKET_URL, { transports: ["websocket"] });
 
   useEffect(() => {
-    // Handle connection open
-    // socket.on("connect", () => {
-    //   console.log("Socket.IO connection established");
-
-    //   // Example: Send an initial message to the server if needed
-    //   // socket.on("testing-event", handleMessages);
-    // });
-
 
     const checkSession = () => {
-      // Check sessionStorage and cookies
-      // sessionStorage.setItem('authToken', JSON.stringify("asd"));
       const authToken = sessionStorage.getItem('authToken');
       const user = Cookies.get('user');
 
