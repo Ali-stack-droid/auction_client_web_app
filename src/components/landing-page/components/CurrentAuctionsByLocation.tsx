@@ -4,6 +4,7 @@ import AuctionCard from '../../auction/auction-components/AuctionCard'
 import auctionData from '../../auction/auctionData'
 import useLandingPageStyles from '../LandingPageStyles'
 import { getFeaturedAuctions, getFeaturedAuctionsByLocation } from '../../Services/Methods'
+import theme from '../../../theme'
 
 const CurrentAuctionsByLocation = () => {
     const classes = useLandingPageStyles();
@@ -53,11 +54,16 @@ const CurrentAuctionsByLocation = () => {
 
 
     return (
-        <Box className={classes.locationSection} pb={8}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }} pb={8}>
             <Box sx={{ textAlign: "center", marginBottom: '54px' }}>
                 <Typography className={classes.heading} color="primary">
                     Current
-                    <Typography component={'span'} className={classes.headingSpan}>
+                    <Typography component={'span'} sx={{
+                        fontSize: '40px',
+                        fontWeight: 600,
+                        lineHeight: '55px',
+                        color: theme.palette.primary.main
+                    }}>
                         &nbsp;Auctions&nbsp;
                     </Typography>
                     By Locations

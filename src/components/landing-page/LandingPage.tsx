@@ -13,6 +13,7 @@ import FeaturedAuctions from "./components/FeaturedAuctions";
 import CurrentAuctionSection from "./components/CurrentAuctionSection";
 import CurrentAuctionsByLocation from "./components/CurrentAuctionsByLocation";
 import CardMediaSection from "./components/CardMediaSection";
+import theme from "../../theme";
 
 const AnimatedText = styled(Typography)({
     animation: "fadeIn 2s ease-in-out",
@@ -28,13 +29,28 @@ const LandingPage = () => {
         <Box>
             {/* Animated Text Section */}
             <Box sx={{ textAlign: "center", marginBottom: 4, padding: "0 150px" }}>
-                <AnimatedText className={classes.heading}>
+                <AnimatedText sx={{
+                    fontSize: '40px',
+                    fontWeight: 600,
+                    lineHeight: '55px',
+                    color: theme.palette.primary.main5
+                }}>
                     Easy to bid,
-                    <Typography component={'span'} className={classes.headingSpan}>
+                    <Typography component={'span'} sx={{
+                        fontSize: '40px',
+                        fontWeight: 600,
+                        lineHeight: '55px',
+                        color: theme.palette.primary.main
+                    }}>
                         &nbsp;simple process
                     </Typography>
                     , and no hidden fees - your ultimate auction
-                    <Typography component={'span'} className={classes.headingSpan}>
+                    <Typography component={'span'} sx={{
+                        fontSize: '40px',
+                        fontWeight: 600,
+                        lineHeight: '55px',
+                        color: theme.palette.primary.main
+                    }}>
                         &nbsp;experience&nbsp;
                     </Typography>
                     starts here!
@@ -42,15 +58,29 @@ const LandingPage = () => {
             </Box>
 
             {/* Search Bar Section */}
-            <Box className={classes.searchBar}>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+            }}>
                 <CustomTextField
                     // value={searchTerm}
                     // onChange={handleSearchChange}
                     placeholder="Search for auction listings here..."
-                    className={classes.searchField}
+                    sx={{
+                        height: '40px',
+                        width: '70%',
+                    }}
                     InputProps={{
                         endAdornment: (
-                            <Button variant={'contained'} className={classes.searchButton}>
+                            <Button variant={'contained'} sx={{
+                                borderRadius: '15px',
+                                margin: "10px 0",
+                                height: '40px',
+                                width: '140px',
+                                textTransform: 'none'
+                            }}>
                                 Search
                             </Button>
                         ),

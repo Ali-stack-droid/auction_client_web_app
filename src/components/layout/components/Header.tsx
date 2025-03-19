@@ -11,6 +11,7 @@ import {
     Logout as LogoutIcon,
 } from '@mui/icons-material';
 import ChangePasswordModal from './ChangePasswordModal';
+import theme from '../../../theme';
 
 
 const Header = () => {
@@ -122,7 +123,14 @@ const Header = () => {
                             </Tooltip>
 
                             <IconButton onClick={handleProfileClick}>
-                                <Avatar alt={clientName ? clientName.toUpperCase() : ''} src="/static/images/avatar/1.jpg" className={classes.avatar} />
+                                <Avatar alt={clientName ? clientName.toUpperCase() : ''} src="/static/images/avatar/1.jpg"
+                                    sx={{
+                                        height: '30px',
+                                        width: '30px',
+                                        fontSize: 16,
+                                        border: `2px solid ${theme.palette.primary.main7}`,
+                                        backgroundColor: theme.palette.primary.main
+                                    }} />
                             </IconButton>
                             <Menu
                                 anchorEl={profileMenuAnchor}
