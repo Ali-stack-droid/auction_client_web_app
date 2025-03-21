@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Divider, IconButton, Typography } from '@mui/material';
+import { Box, StyledEngineProvider } from '@mui/material';
 import Header from './components/Header'; // Import your Header component
 import { useLocation } from 'react-router-dom';
 import Footer from './components/Footer';
@@ -11,19 +11,21 @@ const AppProvider = ({ children }: any) => {
     const classes: any = useAppProviderStyles({ isHomePage });
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <Box className={classes.container}>
-                <Box className={classes.header}>
-                    <Header />
-                </Box>
+        <StyledEngineProvider injectFirst>
+            <Box sx={{ display: 'flex' }}>
+                <Box className={classes.container}>
+                    <Box className={classes.header}>
+                        <Header />
+                    </Box>
 
-                <Box id="childContainer" className={classes.childContainer}>
-                    {children}
-                </Box>
+                    <Box id="childContainer" className={classes.childContainer}>
+                        {children}
+                    </Box>
 
-                <Footer />
+                    <Footer />
+                </Box>
             </Box>
-        </Box>
+        </StyledEngineProvider>
     );
 };
 
