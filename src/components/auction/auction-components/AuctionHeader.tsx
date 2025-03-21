@@ -4,6 +4,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import useAuctionHeaderStyles from './AuctionHeaderStyles';
 import CustomTextField from '../../custom-components/CustomTextField';
 import CloseIcon from '@mui/icons-material/Close';
+import theme from '../../../theme';
 
 const AuctionHeader = ({
     headerType = 'current-auctions', // Default to 'auction'
@@ -45,14 +46,22 @@ const AuctionHeader = ({
 
     return (
         <Box>
-            <Typography className={classes.title}>
+            <Typography
+                sx={{
+                    fontSize: '40.85px',
+                    fontWeight: 600,
+                    color: theme.palette.primary.main1,
+                    padding: "10px 0"
+                }}
+            >
                 {headerType === 'listings' ? "All Lots Listing"
                     : headerType === 'live' ? "Live Stream"
                         : headerType === 'watchlist' ? "Watchlist:"
                             : "Current Auction"
                 }
             </Typography>
-            {headerType !== "watchlist" &&
+            {
+                headerType !== "watchlist" &&
                 <Box className={classes.root}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: "60%", padding: "20px 0" }}>
                         <CustomTextField

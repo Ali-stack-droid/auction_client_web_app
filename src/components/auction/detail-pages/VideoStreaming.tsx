@@ -91,7 +91,6 @@ const VideoLayout = ({ adminId }: any) => {
     const { useParticipants } = useCallStateHooks();
     const participants = useParticipants();
     const adminParticipant = participants.find(p => p.userId === adminId);
-    console.log('participants: ', participants)
     return (
         <div style={{
             display: 'flex',
@@ -101,8 +100,6 @@ const VideoLayout = ({ adminId }: any) => {
             maxHeight: '600px',
             overflow: 'hidden',
         }}>
-            {JSON.stringify(adminId)}
-            {JSON.stringify(adminParticipant)}
             {adminParticipant &&
                 <>
                     <ParticipantView participant={adminParticipant} />

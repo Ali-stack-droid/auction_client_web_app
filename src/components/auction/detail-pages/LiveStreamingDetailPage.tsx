@@ -269,7 +269,15 @@ const LiveStreamingDetailPage = ({ socket }: any) => {
                         {/* Image Section */}
                         <Box sx={{ position: "relative", marginBottom: "35px" }}>
                             {auctionLots[currentIndex].isYoutube ?
-                                <YouTube videoId="LxDJlhj6Yk0" opts={opts} className={classes.liveMedia} />
+                                <YouTube
+                                    videoId="LxDJlhj6Yk0"
+                                    opts={opts}
+                                    style={{
+                                        cursor: "pointer",
+                                        borderRadius: "15px",
+                                        width: "100%",
+                                    }}
+                                />
                                 :
                                 <ClientVideoStream
                                     lotId={auctionLots[currentIndex].id}
