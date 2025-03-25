@@ -10,8 +10,12 @@ task
 /coverage
 
 # production
+<<<<<<< HEAD
 /build
 /build.zip
+=======
+
+>>>>>>> feb38c0d0e182f7635287afc64d0cca5c6d5d2dd
 
 # misc
 .DS_Store
